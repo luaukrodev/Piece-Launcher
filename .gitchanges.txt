@@ -1,0 +1,2 @@
+deleted: unused files/folders
+fixed: microsoft sign in always interactive bug

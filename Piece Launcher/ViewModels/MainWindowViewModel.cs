@@ -178,7 +178,7 @@ namespace Piece_Launcher.ViewModels
                 return MSession.CreateOfflineSession(SelectedProfile.Name);
 
             var handler = await GetLoginHandlerAsync();
-            try { return await handler.AuthenticateInteractively().ConfigureAwait(true); }
+            try { return await handler.AuthenticateSilently().ConfigureAwait(true); }
             catch { return await handler.AuthenticateInteractively().ConfigureAwait(true); }
         }
 
@@ -335,7 +335,7 @@ namespace Piece_Launcher.ViewModels
             {
                 var handler = await GetLoginHandlerAsync();
                 MSession session;
-                try { session = await handler.AuthenticateInteractively().ConfigureAwait(true); }
+                try { session = await handler.AuthenticateSilently().ConfigureAwait(true); }
                 catch { session = await handler.AuthenticateInteractively().ConfigureAwait(true); }
 
                 var old = UserProfiles.FirstOrDefault(p => p.Type == ProfileType.Microsoft);
