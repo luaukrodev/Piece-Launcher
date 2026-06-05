@@ -1,0 +1,154 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Piece_Launcher.App"
+             xmlns:local="using:Piece_Launcher"
+             RequestedThemeVariant="Dark">
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <!-- ═══ SIDEBAR BUTTON ═══ -->
+        <Style Selector="Button.SidebarButton">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#5a5a7a"/>
+            <Setter Property="Padding" Value="14,11"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+        <Style Selector="Button.SidebarButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1ae67e22"/>
+        </Style>
+        <Style Selector="Button.SidebarButton:pointerover">
+            <Setter Property="Foreground" Value="#ddddee"/>
+        </Style>
+        <Style Selector="Button.SidebarButton:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#28e67e22"/>
+        </Style>
+
+        <!-- Active nav item -->
+        <Style Selector="Button.SidebarActive /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1ae67e22"/>
+        </Style>
+        <Style Selector="Button.SidebarActive">
+            <Setter Property="Foreground" Value="#e67e22"/>
+        </Style>
+
+        <!-- ═══ PLAY BUTTON ═══ -->
+        <Style Selector="Button.PlayButton">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#e67e22" Offset="0"/>
+                        <GradientStop Color="#c0392b" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button.PlayButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#f39c12" Offset="0"/>
+                        <GradientStop Color="#e74c3c" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button.PlayButton:pressed /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#d35400" Offset="0"/>
+                        <GradientStop Color="#a93226" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button.PlayButton:disabled /template/ ContentPresenter">
+            <Setter Property="Opacity" Value="0.45"/>
+        </Style>
+
+        <!-- ═══ MICROSOFT BUTTON ═══ -->
+        <Style Selector="Button.MicrosoftButton">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#252535"/>
+            <Setter Property="Background" Value="#12121f"/>
+            <Setter Property="Foreground" Value="#aaaacc"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.MicrosoftButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1a1a2e"/>
+        </Style>
+        <Style Selector="Button.MicrosoftButton:pointerover">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- ═══ REMOVE BUTTON (profile cards) ═══ -->
+        <Style Selector="Button.RemoveButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#3a3a5a"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.RemoveButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#22e74c3c"/>
+        </Style>
+        <Style Selector="Button.RemoveButton:pointerover">
+            <Setter Property="Foreground" Value="#e74c3c"/>
+        </Style>
+
+        <!-- ═══ WINDOW CONTROL BUTTONS ═══ -->
+        <Style Selector="Button.WinBtn">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#1a1a2a"/>
+            <Setter Property="Foreground" Value="#44445a"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.WinClose:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#c0392b"/>
+        </Style>
+        <Style Selector="Button.WinClose:pointerover">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.WinMinimize:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#2a2a3a"/>
+        </Style>
+        <Style Selector="Button.WinMinimize:pointerover">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+    </Application.Styles>
+
+</Application>
