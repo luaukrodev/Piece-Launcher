@@ -69,7 +69,7 @@ namespace Piece_Launcher.Services.Impl
             bool exists = versionsDir.GetDirectories().Any(d =>
                 d.Name.Contains(minecraftVersion, StringComparison.OrdinalIgnoreCase) &&
                 d.Name.Contains("forge", StringComparison.OrdinalIgnoreCase) &&
-                File.Exists(Path.Combine(d.FullName, $"{d.Name}.json")));
+                CmlLibVersionService.IsVersionDownloaded(d));
 
             return Task.FromResult(exists);
         }
@@ -82,7 +82,7 @@ namespace Piece_Launcher.Services.Impl
             return versionsDir.GetDirectories().Any(d =>
                 d.Name.Contains(minecraftVersion, StringComparison.OrdinalIgnoreCase) &&
                 d.Name.Contains(forgeVersion, StringComparison.OrdinalIgnoreCase) &&
-                File.Exists(Path.Combine(d.FullName, $"{d.Name}.json")));
+                CmlLibVersionService.IsVersionDownloaded(d));
         }
     }
 }

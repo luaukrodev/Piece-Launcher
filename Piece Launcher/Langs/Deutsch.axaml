@@ -47,11 +47,21 @@
     <sys:String x:Key="Lang_Versions_Snapshots">Snapshots</sys:String>
     <sys:String x:Key="Lang_Versions_Betas">Betas</sys:String>
     <sys:String x:Key="Lang_Versions_Alphas">Alphas</sys:String>
+    <sys:String x:Key="Lang_Versions_OldVersions">Alte Versionen</sys:String>
     <sys:String x:Key="Lang_Versions_Installed">Installiert</sys:String>
     <sys:String x:Key="Lang_Versions_InstallBtn">Installieren</sys:String>
     <sys:String x:Key="Lang_Versions_ModLoaders">Mod Loader</sys:String>
     <sys:String x:Key="Lang_Versions_ModLoadersDesc">Installiere Mod-Loader, um gemoddetes Minecraft zu spielen.</sys:String>
     <sys:String x:Key="Lang_Versions_TargetMinecraft">Ziel-Minecraft-Version:</sys:String>
+    <sys:String x:Key="Lang_Versions_SelectLoader">Mod-Loader auswählen</sys:String>
+    <sys:String x:Key="Lang_Versions_LoaderVersion">Loader-Version</sys:String>
+    <sys:String x:Key="Lang_Versions_SelectVersionWatermark">Version auswählen...</sys:String>
+    <sys:String x:Key="Lang_Versions_Recommended">Empfohlen</sys:String>
+    <sys:String x:Key="Lang_Versions_LoaderAlreadyInstalled">Dieser Loader ist für diese Version bereits installiert!</sys:String>
+    <sys:String x:Key="Lang_Versions_FabricDesc">Leicht &amp; Schnell</sys:String>
+    <sys:String x:Key="Lang_Versions_ForgeDesc">Klassisch &amp; Robust</sys:String>
+    <sys:String x:Key="Lang_Versions_NeoForgeDesc">Modernes Fork</sys:String>
+    <sys:String x:Key="Lang_Versions_QuiltDesc">Nächste Generation</sys:String>
 
     <!-- Explore Page -->
     <sys:String x:Key="Lang_Explore_Title">Entdecken</sys:String>

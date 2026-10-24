@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -64,11 +65,45 @@ namespace Piece_Launcher.Services.Impl
                 return Task.FromResult<IReadOnlyList<string>>(Array.Empty<string>());
 
             var installed = versionsDir.GetDirectories()
-                .Where(dir => File.Exists(Path.Combine(dir.FullName, $"{dir.Name}.json")))
+                .Where(dir => IsVersionDownloaded(dir))
                 .Select(dir => dir.Name)
                 .ToList();
 
             return Task.FromResult<IReadOnlyList<string>>(installed);
+        }
+
+        public static bool IsVersionDownloaded(DirectoryInfo dir)
+        {
+            var jsonPath = Path.Combine(dir.FullName, $"{dir.Name}.json");
+            if (!File.Exists(jsonPath))
+                return false;
+
+            // Direct jar file exists in the version directory
+            var jarPath = Path.Combine(dir.FullName, $"{dir.Name}.jar");
+            if (File.Exists(jarPath))
+                return true;
+
+            // Or it inherits from another version whose jar is downloaded
+            try
+            {
+                using var jsonDoc = JsonDocument.Parse(File.ReadAllText(jsonPath));
+                if (jsonDoc.RootElement.TryGetProperty("inheritsFrom", out var inheritsElem))
+                {
+                    var parentVersion = inheritsElem.GetString();
+                    if (!string.IsNullOrEmpty(parentVersion) && dir.Parent != null)
+                    {
+                        var parentJar = Path.Combine(dir.Parent.FullName, parentVersion, $"{parentVersion}.jar");
+                        if (File.Exists(parentJar))
+                            return true;
+                    }
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return false;
         }
 
         public async Task InstallVersionAsync(string versionName, IProgress<InstallProgress>? progress = null, CancellationToken ct = default)

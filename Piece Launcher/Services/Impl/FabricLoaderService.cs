@@ -121,7 +121,7 @@ namespace Piece_Launcher.Services.Impl
             bool exists = versionsDir.GetDirectories().Any(d =>
                 d.Name.StartsWith("fabric-loader-", StringComparison.OrdinalIgnoreCase) &&
                 d.Name.EndsWith($"-{minecraftVersion}", StringComparison.OrdinalIgnoreCase) &&
-                File.Exists(Path.Combine(d.FullName, $"{d.Name}.json")));
+                CmlLibVersionService.IsVersionDownloaded(d));
 
             return Task.FromResult(exists);
         }
@@ -129,8 +129,8 @@ namespace Piece_Launcher.Services.Impl
         private bool IsFabricInstalled(string minecraftVersion, string loaderVersion)
         {
             var versionId = $"fabric-loader-{loaderVersion}-{minecraftVersion}";
-            var jsonPath = Path.Combine(_launcher.MinecraftPath.Versions, versionId, $"{versionId}.json");
-            return File.Exists(jsonPath);
+            var versionDir = new DirectoryInfo(Path.Combine(_launcher.MinecraftPath.Versions, versionId));
+            return versionDir.Exists && CmlLibVersionService.IsVersionDownloaded(versionDir);
         }
     }
 }
