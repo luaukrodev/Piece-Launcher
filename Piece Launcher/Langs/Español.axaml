@@ -1,0 +1,86 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=netstandard">
+
+    <!-- Navigation -->
+    <sys:String x:Key="Lang_Nav_Main">principal</sys:String>
+    <sys:String x:Key="Lang_Nav_Home">Inicio</sys:String>
+    <sys:String x:Key="Lang_Nav_Profiles">Perfiles</sys:String>
+    <sys:String x:Key="Lang_Nav_Versions">Versiones</sys:String>
+    <sys:String x:Key="Lang_Nav_Community">comunidad</sys:String>
+    <sys:String x:Key="Lang_Nav_Discover">Descubrir</sys:String>
+    <sys:String x:Key="Lang_Nav_Maps">Mapas</sys:String>
+    <sys:String x:Key="Lang_Nav_Settings">Ajustes</sys:String>
+
+    <!-- Global / Launch Bar -->
+    <sys:String x:Key="Lang_Global_JavaEdition">EDICIÓN JAVA</sys:String>
+    <sys:String x:Key="Lang_Global_Player">JUGADOR</sys:String>
+    <sys:String x:Key="Lang_Global_Type">TIPO</sys:String>
+    <sys:String x:Key="Lang_Global_Version">VERSIÓN</sys:String>
+    <sys:String x:Key="Lang_Global_Loading">Cargando...</sys:String>
+    <sys:String x:Key="Lang_Global_Play">▶  JUGAR</sys:String>
+
+    <!-- Home Page -->
+    <sys:String x:Key="Lang_Home_ReadyToPlay">LISTO PARA JUGAR</sys:String>
+    <sys:String x:Key="Lang_Home_WelcomeBack">Bienvenido de nuevo,</sys:String>
+    <sys:String x:Key="Lang_Home_ChooseVersion">Elige tu versión y diviértete.</sys:String>
+    <sys:String x:Key="Lang_Home_MsAccount">Cuenta de Microsoft</sys:String>
+    <sys:String x:Key="Lang_Home_MsAccountDesc">Inicia sesión para jugar en línea y usar skins</sys:String>
+    <sys:String x:Key="Lang_Home_SignInMs">Iniciar sesión con Microsoft</sys:String>
+
+    <!-- Profiles Page -->
+    <sys:String x:Key="Lang_Profiles_Title">PERFILES</sys:String>
+    <sys:String x:Key="Lang_Profiles_Subtitle">Mis Perfiles</sys:String>
+    <sys:String x:Key="Lang_Profiles_NewProfile">Nuevo Perfil</sys:String>
+    <sys:String x:Key="Lang_Profiles_ProfileNameWatermark">Nombre del perfil...</sys:String>
+    <sys:String x:Key="Lang_Profiles_AddOffline">Añadir Offline</sys:String>
+    <sys:String x:Key="Lang_Profiles_NoProfiles">Aún no hay perfiles</sys:String>
+    <sys:String x:Key="Lang_Profiles_ClickToAdd">Haz clic en "Nuevo Perfil" para añadir</sys:String>
+    <sys:String x:Key="Lang_Profiles_Remove">Eliminar</sys:String>
+
+    <!-- Versions Page -->
+    <sys:String x:Key="Lang_Versions_Title">Versiones</sys:String>
+    <sys:String x:Key="Lang_Versions_Subtitle">Instala y gestiona versiones del juego, mod loaders y ajustes.</sys:String>
+    <sys:String x:Key="Lang_Versions_InstallGame">Instalar Versiones del Juego</sys:String>
+    <sys:String x:Key="Lang_Versions_InstallGameDesc">Descarga e instala nuevas versiones de Minecraft.</sys:String>
+    <sys:String x:Key="Lang_Versions_SearchWatermark">Buscar versiones...</sys:String>
+    <sys:String x:Key="Lang_Versions_Snapshots">Snapshots</sys:String>
+    <sys:String x:Key="Lang_Versions_Betas">Betas</sys:String>
+    <sys:String x:Key="Lang_Versions_Alphas">Alphas</sys:String>
+    <sys:String x:Key="Lang_Versions_Installed">Instalado</sys:String>
+    <sys:String x:Key="Lang_Versions_InstallBtn">Instalar</sys:String>
+    <sys:String x:Key="Lang_Versions_ModLoaders">Mod Loaders</sys:String>
+    <sys:String x:Key="Lang_Versions_ModLoadersDesc">Instala mod loaders para jugar a Minecraft con mods.</sys:String>
+    <sys:String x:Key="Lang_Versions_TargetMinecraft">Versión de Minecraft objetivo:</sys:String>
+
+    <!-- Explore Page -->
+    <sys:String x:Key="Lang_Explore_Title">Descubrir</sys:String>
+    <sys:String x:Key="Lang_Explore_Subtitle">Busca e instala mods, shaders y mapas de la comunidad.</sys:String>
+    <sys:String x:Key="Lang_Explore_SearchWatermark">Buscar mods, shaders, mapas...</sys:String>
+    <sys:String x:Key="Lang_Explore_SearchBtn">Buscar</sys:String>
+    <sys:String x:Key="Lang_Explore_Filters">Filtros</sys:String>
+    <sys:String x:Key="Lang_Explore_Type">Tipo:</sys:String>
+    <sys:String x:Key="Lang_Explore_Source">Fuente:</sys:String>
+    <sys:String x:Key="Lang_Explore_Sort">Ordenar por:</sys:String>
+    <sys:String x:Key="Lang_Explore_NoImage">Sin Imagen</sys:String>
+    <sys:String x:Key="Lang_Explore_PoweredBy">Desarrollado por</sys:String>
+    <sys:String x:Key="Lang_Explore_Previous">Anterior</sys:String>
+    <sys:String x:Key="Lang_Explore_Next">Siguiente</sys:String>
+
+    <!-- Maps Page -->
+    <sys:String x:Key="Lang_Maps_Title">Mapas</sys:String>
+    <sys:String x:Key="Lang_Maps_Subtitle">Esta sección mostrará mapas destacados y permitirá explorar mapas de la comunidad.</sys:String>
+
+    <!-- Settings Page -->
+    <sys:String x:Key="Lang_Settings_Title">Ajustes</sys:String>
+    <sys:String x:Key="Lang_Settings_Subtitle">Personaliza tu launcher y experiencia de juego.</sys:String>
+    <sys:String x:Key="Lang_Settings_General">General</sys:String>
+    <sys:String x:Key="Lang_Settings_Language">Idioma</sys:String>
+    <sys:String x:Key="Lang_Settings_Theme">Tema</sys:String>
+    <sys:String x:Key="Lang_Settings_StartupPage">Página de Inicio</sys:String>
+    <sys:String x:Key="Lang_Settings_LaunchStartup">Iniciar con Windows</sys:String>
+    <sys:String x:Key="Lang_Settings_KeepOpen">Mantener el launcher abierto mientras Minecraft está en ejecución</sys:String>
+    <sys:String x:Key="Lang_Settings_Reset">Restablecer Valores</sys:String>
+    <sys:String x:Key="Lang_Settings_Save">Guardar Ajustes</sys:String>
+
+</ResourceDictionary>

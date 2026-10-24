@@ -1,0 +1,256 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
+             xmlns:models="using:Piece_Launcher.Models"
+             x:Class="Piece_Launcher.Views.Pages.VersionsPageView"
+             x:DataType="vm:VersionsPageViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button.LoaderBtn">
+            <Setter Property="Background" Value="{DynamicResource InnerCardBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="12,14"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.LoaderBtn.active">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="{DynamicResource SidebarActiveBg}"/>
+        </Style>
+        <Style Selector="Button.LoaderBtn:pointerover">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,*" Margin="36,12,36,16">
+
+        <!-- ═══ ROW 0: HEADER ═══ -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+            <StackPanel Grid.Column="0" Spacing="4">
+                <TextBlock Text="{DynamicResource Lang_Versions_Title}" FontSize="28" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                <TextBlock Text="{DynamicResource Lang_Versions_Subtitle}" FontSize="12" Foreground="{DynamicResource TextMuted}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- ═══ ROW 1: STATUS & PROGRESS BANNERS ═══ -->
+        <StackPanel Grid.Row="1" Spacing="8" Margin="0,0,0,12">
+            <!-- Active Installation Banner -->
+            <Border IsVisible="{Binding IsInstalling}" 
+                    Background="{DynamicResource CardBackground}" 
+                    BorderBrush="{DynamicResource AccentBrush}" 
+                    BorderThickness="1" CornerRadius="10" Padding="16,12">
+                <StackPanel Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Grid.Column="0" Text="{Binding InstallProgressText}" Foreground="{DynamicResource TextPrimary}" FontSize="13" FontWeight="SemiBold"/>
+                        <TextBlock Grid.Column="1" Text="{Binding InstallProgressValue, StringFormat='{}{0:F0}%'}" Foreground="{DynamicResource AccentBrush}" FontSize="13" FontWeight="Bold"/>
+                    </Grid>
+                    <ProgressBar Value="{Binding InstallProgressValue}" Maximum="100" Height="6" CornerRadius="3" Foreground="{DynamicResource AccentBrush}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Status Notification Banner -->
+            <Border IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" 
+                    Background="{DynamicResource InnerCardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
+                    CornerRadius="8" Padding="14,8">
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource AccentBrush}" FontSize="12" FontWeight="Medium"/>
+            </Border>
+        </StackPanel>
+
+        <!-- ═══ ROW 2: MAIN 2-COLUMN VIEW ═══ -->
+        <Grid Grid.Row="2" ColumnDefinitions="3*,16,2*">
+
+            <!-- ─── LEFT COLUMN: MINECRAFT GAME VERSIONS ─── -->
+            <Border Grid.Column="0" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="14" Padding="18">
+                <Grid RowDefinitions="Auto,Auto,Auto,*">
+                    <!-- Title & Description -->
+                    <StackPanel Grid.Row="0" Spacing="2" Margin="0,0,0,10">
+                        <TextBlock Text="{DynamicResource Lang_Versions_InstallGame}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
+                        <TextBlock Text="{DynamicResource Lang_Versions_InstallGameDesc}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                    </StackPanel>
+
+                    <!-- Search & Filter Options -->
+                    <StackPanel Grid.Row="1" Spacing="8" Margin="0,0,0,10">
+                        <TextBox Text="{Binding SearchQuery}" 
+                                 PlaceholderText="{DynamicResource Lang_Versions_SearchWatermark}" 
+                                 Padding="12,8" CornerRadius="8"/>
+                        <WrapPanel Orientation="Horizontal">
+                            <CheckBox Content="{DynamicResource Lang_Versions_Snapshots}" IsChecked="{Binding ShowSnapshots}" Margin="0,0,12,0"/>
+                            <CheckBox Content="{DynamicResource Lang_Versions_Betas}" IsChecked="{Binding ShowBetas}" Margin="0,0,12,0"/>
+                            <CheckBox Content="{DynamicResource Lang_Versions_Alphas}" IsChecked="{Binding ShowAlphas}" Margin="0,0,12,0"/>
+                            <CheckBox Content="Antigas" IsChecked="{Binding ShowOldVersions}" Margin="0,0,12,0"/>
+                        </WrapPanel>
+                    </StackPanel>
+
+                    <!-- Indeterminate loader -->
+                    <ProgressBar Grid.Row="2" IsIndeterminate="True" Height="2" IsVisible="{Binding IsLoading}" Foreground="{DynamicResource AccentBrush}" Margin="0,0,0,6"/>
+
+                    <!-- Virtualized Versions List -->
+                    <ListBox Grid.Row="3" ItemsSource="{Binding FilteredVersions}" Background="Transparent">
+                        <ListBox.Styles>
+                            <Style Selector="ListBoxItem">
+                                <Setter Property="Padding" Value="0,3"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style>
+                            <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style>
+                        </ListBox.Styles>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="models:VersionEntry">
+                                <Border Background="{DynamicResource InnerCardBackground}" 
+                                        BorderBrush="{DynamicResource CardBorderBrush}" 
+                                        BorderThickness="1" CornerRadius="10" Padding="14,10" Margin="0,0,4,4">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                                        <!-- Type Tag -->
+                                        <Border Grid.Column="0" CornerRadius="6" Padding="8,4" Margin="0,0,12,0"
+                                                Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1">
+                                            <TextBlock Text="{Binding Type}" FontSize="10" FontWeight="Bold" 
+                                                       Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
+                                        </Border>
+
+                                        <!-- Info -->
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                            <TextBlock Text="{Binding Name}" FontSize="13" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
+                                            <TextBlock Text="{Binding ReleaseTime, StringFormat='{}{0:dd/MM/yyyy}'}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                                        </StackPanel>
+
+                                        <!-- Action / Badge -->
+                                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                                            <Border IsVisible="{Binding IsInstalled}" Background="#182ecc71" BorderBrush="#2ecc71" BorderThickness="1" CornerRadius="6" Padding="10,5">
+                                                <TextBlock Text="✓ Instalado" Foreground="#2ecc71" FontSize="11" FontWeight="SemiBold"/>
+                                            </Border>
+                                            <Button Classes="MicrosoftButton" Content="{DynamicResource Lang_Versions_InstallBtn}" FontSize="11" Padding="12,5"
+                                                    IsVisible="{Binding !IsInstalled}"
+                                                    Command="{Binding $parent[UserControl].((vm:VersionsPageViewModel)DataContext).InstallVersionCommand}"
+                                                    CommandParameter="{Binding Name}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- ─── RIGHT COLUMN: MOD LOADERS HUB ─── -->
+            <Border Grid.Column="2" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="14" Padding="18">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="16">
+                        <!-- Hub Title -->
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="{DynamicResource Lang_Versions_ModLoaders}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
+                            <TextBlock Text="{DynamicResource Lang_Versions_ModLoadersDesc}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                        </StackPanel>
+
+                        <!-- Step 1: Target Minecraft Version -->
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{DynamicResource Lang_Versions_TargetMinecraft}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            <ComboBox ItemsSource="{Binding MinecraftReleaseVersions}" 
+                                      SelectedItem="{Binding SelectedMinecraftVersion}" 
+                                      HorizontalAlignment="Stretch" CornerRadius="8"/>
+                        </StackPanel>
+
+                        <!-- Step 2: Choose Loader -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Selecione o Mod Loader" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" Margin="0,0,0,0">
+                                <!-- Fabric -->
+                                <Button Grid.Row="0" Grid.Column="0" Margin="0,0,4,4"
+                                        Classes="LoaderBtn" Classes.active="{Binding IsFabricSelected}"
+                                        Command="{Binding SelectLoaderCommand}" CommandParameter="Fabric">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Fabric" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Leve &amp; Rápido" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- Forge -->
+                                <Button Grid.Row="0" Grid.Column="1" Margin="4,0,0,4"
+                                        Classes="LoaderBtn" Classes.active="{Binding IsForgeSelected}"
+                                        Command="{Binding SelectLoaderCommand}" CommandParameter="Forge">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Forge" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Clássico &amp; Robusto" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- NeoForge -->
+                                <Button Grid.Row="1" Grid.Column="0" Margin="0,4,4,0"
+                                        Classes="LoaderBtn" Classes.active="{Binding IsNeoForgeSelected}"
+                                        Command="{Binding SelectLoaderCommand}" CommandParameter="NeoForge">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="NeoForge" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Modern Forge" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- Quilt -->
+                                <Button Grid.Row="1" Grid.Column="1" Margin="4,4,0,0"
+                                        Classes="LoaderBtn" Classes.active="{Binding IsQuiltSelected}"
+                                        Command="{Binding SelectLoaderCommand}" CommandParameter="Quilt">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="Quilt" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Próxima Geração" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Step 3: Choose Loader Version -->
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Versão do Loader" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+
+                            <!-- Loader Spinner -->
+                            <ProgressBar IsIndeterminate="True" Height="2" IsVisible="{Binding IsLoadingLoaderVersions}" Foreground="{DynamicResource AccentBrush}" Margin="0,0,0,4"/>
+
+                            <ComboBox ItemsSource="{Binding AvailableLoaderVersions}" 
+                                      SelectedItem="{Binding SelectedLoaderVersionEntry}" 
+                                      HorizontalAlignment="Stretch" CornerRadius="8"
+                                      PlaceholderText="Selecione a versão">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="models:LoaderVersionEntry">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="{Binding Version}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="★ Recomendado" IsVisible="{Binding IsRecommended}" Foreground="{DynamicResource AccentBrush}" FontSize="11" VerticalAlignment="Center"/>
+                                            <TextBlock Text="✓ Instalado" IsVisible="{Binding IsInstalled}" Foreground="#2ecc71" FontSize="11" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Step 4: Installation status badge (if already installed) -->
+                        <Border IsVisible="{Binding IsCurrentLoaderInstalled}" 
+                                Background="#182ecc71" BorderBrush="#2ecc71" BorderThickness="1" CornerRadius="8" Padding="12,8">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="✓" Foreground="#2ecc71" FontWeight="Bold"/>
+                                <TextBlock Text="Este loader já está instalado para esta versão!" Foreground="#2ecc71" FontSize="11" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Primary CTA Button -->
+                        <Button Classes="PlayButton"
+                                HorizontalAlignment="Stretch"
+                                Height="44"
+                                Margin="0,8,0,0"
+                                Command="{Binding InstallSelectedLoaderCommand}"
+                                IsEnabled="{Binding !IsInstalling}">
+                            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                <TextBlock Text="📥" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Text="Instalar " FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding SelectedLoader}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+        </Grid>
+    </Grid>
+</UserControl>

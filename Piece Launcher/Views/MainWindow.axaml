@@ -11,124 +11,103 @@
         Title=""
         Width="900" Height="560"
         MinWidth="800" MinHeight="500"
-        Background="#080810"
+        Background="{DynamicResource WindowBackground}"
         SystemDecorations="None"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaTitleBarHeightHint="-1"
         CornerRadius="12"
         BorderThickness="1"
-        BorderBrush="#1a1a2e">
-
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+        BorderBrush="{DynamicResource WindowBorderBrush}">
 
     <Grid>
-
-        <!-- Glow: top-left orange -->
+        <!-- Glow effects -->
         <Border>
             <Border.Background>
                 <RadialGradientBrush Center="0,0" GradientOrigin="0,0" RadiusX="0.55" RadiusY="0.55">
-                    <GradientStop Color="#33e67e22" Offset="0"/>
+                    <GradientStop Color="{DynamicResource GlowPrimary}" Offset="0"/>
                     <GradientStop Color="#00000000" Offset="1"/>
                 </RadialGradientBrush>
             </Border.Background>
         </Border>
-
-        <!-- Glow: bottom-right red -->
         <Border>
             <Border.Background>
                 <RadialGradientBrush Center="1,1" GradientOrigin="1,1" RadiusX="0.45" RadiusY="0.45">
-                    <GradientStop Color="#22c0392b" Offset="0"/>
+                    <GradientStop Color="{DynamicResource GlowSecondary}" Offset="0"/>
                     <GradientStop Color="#00000000" Offset="1"/>
                 </RadialGradientBrush>
             </Border.Background>
         </Border>
 
         <Grid ColumnDefinitions="210,*">
-
-            <!-- ══════════════════════════════════ SIDEBAR ══════════════════════════════════ -->
-            <Border Grid.Column="0" Background="#0f0f1a" BorderBrush="#1e1e2e" BorderThickness="0,0,1,0">
-                <Grid RowDefinitions="Auto,*,Auto,Auto">
-
+            <!-- ════ SIDEBAR ════ -->
+            <Border Grid.Column="0" Background="{DynamicResource SidebarBackground}" BorderBrush="{DynamicResource SidebarBorderBrush}" BorderThickness="0,0,1,0">
+                <Grid RowDefinitions="100,*,Auto,Auto">
                     <!-- Logo -->
-                    <Border Grid.Row="0" Padding="20,28,20,20" BorderBrush="#1a1a2e" BorderThickness="0,0,0,1">
+                    <Border Grid.Row="0" Padding="20,10,10,10" BorderBrush="{DynamicResource SidebarDividerBrush}" BorderThickness="0,0,0,1">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Border Width="38" Height="38" CornerRadius="10" Background="#1a1200">
-                                <Image Source="/Assets/Piece Launcher.ico" Width="24" Height="24"
+                            <Border Width="75" Height="75" CornerRadius="10" Background="{DynamicResource SidebarLogoBg}">
+                                <Image Source="/Assets/Piece Launcher.ico" Width="65" Height="65"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <StackPanel VerticalAlignment="Center" Spacing="0">
                                 <TextBlock Text="PIECE" FontSize="16" FontWeight="Black"
-                                           Foreground="#e67e22" LetterSpacing="4"/>
+                                           Foreground="{DynamicResource AccentBrush}" LetterSpacing="4"/>
                                 <TextBlock Text="LAUNCHER" FontSize="10" FontWeight="SemiBold"
-                                           Foreground="#5a5a7a" LetterSpacing="3"/>
+                                           Foreground="{DynamicResource TextDimmed}" LetterSpacing="3"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
 
                     <!-- Nav -->
                     <StackPanel Grid.Row="1" Margin="12,16,12,0" Spacing="4">
-                        <TextBlock Text="main"
-                                   HorizontalAlignment="Center"
-                                   FontWeight="Light"
-                                   Foreground="#5a5a7a"></TextBlock>
+                        <TextBlock Text="{DynamicResource Lang_Nav_Main}" HorizontalAlignment="Center" FontWeight="Light" Foreground="{DynamicResource TextDimmed}"></TextBlock>
 
                         <Button Classes="SidebarButton" Command="{Binding NavigateHomeCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="⌂" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="Home" VerticalAlignment="Center"/>
-                                <TextBlock Text=" ●" Foreground="#e67e22" VerticalAlignment="Center" IsVisible="{Binding IsHomeView}"/>
+                                <TextBlock Text="{DynamicResource Lang_Nav_Home}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
                         <Button Classes="SidebarButton" Command="{Binding NavigateProfilesCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="◉" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="Profiles" VerticalAlignment="Center"/>
-                                <TextBlock Text=" ●" Foreground="#e67e22" VerticalAlignment="Center" IsVisible="{Binding IsProfilesView}"/>
+                                <TextBlock Text="{DynamicResource Lang_Nav_Profiles}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
                         <Button Classes="SidebarButton" Command="{Binding NavigateVersionsCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="⎇" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="Versions" VerticalAlignment="Center"/>
-                                <TextBlock Text=" ●" Foreground="#e67e22" VerticalAlignment="Center" IsVisible="{Binding IsVersionsView}"/>
+                                <TextBlock Text="{DynamicResource Lang_Nav_Versions}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
 
-                        <Border Height="1" Background="#1a1a2e" Margin="4,8"/>
+                        <Border Height="1" Background="{DynamicResource SidebarDividerBrush}" Margin="4,8"/>
 
-                        <TextBlock Text="community"
-                                   HorizontalAlignment="Center"
-                                   FontWeight="Light"
-                                   Foreground="#5a5a7a"></TextBlock>
+                        <TextBlock Text="{DynamicResource Lang_Nav_Community}" HorizontalAlignment="Center" FontWeight="Light" Foreground="{DynamicResource TextDimmed}"></TextBlock>
 
                         <Button Classes="SidebarButton" Command="{Binding NavigateDiscoverCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="🗲" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="Discover" VerticalAlignment="Center"/>
-                                <TextBlock Text=" ●" Foreground="#e67e22" VerticalAlignment="Center" IsVisible="{Binding IsDiscoverView}"/>
+                                <TextBlock Text="{DynamicResource Lang_Nav_Discover}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="SidebarButton" Command="{Binding NavigateMapsCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="◈" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="Maps" VerticalAlignment="Center"/>
-                                <TextBlock Text=" ●" Foreground="#e67e22" VerticalAlignment="Center" IsVisible="{Binding IsMapsView}"/>
+                                <TextBlock Text="{DynamicResource Lang_Nav_Maps}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-
                     </StackPanel>
 
                     <!-- Version badge -->
-                    <Border Grid.Row="2" Margin="12,8" Padding="12,8" CornerRadius="8" Background="#0d0d1a">
+                    <Border Grid.Row="2" Margin="12,8" Padding="12,8" CornerRadius="8" Background="{DynamicResource ElevatedBackground}">
                         <StackPanel Spacing="2">
-                            <TextBlock Text="JAVA EDITION" FontSize="9" FontWeight="Bold"
-                                       Foreground="#3a3a5a" LetterSpacing="2"/>
+                            <TextBlock Text="{DynamicResource Lang_Global_JavaEdition}" FontSize="9" FontWeight="Bold"
+                                       Foreground="{DynamicResource TextLabel}" LetterSpacing="2"/>
                             <TextBlock Text="{Binding SelectedVersion, FallbackValue='...'}"
-                                       FontSize="12" FontWeight="SemiBold" Foreground="#6a6a9a"/>
+                                       FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextMuted}"/>
                         </StackPanel>
                     </Border>
 
@@ -136,672 +115,36 @@
                     <Button Grid.Row="3" Classes="SidebarButton" Margin="12,0,12,16" Command="{Binding NavigateSettingsCommand}">
                         <StackPanel Orientation="Horizontal" Spacing="12">
                             <TextBlock Text="⚙" FontSize="16" VerticalAlignment="Center"/>
-                            <TextBlock Text="Settings" VerticalAlignment="Center"/>
-                            <TextBlock Text=" ●" Foreground="#e67e22" VerticalAlignment="Center" IsVisible="{Binding IsSettingsView}"/>
+                            <TextBlock Text="{DynamicResource Lang_Nav_Settings}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-
                 </Grid>
             </Border>
 
-            <!-- ══════════════════════════════════ MAIN ══════════════════════════════════ -->
+            <!-- ════ MAIN ════ -->
             <Grid Grid.Column="1" RowDefinitions="38,*,Auto">
-
-                <!-- Title-bar drag + window controls -->
+                <!-- Title-bar -->
                 <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
                     <Border Grid.Column="0" Background="Transparent" PointerPressed="OnTitleBarPointerPressed"/>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center"
-                                Margin="0,0,12,0" Spacing="8">
-                        <Button Classes="WinBtn WinMaximize"    Content="☐" Click="OnMaximizeClick"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0" Spacing="8">
+                        <Button Classes="WinBtn WinMaximize" Content="☐" Click="OnMaximizeClick"/>
                         <Button Classes="WinBtn WinMinimize" Content="—" Click="OnMinimizeClick"/>
-                        <Button Classes="WinBtn WinClose"    Content="✕" Click="OnCloseClick"/>
+                        <Button Classes="WinBtn WinClose" Content="✕" Click="OnCloseClick"/>
                     </StackPanel>
                 </Grid>
 
-                <!-- ── Content views (Panel stacks them; IsVisible toggles) ── -->
-                <Panel Grid.Row="1">
+                <!-- ── Dynamic Content ── -->
+                <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" />
 
-                    <!-- ════════════ HOME VIEW ════════════ -->
-                    <Grid Margin="44,8,44,0" IsVisible="{Binding IsHomeView}">
-
-                        <!-- Watermark -->
-                        <TextBlock Text="PL" FontSize="200" FontWeight="Black" Foreground="#06060f"
-                                   HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                                   IsHitTestVisible="False"/>
-
-                        <StackPanel Spacing="6" VerticalAlignment="Center">
-
-                            <!-- Ready pill -->
-                            <Border CornerRadius="20" BorderBrush="#55e67e22" BorderThickness="1"
-                                    Padding="14,5" HorizontalAlignment="Left">
-                                <Border.Background>
-                                    <SolidColorBrush Color="#e67e22" Opacity="0.08"/>
-                                </Border.Background>
-                                <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="#e67e22" LetterSpacing="2">
-                                    <Run Text="● "/>
-                                    <Run Text="READY TO PLAY"/>
-                                </TextBlock>
-                            </Border>
-
-                            <TextBlock Text="Welcome back," FontSize="36" FontWeight="Light"
-                                       Foreground="#8888aa" Margin="0,8,0,0"/>
-
-                            <TextBlock Text="{Binding SelectedProfile.Name, FallbackValue='Explorer'}"
-                                       FontSize="54" FontWeight="Black" Foreground="White" Margin="0,-8,0,0"/>
-
-                            <TextBlock Text="Choose your version and jump in."
-                                       FontSize="14" Foreground="#44445a" Margin="0,4,0,24"/>
-
-                            <!-- Microsoft sign-in card -->
-                            <Border CornerRadius="14" Background="#0f0f1c" BorderBrush="#252535"
-                                    BorderThickness="1" Padding="24,20" MaxWidth="440" HorizontalAlignment="Left">
-                                <StackPanel Spacing="12">
-
-                                    <!-- Card header -->
-                                    <StackPanel Orientation="Horizontal" Spacing="10">
-                                        <Border Width="32" Height="32" CornerRadius="8" Background="#1a1a2e">
-                                            <TextBlock Text="⊞" FontSize="18" Foreground="#00a4ef"
-                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                        <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="Microsoft Account" FontSize="13"
-                                                       FontWeight="SemiBold" Foreground="White"/>
-                                            <TextBlock Text="Sign in for online play &amp; skins"
-                                                       FontSize="11" Foreground="#44445a"/>
-                                        </StackPanel>
-                                    </StackPanel>
-
-                                    <Button Content="Sign in with Microsoft"
-                                            Classes="MicrosoftButton"
-                                            Command="{Binding AddMicrosoftProfileCommand}"
-                                            IsEnabled="{Binding !IsLoggingIn}"
-                                            HorizontalAlignment="Stretch"/>
-
-                                    <!--<Button Content="Advanced: custom Azure Client ID"
-                                            Classes="SidebarButton"
-                                            Command="{Binding ToggleCustomClientIdSettingsCommand}"
-                                            HorizontalAlignment="Left"
-                                            Padding="0"/>
-
-                                    <StackPanel IsVisible="{Binding ShowCustomClientIdSettings}" Spacing="8">
-                                        <TextBlock Text="Only needed if you registered your own Azure app with Mojang."
-                                                   FontSize="10" Foreground="#3a3a5a" TextWrapping="Wrap"/>
-                                        <Grid ColumnDefinitions="*,Auto">
-                                            <TextBox Grid.Column="0"
-                                                     Text="{Binding ClientIdInput}"
-                                                     Watermark="Paste your Azure App Client ID..."
-                                                     Margin="0,0,8,0"/>
-                                            <Button Grid.Column="1" Content="Save"
-                                                    Classes="MicrosoftButton"
-                                                    Command="{Binding SaveClientIdCommand}"/>
-                                        </Grid>
-                                        <Button Content="Use built-in sign-in instead"
-                                                Classes="SidebarButton"
-                                                Command="{Binding DisableCustomClientIdCommand}"
-                                                HorizontalAlignment="Left"
-                                                IsVisible="{Binding UseCustomClientId}"/>
-                                    </StackPanel>-->
-
-                                    <!-- Logging-in indicator -->
-                                    <TextBlock IsVisible="{Binding IsLoggingIn}"
-                                               Text="Signing in, check your browser..."
-                                               FontSize="11" Foreground="#7777aa"/>
-
-                                    <TextBlock IsVisible="{Binding IsLoggingIn}" 
-                                               Text="Disclaimer: This launcher uses CmLib.Core to run"
-                                               FontSize="11" Foreground="#7777aa"/>
-                                               <!-- Status / error -->
-
-                                    <TextBlock Text="{Binding StatusMessage}"
-                                               FontSize="11" Foreground="#cc5555" TextWrapping="Wrap"
-                                               IsVisible="{Binding HasStatusMessage}"/>
-                                </StackPanel>
-                            </Border>
-
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- ════════════ PROFILES VIEW ════════════ -->
-                    <ScrollViewer IsVisible="{Binding IsProfilesView}"
-                                  HorizontalScrollBarVisibility="Disabled"
-                                  VerticalScrollBarVisibility="Auto">
-                        <StackPanel Margin="44,12,44,16" Spacing="0">
-
-                            <!-- Header -->
-                            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock Text="PROFILES" FontSize="11" FontWeight="Bold"
-                                               Foreground="#3a3a5a" LetterSpacing="3"/>
-                                    <TextBlock Text="My Profiles" FontSize="32" FontWeight="Black" Foreground="White"/>
-                                </StackPanel>
-                                <Button Grid.Column="1" Classes="PlayButton" Padding="16,10"
-                                        VerticalAlignment="Center" Command="{Binding ToggleAddFormCommand}">
-                                    <StackPanel Orientation="Horizontal" Spacing="6">
-                                        <TextBlock Text="+" FontSize="16" VerticalAlignment="Center"/>
-                                        <TextBlock Text="New Profile" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </Grid>
-
-                            <!-- Add-profile form -->
-                            <Border IsVisible="{Binding ShowAddProfileForm}"
-                                    Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1"
-                                    CornerRadius="12" Padding="20,16" Margin="0,0,0,16">
-                                <StackPanel Spacing="10">
-                                    <TextBlock Text="New Profile" FontSize="13" FontWeight="SemiBold" Foreground="White"/>
-                                    <Grid ColumnDefinitions="*,Auto,Auto">
-                                        <TextBox Grid.Column="0"
-                                                 Text="{Binding NewProfileName}"
-                                                 PlaceholderText="Profile name..."
-                                                 Margin="0,0,10,0"/>
-                                        <Button Grid.Column="1" Content="Add Offline"
-                                                Classes="MicrosoftButton" Margin="0,0,8,0"
-                                                Command="{Binding AddOfflineProfileCommand}"/>
-                                        <Button Grid.Column="2" Content="Sign in with Microsoft"
-                                                Classes="PlayButton" Padding="14,10"
-                                                Command="{Binding AddMicrosoftProfileCommand}"
-                                                IsEnabled="{Binding !IsLoggingIn}"/>
-                                    </Grid>
-                                    <TextBlock Text="{Binding StatusMessage}"
-                                               FontSize="11" Foreground="#cc5555" TextWrapping="Wrap"
-                                               IsVisible="{Binding HasStatusMessage}"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Empty-state hint -->
-                            <Border IsVisible="{Binding HasNoProfiles}" Padding="0,32">
-                                <StackPanel Spacing="6" HorizontalAlignment="Center">
-                                    <TextBlock Text="No profiles yet" FontSize="16"
-                                               Foreground="#3a3a5a" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="Click &quot;New Profile&quot; to add one"
-                                               FontSize="12" Foreground="#2a2a3a" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Profile cards grid -->
-                            <ItemsControl ItemsSource="{Binding UserProfiles}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Width="168" Height="112"
-                                                CornerRadius="12" Background="#0f0f1c"
-                                                BorderBrush="#252535" BorderThickness="1"
-                                                Margin="0,0,12,12" Padding="16,14">
-                                            <Grid RowDefinitions="*,Auto">
-
-                                                <StackPanel Grid.Row="0" Spacing="6">
-                                                    <TextBlock Text="{Binding Name}" FontSize="15"
-                                                               FontWeight="SemiBold" Foreground="White"
-                                                               TextTrimming="CharacterEllipsis"/>
-                                                    <Border CornerRadius="4" Background="#1a1a2e"
-                                                            Padding="6,3" HorizontalAlignment="Left">
-                                                        <TextBlock Text="{Binding Type}" FontSize="10"
-                                                                   Foreground="#5a5a9a" FontWeight="Bold"/>
-                                                    </Border>
-                                                </StackPanel>
-
-                                                <Button Grid.Row="1"
-                                                        Content="Remove"
-                                                        Classes="RemoveButton"
-                                                        HorizontalAlignment="Right"
-                                                        Command="{Binding $parent[Window].DataContext.RemoveProfileCommand}"
-                                                        CommandParameter="{Binding}"/>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-
-                        </StackPanel>
-                    </ScrollViewer>
-
-                    <!-- ════════════ DISCOVER / EXPLORE VIEW ════════════ -->
-                    <ScrollViewer IsVisible="{Binding IsDiscoverView}" Margin="44,12,44,16">
-                        <StackPanel Spacing="12">
-                            <TextBlock Text="Explore" FontSize="32" FontWeight="Black" Foreground="White"/>
-                            <TextBlock Text="Search and install mods, shaders, and maps from the community." Foreground="#6a6a9a" Margin="0,0,0,8"/>
-
-                            <!-- Search Bar -->
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBox Grid.Column="0" Watermark="Search mods, shaders, maps..." Padding="12,10" Margin="0,0,8,0"/>
-                                <Button Grid.Column="1" Content="Search" Padding="20,10" Classes="PlayButton"/>
-                            </Grid>
-
-                            <!-- Filters -->
-                            <Border Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1" CornerRadius="8" Padding="12,8">
-                                <StackPanel Spacing="8">
-                                    <TextBlock Text="Filters" FontSize="11" FontWeight="Bold" Foreground="#3a3a5a"/>
-                                    <Grid ColumnDefinitions="*,*,*">
-                                        <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
-                                            <TextBlock Text="Type:" FontSize="10" Foreground="#6a6a9a"/>
-                                            <ComboBox>
-                                                <ComboBoxItem Content="Mod"/>
-                                                <ComboBoxItem Content="Shader"/>
-                                                <ComboBoxItem Content="Map"/>
-                                            </ComboBox>
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,8,0">
-                                            <TextBlock Text="Source:" FontSize="10" Foreground="#6a6a9a"/>
-                                            <ComboBox>
-                                                <ComboBoxItem Content="All"/>
-                                                <ComboBoxItem Content="Modrinth"/>
-                                                <ComboBoxItem Content="CurseForge"/>
-                                            </ComboBox>
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="2" Spacing="4">
-                                            <TextBlock Text="Sort:" FontSize="10" Foreground="#6a6a9a"/>
-                                            <ComboBox>
-                                                <ComboBoxItem Content="Popular"/>
-                                                <ComboBoxItem Content="Recent"/>
-                                                <ComboBoxItem Content="Downloaded"/>
-                                            </ComboBox>
-                                        </StackPanel>
-                                    </Grid>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Results (Placeholder) -->
-                            <ItemsControl>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Width="240" Height="200" CornerRadius="10" Background="#0f0f1c" 
-                                                BorderBrush="#252535" BorderThickness="1" Margin="0,0,12,12" Padding="12">
-                                            <StackPanel Spacing="8">
-                                                <Border Height="100" CornerRadius="8" Background="#1a1a2e">
-                                                    <TextBlock Text="Mod Preview" FontSize="11" Foreground="#5a5a9a"
-                                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                                <TextBlock Text="Mod Name" FontSize="13" FontWeight="SemiBold" Foreground="White"/>
-                                                <TextBlock Text="Author · 10K downloads" FontSize="10" Foreground="#6a6a9a"/>
-                                                <Button Content="Install" HorizontalAlignment="Stretch" Classes="PlayButton"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </ScrollViewer>
-
-                    <!-- ════════════ VERSIONS VIEW ════════════ -->
-                    <ScrollViewer IsVisible="{Binding IsVersionsView}" Margin="44,12,44,16" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Spacing="20">
-                            <!-- Header -->
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="Versions" FontSize="32" FontWeight="Black" Foreground="White"/>
-                                <TextBlock Text="Install and manage game versions, mod loaders, and settings." Foreground="#6a6a9a"/>
-                            </StackPanel>
-
-                            <!-- ─── Section 1: Install Game Versions ─── -->
-                            <Border Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1" CornerRadius="12" Padding="20,16">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="Install Game Versions" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
-                                    <TextBlock Text="Download and install new Minecraft versions." FontSize="11" Foreground="#6a6a9a"/>
-
-                                    <!-- Search/Filter -->
-                                    <Grid ColumnDefinitions="*,Auto,Auto">
-                                        <TextBox Grid.Column="0" Watermark="Search versions..." Padding="12,10" Margin="0,0,8,0"/>
-                                        <ComboBox Grid.Column="1" MinWidth="120" Margin="0,0,8,0">
-                                            <ComboBoxItem Content="All Versions"/>
-                                            <ComboBoxItem Content="Releases"/>
-                                            <ComboBoxItem Content="Snapshots"/>
-                                            <ComboBoxItem Content="Betas"/>
-                                        </ComboBox>
-                                        <Button Grid.Column="2" Content="Search" Padding="16,10" Classes="PlayButton"/>
-                                    </Grid>
-
-                                    <!-- Available Versions Grid -->
-                                    <ItemsControl ItemsSource="{Binding Versions}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel Orientation="Horizontal"/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Width="140" Height="90" CornerRadius="8" Background="#1a1a2e" 
-                                                        BorderBrush="#252535" BorderThickness="1" Margin="0,0,8,8" Padding="12">
-                                                    <Grid RowDefinitions="*,Auto">
-                                                        <StackPanel Grid.Row="0" VerticalAlignment="Center">
-                                                            <TextBlock Text="{Binding}" FontSize="12" FontWeight="SemiBold" 
-                                                                       Foreground="White" TextTrimming="CharacterEllipsis"/>
-                                                        </StackPanel>
-                                                        <Button Grid.Row="1" Content="Install" FontSize="10" Padding="8,4" 
-                                                                Classes="MicrosoftButton" Margin="0,8,0,0"
-                                                                Command="{Binding $parent[Window].DataContext.InstallVersionCommand}"
-                                                                CommandParameter="{Binding}"/>
-                                                    </Grid>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- ─── Section 2: Mod Loaders ─── -->
-                            <Border Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1" CornerRadius="12" Padding="20,16">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="Mod Loaders" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
-                                    <TextBlock Text="Install mod loaders to play modded Minecraft." FontSize="11" Foreground="#6a6a9a"/>
-
-                                    <!-- Loader Buttons -->
-                                    <StackPanel Spacing="8">
-                                        <Grid ColumnDefinitions="*,*,*,*">
-                                            <!-- Forge -->
-                                            <Border Grid.Column="0" Width="160" Height="100" CornerRadius="8" Background="#1a1a2e" 
-                                                    BorderBrush="#252535" BorderThickness="1" Padding="12" Margin="0,0,8,0">
-                                                <Grid RowDefinitions="*,Auto">
-                                                    <StackPanel Grid.Row="0" VerticalAlignment="Center" Spacing="4">
-                                                        <TextBlock Text="Forge" FontSize="13" FontWeight="SemiBold" 
-                                                                   Foreground="White" HorizontalAlignment="Center"/>
-                                                        <Border CornerRadius="4" Background="#0d0d18" Padding="4,2" HorizontalAlignment="Center">
-                                                            <TextBlock Text="Not Installed" FontSize="9" Foreground="#6a6a9a"/>
-                                                        </Border>
-                                                    </StackPanel>
-                                                    <Button Grid.Row="1" Content="Install" FontSize="10" Padding="8,4" 
-                                                            Classes="PlayButton" Margin="0,8,0,0"
-                                                            Command="{Binding InstallLoaderCommand}"
-                                                            CommandParameter="Forge"/>
-                                                </Grid>
-                                            </Border>
-                                            <!-- Fabric -->
-                                            <Border Grid.Column="1" Width="160" Height="100" CornerRadius="8" Background="#1a1a2e" 
-                                                    BorderBrush="#252535" BorderThickness="1" Padding="12" Margin="0,0,8,0">
-                                                <Grid RowDefinitions="*,Auto">
-                                                    <StackPanel Grid.Row="0" VerticalAlignment="Center" Spacing="4">
-                                                        <TextBlock Text="Fabric" FontSize="13" FontWeight="SemiBold" 
-                                                                   Foreground="White" HorizontalAlignment="Center"/>
-                                                        <Border CornerRadius="4" Background="#0d0d18" Padding="4,2" HorizontalAlignment="Center">
-                                                            <TextBlock Text="Not Installed" FontSize="9" Foreground="#6a6a9a"/>
-                                                        </Border>
-                                                    </StackPanel>
-                                                    <Button Grid.Row="1" Content="Install" FontSize="10" Padding="8,4" 
-                                                            Classes="PlayButton" Margin="0,8,0,0"
-                                                            Command="{Binding InstallLoaderCommand}"
-                                                            CommandParameter="Fabric"/>
-                                                </Grid>
-                                            </Border>
-                                            <!-- NeoForge -->
-                                            <Border Grid.Column="2" Width="160" Height="100" CornerRadius="8" Background="#1a1a2e" 
-                                                    BorderBrush="#252535" BorderThickness="1" Padding="12" Margin="0,0,8,0">
-                                                <Grid RowDefinitions="*,Auto">
-                                                    <StackPanel Grid.Row="0" VerticalAlignment="Center" Spacing="4">
-                                                        <TextBlock Text="NeoForge" FontSize="13" FontWeight="SemiBold" 
-                                                                   Foreground="White" HorizontalAlignment="Center"/>
-                                                        <Border CornerRadius="4" Background="#0d0d18" Padding="4,2" HorizontalAlignment="Center">
-                                                            <TextBlock Text="Not Installed" FontSize="9" Foreground="#6a6a9a"/>
-                                                        </Border>
-                                                    </StackPanel>
-                                                    <Button Grid.Row="1" Content="Install" FontSize="10" Padding="8,4" 
-                                                            Classes="PlayButton" Margin="0,8,0,0"
-                                                            Command="{Binding InstallLoaderCommand}"
-                                                            CommandParameter="NeoForge"/>
-                                                </Grid>
-                                            </Border>
-                                            <!-- Quilt -->
-                                            <Border Grid.Column="3" Width="160" Height="100" CornerRadius="8" Background="#1a1a2e" 
-                                                    BorderBrush="#252535" BorderThickness="1" Padding="12">
-                                                <Grid RowDefinitions="*,Auto">
-                                                    <StackPanel Grid.Row="0" VerticalAlignment="Center" Spacing="4">
-                                                        <TextBlock Text="Quilt" FontSize="13" FontWeight="SemiBold" 
-                                                                   Foreground="White" HorizontalAlignment="Center"/>
-                                                        <Border CornerRadius="4" Background="#0d0d18" Padding="4,2" HorizontalAlignment="Center">
-                                                            <TextBlock Text="Not Installed" FontSize="9" Foreground="#6a6a9a"/>
-                                                        </Border>
-                                                    </StackPanel>
-                                                    <Button Grid.Row="1" Content="Install" FontSize="10" Padding="8,4" 
-                                                            Classes="PlayButton" Margin="0,8,0,0"
-                                                            Command="{Binding InstallLoaderCommand}"
-                                                            CommandParameter="Quilt"/>
-                                                </Grid>
-                                            </Border>
-                                        </Grid>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- ─── Section 3: Game Configuration ─── -->
-                            <Border Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1" CornerRadius="12" Padding="20,16">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="Game Configuration" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
-                                    <TextBlock Text="Configure game launch settings." FontSize="11" Foreground="#6a6a9a"/>
-
-                                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto">
-                                        <!-- RAM Settings -->
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="RAM Allocation" FontSize="11" Foreground="#6a6a9a" Margin="0,0,8,0"/>
-                                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,0,8,0">
-                                            <TextBox Width="100" Watermark="Min (MB)" Padding="8,6" Margin="0,0,8,0"/>
-                                            <TextBlock Text="—" VerticalAlignment="Center" Foreground="#5a5a9a" Margin="0,0,8,0"/>
-                                            <TextBox Width="100" Watermark="Max (MB)" Padding="8,6"/>
-                                        </StackPanel>
-
-                                        <!-- Java Path -->
-                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Java Executable" FontSize="11" Foreground="#6a6a9a"/>
-                                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                                            <TextBox Text="{Binding Config.DefaultJava}" Padding="8,6" Width="200" Margin="0,0,8,0"/>
-                                            <Button Content="Auto-detect" Padding="12,6" Classes="MicrosoftButton"/>
-                                        </StackPanel>
-
-                                        <!-- JVM Args -->
-                                        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="JVM Arguments" FontSize="11" Foreground="#6a6a9a"/>
-                                        <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" 
-                                                 Watermark="Additional JVM parameters..." 
-                                                 MinHeight="60" Padding="8,6" AcceptsReturn="True"/>
-                                    </Grid>
-
-                                    <!-- Save Button -->
-                                    <Button Content="Save Configuration" HorizontalAlignment="Right" Padding="20,10" Classes="PlayButton"/>
-                                </StackPanel>
-                            </Border>
-
-                        </StackPanel>
-                    </ScrollViewer>
-
-                    <!-- ════════════ MAPS VIEW (base) ════════════ -->
-                    <ScrollViewer IsVisible="{Binding IsMapsView}" Margin="44,12,44,16">
-                        <StackPanel>
-                            <TextBlock Text="Maps" FontSize="32" FontWeight="Black" Foreground="White"/>
-                            <TextBlock Text="This section will show featured maps and allow browsing community maps." Foreground="#6a6a9a"/>
-                            <!-- Placeholder cards -->
-                            <ItemsControl>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Width="220" Height="120" CornerRadius="10" Background="#0f0f1c" Margin="6">
-                                        <StackPanel>
-                                                <TextBlock Text="Map Title" FontWeight="SemiBold" Foreground="White"/>
-                                                <TextBlock Text="Author · Downloads" FontSize="11" Foreground="#6a6a9a"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </ScrollViewer>
-
-                    <!-- ════════════ SETTINGS VIEW ════════════ -->
-                    <ScrollViewer IsVisible="{Binding IsSettingsView}" Margin="44,12,44,16" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Spacing="16">
-                            <!-- Header -->
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="Settings" FontSize="32" FontWeight="Black" Foreground="White"/>
-                                <TextBlock Text="Customize your launcher and game experience." Foreground="#6a6a9a"/>
-                            </StackPanel>
-
-                            <!-- ─── GENERAL SETTINGS ─── -->
-                            <Border Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1" CornerRadius="12" Padding="20,16">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="General" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
-
-                                    <!-- Appearance Options -->
-                                    <Grid ColumnDefinitions="*,*">
-                                        <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,8,0">
-                                            <TextBlock Text="Language" FontSize="11" Foreground="#6a6a9a"/>
-                                            <ComboBox SelectedItem="{Binding Config.Language, Mode=TwoWay}">
-                                                <ComboBoxItem Content="Português"/>
-                                                <ComboBoxItem Content="English"/>
-                                            </ComboBox>
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="1" Spacing="6">
-                                            <TextBlock Text="Theme" FontSize="11" Foreground="#6a6a9a"/>
-                                            <ComboBox SelectedItem="{Binding Config.Theme, Mode=TwoWay}">
-                                                <ComboBoxItem Content="Dark Orange"/>
-                                                <ComboBoxItem Content="Light"/>
-                                            </ComboBox>
-                                        </StackPanel>
-                                    </Grid>
-
-                                    <StackPanel Spacing="6">
-                                        <TextBlock Text="Startup Page" FontSize="11" Foreground="#6a6a9a"/>
-                                        <ComboBox SelectedItem="{Binding Config.StartupPage, Mode=TwoWay}">
-                                            <ComboBoxItem Content="Home"/>
-                                            <ComboBoxItem Content="Profiles"/>
-                                            <ComboBoxItem Content="Versions"/>
-                                            <ComboBoxItem Content="Discover"/>
-                                        </ComboBox>
-                                    </StackPanel>
-
-                                    <!-- Behavior Options -->
-                                    <Border Height="1" Background="#1a1a2e"/>
-                                    <CheckBox Content="Launch on Windows startup" IsChecked="{Binding Config.LaunchOnStartup, Mode=TwoWay}"/>
-                                    <CheckBox Content="Keep launcher open while Minecraft is running" IsChecked="{Binding Config.KeepOpenWhilePlaying, Mode=TwoWay}"/>
-                                    <CheckBox Content="Minimize launcher to tray" IsChecked="{Binding Config.MinimizeToTray, Mode=TwoWay}"/>
-                                    <CheckBox Content="Check launcher updates automatically" IsChecked="{Binding Config.CheckLauncherUpdates, Mode=TwoWay}"/>
-                                    <CheckBox Content="Enable animations" IsChecked="{Binding Config.EnableAnimations, Mode=TwoWay}"/>
-                                    <CheckBox Content="Reduced motion mode" IsChecked="{Binding Config.ReducedMotion, Mode=TwoWay}"/>
-                                    <CheckBox Content="Discord Rich Presence" IsChecked="{Binding Config.DiscordRichPresence, Mode=TwoWay}"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- ─── MINECRAFT SETTINGS ─── -->
-                            <Border Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1" CornerRadius="12" Padding="20,16">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="Minecraft" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
-
-                                    <!-- Paths -->
-                                    <StackPanel Spacing="6">
-                                        <TextBlock Text="Game Directory" FontSize="11" Foreground="#6a6a9a"/>
-                                        <Grid ColumnDefinitions="*,Auto">
-                                            <TextBox Grid.Column="0" Text="{Binding Config.GameDirectory, Mode=TwoWay}" Padding="8,8" Margin="0,0,8,0"/>
-                                            <Button Grid.Column="1" Content="Browse" Padding="16,8" Classes="MicrosoftButton"/>
-                                        </Grid>
-                                    </StackPanel>
-
-                                    <StackPanel Spacing="6">
-                                        <TextBlock Text="Downloads Directory" FontSize="11" Foreground="#6a6a9a"/>
-                                        <Grid ColumnDefinitions="*,Auto">
-                                            <TextBox Grid.Column="0" Text="{Binding Config.DownloadsDirectory, Mode=TwoWay}" Padding="8,8" Margin="0,0,8,0"/>
-                                            <Button Grid.Column="1" Content="Browse" Padding="16,8" Classes="MicrosoftButton"/>
-                                        </Grid>
-                                    </StackPanel>
-
-                                    <!-- Java Settings -->
-                                    <Border Height="1" Background="#1a1a2e" Margin="0,4"/>
-                                    <StackPanel Spacing="6">
-                                        <TextBlock Text="Java Executable" FontSize="11" Foreground="#6a6a9a"/>
-                                        <Grid ColumnDefinitions="*,Auto">
-                                            <TextBox Grid.Column="0" Text="{Binding Config.DefaultJava, Mode=TwoWay}" Padding="8,8" Margin="0,0,8,0"/>
-                                            <Button Grid.Column="1" Content="Auto-detect" Padding="16,8" Classes="PlayButton"/>
-                                        </Grid>
-                                    </StackPanel>
-
-                                    <CheckBox Content="Auto-detect Java on startup" IsChecked="{Binding Config.AutoDetectJava, Mode=TwoWay}"/>
-                                    <CheckBox Content="Use custom Java executable" IsChecked="{Binding Config.UseCustomJava, Mode=TwoWay}"/>
-
-                                    <!-- Verification -->
-                                    <Border Height="1" Background="#1a1a2e" Margin="0,4"/>
-                                    <CheckBox Content="Verify game files before launch" IsChecked="{Binding Config.VerifyBeforeLaunch, Mode=TwoWay}"/>
-                                    <CheckBox Content="Verify assets" IsChecked="{Binding Config.VerifyAssets, Mode=TwoWay}"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- ─── VERSION SETTINGS ─── -->
-                            <Border Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1" CornerRadius="12" Padding="20,16">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="Versions" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
-
-                                    <!-- Version Filters -->
-                                    <StackPanel Spacing="6">
-                                        <TextBlock Text="Show Version Types" FontSize="11" Foreground="#6a6a9a"/>
-                                        <Grid ColumnDefinitions="*,*">
-                                            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,8,0">
-                                                <CheckBox Content="Snapshots" IsChecked="{Binding Config.ShowSnapshots, Mode=TwoWay}"/>
-                                                <CheckBox Content="Betas" IsChecked="{Binding Config.ShowBetas, Mode=TwoWay}"/>
-                                                <CheckBox Content="Alphas" IsChecked="{Binding Config.ShowAlphas, Mode=TwoWay}"/>
-                                            </StackPanel>
-                                            <StackPanel Grid.Column="1" Spacing="6">
-                                                <CheckBox Content="Experimental" IsChecked="{Binding Config.ShowExperimental, Mode=TwoWay}"/>
-                                                <CheckBox Content="Old versions" IsChecked="{Binding Config.ShowOldVersions, Mode=TwoWay}"/>
-                                                <CheckBox Content="Show installed only" IsChecked="{Binding Config.ShowInstalledOnly, Mode=TwoWay}"/>
-                                            </StackPanel>
-                                        </Grid>
-                                    </StackPanel>
-
-                                    <!-- Default Loader -->
-                                    <StackPanel Spacing="6">
-                                        <TextBlock Text="Default Mod Loader" FontSize="11" Foreground="#6a6a9a"/>
-                                        <ComboBox SelectedItem="{Binding Config.DefaultLoader, Mode=TwoWay}">
-                                            <ComboBoxItem Content="Vanilla"/>
-                                            <ComboBoxItem Content="Forge"/>
-                                            <ComboBoxItem Content="Fabric"/>
-                                            <ComboBoxItem Content="NeoForge"/>
-                                            <ComboBoxItem Content="Quilt"/>
-                                        </ComboBox>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- ─── EXPLORE SETTINGS ─── -->
-                            <Border Background="#0f0f1c" BorderBrush="#252535" BorderThickness="1" CornerRadius="12" Padding="20,16">
-                                <StackPanel Spacing="12">
-                                    <TextBlock Text="Explore Sources" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
-                                    <TextBlock Text="Choose where to search for mods, shaders, and maps." FontSize="11" Foreground="#6a6a9a"/>
-
-                                    <CheckBox Content="Modrinth" IsChecked="{Binding Config.ExploreModrinth, Mode=TwoWay}"/>
-                                    <CheckBox Content="CurseForge" IsChecked="{Binding Config.ExploreCurseForge, Mode=TwoWay}"/>
-                                    <CheckBox Content="Show only compatible content" IsChecked="{Binding Config.ExploreOnlyCompatible, Mode=TwoWay}"/>
-                                </StackPanel>
-                            </Border>
-
-                            <!-- Action Buttons -->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,0">
-                                <Button Content="Reset to Defaults" Padding="16,10" Classes="MicrosoftButton"/>
-                                <Button Content="Save Settings" Padding="20,10" Classes="PlayButton" Command="{Binding SaveSettingsCommand}"/>
-                            </StackPanel>
-
-                        </StackPanel>
-                    </ScrollViewer>
-
-                </Panel>
-
-                <!-- ══════════════ LAUNCH BAR ══════════════ -->
-                <Border Grid.Row="2" Background="#0c0c18" BorderBrush="#15152a" BorderThickness="0,1,0,0">
+                <!-- ════ LAUNCH BAR ════ -->
+                <Border Grid.Row="2" Background="{DynamicResource LaunchBarBackground}" BorderBrush="{DynamicResource LaunchBarBorderBrush}" BorderThickness="0,1,0,0">
                     <Grid ColumnDefinitions="*,Auto" Margin="24,14,24,20" VerticalAlignment="Center">
-
-                        <Border Grid.Column="0" CornerRadius="12" Background="#0a0a14"
-                                BorderBrush="#1a1a2e" BorderThickness="1" Padding="16,0" Height="52">
+                        <Border Grid.Column="0" CornerRadius="12" Background="{DynamicResource LaunchBarInnerBg}" BorderBrush="{DynamicResource LaunchBarInnerBorder}" BorderThickness="1" Padding="16,0" Height="52">
                             <Grid ColumnDefinitions="*,1,Auto,1,Auto">
-
-                                <!-- Profile selector -->
                                 <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="2">
-                                    <TextBlock Text="PLAYER" FontSize="9" FontWeight="Bold"
-                                               Foreground="#3a3a5a" LetterSpacing="2"/>
-                                    <ComboBox Background="Transparent" BorderThickness="0" Foreground="White"
-                                              FontSize="13" FontWeight="SemiBold" MinHeight="0" Padding="0"
-                                              ItemsSource="{Binding UserProfiles}"
-                                              SelectedItem="{Binding SelectedProfile}">
+                                    <TextBlock Text="{DynamicResource Lang_Global_Player}" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource TextLabel}" LetterSpacing="2"/>
+                                    <ComboBox Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextPrimary}" FontSize="13" FontWeight="SemiBold" MinHeight="0" Padding="0"
+                                              ItemsSource="{Binding UserProfiles}" SelectedItem="{Binding SelectedProfile}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Name}"/>
@@ -810,40 +153,29 @@
                                     </ComboBox>
                                 </StackPanel>
 
-                                <Border Grid.Column="1" Width="1" Background="#1a1a2e" Margin="0,10"/>
+                                <Border Grid.Column="1" Width="1" Background="{DynamicResource SurfaceDivider}" Margin="0,10"/>
 
-                                <!-- Profile type indicator -->
                                 <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="16,0" Spacing="2">
-                                    <TextBlock Text="TYPE" FontSize="9" FontWeight="Bold"
-                                               Foreground="#3a3a5a" LetterSpacing="2"/>
-                                    <TextBlock Text="{Binding SelectedProfileType}"
-                                               FontSize="12" FontWeight="SemiBold" Foreground="#6a6a9a"/>
+                                    <TextBlock Text="{DynamicResource Lang_Global_Type}" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource TextLabel}" LetterSpacing="2"/>
+                                    <TextBlock Text="{Binding SelectedProfileType}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextMuted}"/>
                                 </StackPanel>
 
-                                <Border Grid.Column="3" Width="1" Background="#1a1a2e" Margin="0,10"/>
+                                <Border Grid.Column="3" Width="1" Background="{DynamicResource SurfaceDivider}" Margin="0,10"/>
 
-                                <!-- Version selector -->
                                 <StackPanel Grid.Column="4" VerticalAlignment="Center" Margin="16,0,0,0" Spacing="2">
-                                    <TextBlock Text="VERSION" FontSize="9" FontWeight="Bold"
-                                               Foreground="#3a3a5a" LetterSpacing="2"/>
-                                    <TextBlock Text="Loading..." FontSize="12" Foreground="#44445a"
-                                               IsVisible="{Binding IsLoadingVersions}"/>
-                                    <ComboBox Background="Transparent" BorderThickness="0" Foreground="White"
-                                              FontSize="13" FontWeight="SemiBold" MinHeight="0" Padding="0"
-                                              ItemsSource="{Binding Versions}" SelectedItem="{Binding SelectedVersion}"
+                                    <TextBlock Text="{DynamicResource Lang_Global_Version}" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource TextLabel}" LetterSpacing="2"/>
+                                    <TextBlock Text="{DynamicResource Lang_Global_Loading}" FontSize="12" Foreground="{DynamicResource TextVeryDimmed}" IsVisible="{Binding IsLoadingVersions}"/>
+                                    <ComboBox Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextPrimary}" FontSize="13" FontWeight="SemiBold" MinHeight="0" Padding="0"
+                                              ItemsSource="{Binding InstalledVersions}" SelectedItem="{Binding SelectedVersion}"
                                               IsVisible="{Binding !IsLoadingVersions}"/>
                                 </StackPanel>
-
                             </Grid>
                         </Border>
 
-                        <!-- Play button -->
-                        <Button Grid.Column="1" Content="▶  PLAY" Width="130" Height="52"
-                                Margin="12,0,0,0" Classes="PlayButton"
-                                Command="{Binding LaunchGameCommand}"/>
+                        <Button Grid.Column="1" Content="{DynamicResource Lang_Global_Play}" Width="130" Height="52" Margin="12,0,0,0" Classes="PlayButton"
+                                Command="{Binding LaunchGameCommand}" IsEnabled="{Binding CanPlay}" />
                     </Grid>
                 </Border>
-
             </Grid>
         </Grid>
     </Grid>

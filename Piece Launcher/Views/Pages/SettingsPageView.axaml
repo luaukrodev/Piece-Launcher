@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
+             x:Class="Piece_Launcher.Views.Pages.SettingsPageView"
+             x:DataType="vm:SettingsPageViewModel">
+
+    <ScrollViewer Margin="44,12,44,16" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16">
+            <!-- Header -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="{DynamicResource Lang_Settings_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                <TextBlock Text="{DynamicResource Lang_Settings_Subtitle}" Foreground="{DynamicResource TextMuted}"/>
+            </StackPanel>
+
+            <!-- ─── GENERAL SETTINGS ─── -->
+            <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20,16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{DynamicResource Lang_Settings_General}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+
+                    <!-- Appearance Options -->
+                    <Grid ColumnDefinitions="*,*">
+                        <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,8,0">
+                            <TextBlock Text="{DynamicResource Lang_Settings_Language}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            <ComboBox ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding Config.Language, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="6">
+                            <TextBlock Text="{DynamicResource Lang_Settings_Theme}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            <ComboBox ItemsSource="{Binding AvailableThemes}" SelectedItem="{Binding Config.Theme, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{DynamicResource Lang_Settings_StartupPage}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                        <ComboBox ItemsSource="{Binding AvailableStartupPages}" SelectedItem="{Binding Config.StartupPage, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <!-- Behavior Options -->
+                    <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
+                    <CheckBox Content="{DynamicResource Lang_Settings_LaunchStartup}" IsChecked="{Binding Config.LaunchOnStartup, Mode=TwoWay}"/>
+                    <CheckBox Content="{DynamicResource Lang_Settings_KeepOpen}" IsChecked="{Binding Config.KeepOpenWhilePlaying, Mode=TwoWay}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,0">
+                <Button Content="{DynamicResource Lang_Settings_Reset}" Padding="16,10" Classes="MicrosoftButton" Command="{Binding ResetToDefaultsCommand}"/>
+                <Button Content="{DynamicResource Lang_Settings_Save}" Padding="20,10" Classes="PlayButton" Command="{Binding SaveSettingsCommand}"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

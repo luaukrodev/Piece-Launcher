@@ -1,4 +1,5 @@
-﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -19,7 +20,7 @@ namespace Piece_Launcher.Models
         public override string ToString() => Name;
     }
 
-    public class LauncherConfig
+    public class LauncherConfig : ObservableObject
     {
         private static readonly string ConfigDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PieceLauncher");
@@ -32,14 +33,24 @@ namespace Piece_Launcher.Models
         public string? LastSelectedVersion { get; set; }
         public string? LastSelectedProfileId { get; set; }
 
-        // New settings
-        public string Language { get; set; } = "Português";
-        public string Theme { get; set; } = "Dark Orange";
-        public string StartupPage { get; set; } = "Home";
+        // New settings (Observable)
+        private string _language = "English";
+        public string Language { get => _language; set => SetProperty(ref _language, value); }
+        
+        private string _theme = "DarkOrange";
+        public string Theme { get => _theme; set => SetProperty(ref _theme, value); }
+        
+        private string _startupPage = "Home";
+        public string StartupPage { get => _startupPage; set => SetProperty(ref _startupPage, value); }
 
-        public bool LaunchOnStartup { get; set; } = false;
+        private bool _launchOnStartup = false;
+        public bool LaunchOnStartup { get => _launchOnStartup; set => SetProperty(ref _launchOnStartup, value); }
+        
         public bool CheckLauncherUpdates { get; set; } = true;
-        public bool KeepOpenWhilePlaying { get; set; } = true;
+        
+        private bool _keepOpenWhilePlaying = true;
+        public bool KeepOpenWhilePlaying { get => _keepOpenWhilePlaying; set => SetProperty(ref _keepOpenWhilePlaying, value); }
+        
         public bool MinimizeToTray { get; set; } = false;
         public bool DiscordRichPresence { get; set; } = true;
         public bool EnableAnimations { get; set; } = true;

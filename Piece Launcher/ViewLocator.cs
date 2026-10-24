@@ -24,7 +24,7 @@ namespace Piece_Launcher
             // -> Piece_Launcher.Views.Pages.HomePage
             var vmFullName = param.GetType().FullName!;
             var viewName = vmFullName.Replace(".ViewModels.", ".Views.", StringComparison.Ordinal)
-                                     .Replace("ViewModel", string.Empty, StringComparison.Ordinal);
+                                     .Replace("ViewModel", "View", StringComparison.Ordinal);
 
             // Try to get the type directly, then fall back to searching loaded assemblies
             var type = Type.GetType(viewName);

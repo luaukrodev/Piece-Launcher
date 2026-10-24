@@ -1,0 +1,88 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Accent Colors -->
+    <Color x:Key="SystemAccentColor">#9b59b6</Color>
+    <Color x:Key="SystemAccentColorDark1">#8e44ad</Color>
+    <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="{DynamicResource SystemAccentColorDark1}" />
+
+    <!-- Window -->
+    <SolidColorBrush x:Key="WindowBackground" Color="#0a0818" />
+    <SolidColorBrush x:Key="WindowBorderBrush" Color="#1e1a30" />
+
+    <!-- Sidebar -->
+    <SolidColorBrush x:Key="SidebarBackground" Color="#10102a" />
+    <SolidColorBrush x:Key="SidebarBorderBrush" Color="#201c38" />
+    <SolidColorBrush x:Key="SidebarDividerBrush" Color="#1e1a30" />
+    <SolidColorBrush x:Key="SidebarLogoBg" Color="#180e28" />
+
+    <!-- Surfaces -->
+    <SolidColorBrush x:Key="PrimaryBackground" Color="#0a0818" />
+    <SolidColorBrush x:Key="SecondaryBackground" Color="#10102a" />
+    <SolidColorBrush x:Key="CardBackground" Color="#12102a" />
+    <SolidColorBrush x:Key="CardBorderBrush" Color="#2a2540" />
+    <SolidColorBrush x:Key="InnerCardBackground" Color="#1c1838" />
+    <SolidColorBrush x:Key="ElevatedBackground" Color="#0e0c22" />
+    <SolidColorBrush x:Key="SurfaceDivider" Color="#1e1a30" />
+
+    <!-- Launch Bar -->
+    <SolidColorBrush x:Key="LaunchBarBackground" Color="#0c0a1e" />
+    <SolidColorBrush x:Key="LaunchBarBorderBrush" Color="#181530" />
+    <SolidColorBrush x:Key="LaunchBarInnerBg" Color="#0a0818" />
+    <SolidColorBrush x:Key="LaunchBarInnerBorder" Color="#1e1a30" />
+
+    <!-- Typography -->
+    <SolidColorBrush x:Key="TextPrimary" Color="White" />
+    <SolidColorBrush x:Key="TextSecondary" Color="#9988bb" />
+    <SolidColorBrush x:Key="TextMuted" Color="#7a6aaa" />
+    <SolidColorBrush x:Key="TextDimmed" Color="#6a5a8a" />
+    <SolidColorBrush x:Key="TextVeryDimmed" Color="#4a4570" />
+    <SolidColorBrush x:Key="TextLabel" Color="#3a3560" />
+    <SolidColorBrush x:Key="TextWatermark" Color="#08061a" />
+    <SolidColorBrush x:Key="TextError" Color="#cc5555" />
+
+    <!-- Interactive -->
+    <SolidColorBrush x:Key="SidebarHoverBg" Color="#1a9b59b6" />
+    <SolidColorBrush x:Key="SidebarPressedBg" Color="#289b59b6" />
+    <SolidColorBrush x:Key="SidebarActiveBg" Color="#1a9b59b6" />
+    <SolidColorBrush x:Key="SidebarActiveText" Color="#9b59b6" />
+    <SolidColorBrush x:Key="SidebarHoverText" Color="#ddddee" />
+
+    <!-- Buttons -->
+    <SolidColorBrush x:Key="MicrosoftBtnBg" Color="#140f28" />
+    <SolidColorBrush x:Key="MicrosoftBtnBorder" Color="#2a2540" />
+    <SolidColorBrush x:Key="MicrosoftBtnFg" Color="#aa99cc" />
+    <SolidColorBrush x:Key="MicrosoftBtnHoverBg" Color="#1c1838" />
+    <SolidColorBrush x:Key="RemoveHoverBg" Color="#22e74c3c" />
+    <SolidColorBrush x:Key="RemoveHoverFg" Color="#e74c3c" />
+
+    <!-- Window Buttons -->
+    <SolidColorBrush x:Key="WinBtnBg" Color="#1c1a30" />
+    <SolidColorBrush x:Key="WinBtnFg" Color="#4a4570" />
+    <SolidColorBrush x:Key="WinCloseBg" Color="#c0392b" />
+    <SolidColorBrush x:Key="WinMaxBg" Color="#427ef5" />
+    <SolidColorBrush x:Key="WinMinBg" Color="#2a2842" />
+
+    <!-- Play Button Gradient -->
+    <Color x:Key="PlayBtnTop">#9b59b6</Color>
+    <Color x:Key="PlayBtnBottom">#8e44ad</Color>
+    <Color x:Key="PlayBtnHoverTop">#af7ac5</Color>
+    <Color x:Key="PlayBtnHoverBottom">#9b59b6</Color>
+    <Color x:Key="PlayBtnPressedTop">#7d3c98</Color>
+    <Color x:Key="PlayBtnPressedBottom">#6c3483</Color>
+
+    <!-- Glow Effects -->
+    <Color x:Key="GlowPrimary">#339b59b6</Color>
+    <Color x:Key="GlowSecondary">#228e44ad</Color>
+
+    <!-- Accent pill -->
+    <SolidColorBrush x:Key="AccentPillBorder" Color="#559b59b6" />
+    <Color x:Key="AccentPillBgColor">#9b59b6</Color>
+
+    <!-- Badge colors -->
+    <SolidColorBrush x:Key="BadgeTypeBg" Color="#1c1838" />
+    <SolidColorBrush x:Key="BadgeTypeFg" Color="#6a5a9a" />
+
+    <!-- Theme variant flag: true = dark -->
+    <x:Boolean x:Key="IsDarkTheme">True</x:Boolean>
+</ResourceDictionary>

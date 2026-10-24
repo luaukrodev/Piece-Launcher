@@ -1,0 +1,98 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
+             x:Class="Piece_Launcher.Views.Pages.ProfilesPageView"
+             x:DataType="vm:ProfilesPageViewModel">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="44,12,44,16" Spacing="0">
+            <!-- Header -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="{DynamicResource Lang_Profiles_Title}" FontSize="11" FontWeight="Bold"
+                               Foreground="{DynamicResource TextLabel}" LetterSpacing="3"/>
+                    <TextBlock Text="{DynamicResource Lang_Profiles_Subtitle}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                </StackPanel>
+                <Button Grid.Column="1" Classes="PlayButton" Padding="16,10"
+                        VerticalAlignment="Center" Command="{Binding ToggleAddFormCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <TextBlock Text="+" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Lang_Profiles_NewProfile}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- Add-profile form -->
+            <Border IsVisible="{Binding ShowAddProfileForm}"
+                    Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
+                    CornerRadius="12" Padding="20,16" Margin="0,0,0,16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="{DynamicResource Lang_Profiles_NewProfile}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                    <Grid ColumnDefinitions="*,Auto,Auto">
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding NewProfileName}"
+                                 PlaceholderText="{DynamicResource Lang_Profiles_ProfileNameWatermark}"
+                                 Margin="0,0,10,0"/>
+                        <Button Grid.Column="1" Content="{DynamicResource Lang_Profiles_AddOffline}"
+                                Classes="MicrosoftButton" Margin="0,0,8,0"
+                                Command="{Binding AddOfflineProfileCommand}"/>
+                        <Button Grid.Column="2" Content="{DynamicResource Lang_Home_SignInMs}"
+                                Classes="PlayButton" Padding="14,10"
+                                Command="{Binding AddMicrosoftProfileCommand}"
+                                IsEnabled="{Binding !IsLoggingIn}"/>
+                    </Grid>
+                    <TextBlock Text="{Binding StatusMessage}"
+                               FontSize="11" Foreground="{DynamicResource TextError}" TextWrapping="Wrap"
+                               IsVisible="{Binding HasStatusMessage}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Empty-state hint -->
+            <Border IsVisible="{Binding HasNoProfiles}" Padding="0,32">
+                <StackPanel Spacing="6" HorizontalAlignment="Center">
+                    <TextBlock Text="{DynamicResource Lang_Profiles_NoProfiles}" FontSize="16"
+                               Foreground="{DynamicResource TextLabel}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource Lang_Profiles_ClickToAdd}"
+                               FontSize="12" Foreground="{DynamicResource TextVeryDimmed}" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Profile cards grid -->
+            <ItemsControl ItemsSource="{Binding UserProfiles}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="168" Height="112"
+                                CornerRadius="12" Background="{DynamicResource CardBackground}"
+                                BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
+                                Margin="0,0,12,12" Padding="16,14">
+                            <Grid RowDefinitions="*,Auto">
+                                <StackPanel Grid.Row="0" Spacing="6">
+                                    <TextBlock Text="{Binding Name}" FontSize="15"
+                                               FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <Border CornerRadius="4" Background="{DynamicResource BadgeTypeBg}"
+                                            Padding="6,3" HorizontalAlignment="Left">
+                                        <TextBlock Text="{Binding Type}" FontSize="10"
+                                                   Foreground="{DynamicResource BadgeTypeFg}" FontWeight="Bold"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <Button Grid.Row="1"
+                                        Content="{DynamicResource Lang_Profiles_Remove}"
+                                        Classes="RemoveButton"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding $parent[UserControl].((vm:ProfilesPageViewModel)DataContext).RemoveProfileCommand}"
+                                        CommandParameter="{Binding}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

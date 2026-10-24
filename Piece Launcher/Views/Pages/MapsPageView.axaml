@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
+             x:Class="Piece_Launcher.Views.Pages.MapsPageView"
+             x:DataType="vm:MapsPageViewModel">
+
+    <ScrollViewer Margin="44,12,44,16">
+        <StackPanel>
+            <TextBlock Text="{DynamicResource Lang_Maps_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+            <TextBlock Text="{DynamicResource Lang_Maps_Subtitle}" Foreground="{DynamicResource TextMuted}"/>
+            <!-- Placeholder cards -->
+            <ItemsControl>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="220" Height="120" CornerRadius="10" Background="{DynamicResource CardBackground}" Margin="6">
+                        <StackPanel>
+                                <TextBlock Text="Map Title" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="Author · Downloads" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

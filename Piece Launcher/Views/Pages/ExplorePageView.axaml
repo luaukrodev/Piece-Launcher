@@ -1,0 +1,148 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
+             xmlns:helpers="using:Piece_Launcher.Helpers"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:pages="using:Piece_Launcher.Views.Pages"
+             x:Class="Piece_Launcher.Views.Pages.ExplorePageView"
+             x:DataType="vm:ExplorePageViewModel">
+
+    <Grid>
+        <!-- MASTER VIEW: Search and Mod List -->
+        <Grid IsVisible="{Binding IsMasterViewOpen}">
+            <Grid ColumnDefinitions="*, 280">
+                <!-- Left Side: Header, Search & List -->
+                <Grid Grid.Column="0" RowDefinitions="Auto, *">
+                    <!-- Header & Search -->
+                    <StackPanel Grid.Row="0" Margin="44,12,24,16" Spacing="12">
+                        <TextBlock Text="{DynamicResource Lang_Explore_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBox Grid.Column="0" Text="{Binding SearchQuery}" PlaceholderText="{DynamicResource Lang_Explore_SearchWatermark}" Padding="12,10" Margin="0,0,8,0" CornerRadius="8" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}"/>
+                            <Button Grid.Column="1" Content="{DynamicResource Lang_Explore_SearchBtn}" Command="{Binding PerformSearchCommand}" Padding="20,10" Classes="PlayButton"/>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Mods List -->
+                    <ScrollViewer Grid.Row="1" Margin="44,0,24,0">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Foreground="{DynamicResource AccentColor}"/>
+                            <TextBlock Text="{DynamicResource Lang_Global_Loading}" IsVisible="{Binding IsLoading}" Foreground="{DynamicResource TextMuted}"/>
+
+                            <ItemsControl ItemsSource="{Binding SearchResults}" IsVisible="{Binding !IsLoading}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="16" Margin="0,0,0,12">
+                                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                                <!-- Icon -->
+                                                <Border Grid.Column="0" Width="64" Height="64" CornerRadius="12" Background="{DynamicResource InnerCardBackground}" ClipToBounds="True" Margin="0,0,16,0">
+                                                    <Image helpers:ImageAsyncHelper.SourceUrl="{Binding IconUrl}" Stretch="UniformToFill" />
+                                                </Border>
+
+                                                <!-- Info -->
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                                        <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
+                                                        <TextBlock Text="{Binding Author}" FontSize="12" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                                                    </StackPanel>
+                                                    
+                                                    <TextBlock Text="{Binding Description}" FontSize="12" Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis"/>
+                                                    
+                                                    <ItemsControl ItemsSource="{Binding Categories}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Horizontal" Spacing="4"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Background="{DynamicResource InnerCardBackground}" CornerRadius="4" Padding="6,2">
+                                                                    <TextBlock Text="{Binding}" FontSize="10" Foreground="{DynamicResource TextPrimary}"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+
+                                                <!-- Action Buttons & Stats -->
+                                                <StackPanel Grid.Column="2" VerticalAlignment="Center" Spacing="8" HorizontalAlignment="Right">
+                                                    <TextBlock Text="{Binding Downloads, StringFormat='↓ {0}'}" FontSize="11" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Right"/>
+                                                    
+                                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                                        <Button Content="View" Command="{Binding $parent[UserControl].DataContext.ViewProjectCommand}" CommandParameter="{Binding}" Classes="SidebarButton" Padding="16,8" Background="{DynamicResource InnerCardBackground}"/>
+                                                        <Button Content="Install" Command="{Binding $parent[UserControl].DataContext.InstallProjectCommand}" CommandParameter="{Binding}" Classes="PlayButton" Padding="16,8" Background="{DynamicResource PlayBtnTop}"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Pagination -->
+                            <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center" Margin="0,16,0,24" IsVisible="{Binding !IsLoading}">
+                                <Button Content="{DynamicResource Lang_Explore_Previous}" Command="{Binding PreviousPageCommand}" IsEnabled="{Binding HasPreviousPage}" Classes="SidebarButton" Padding="16,8"/>
+                                <TextBlock Text="{Binding CurrentPage}" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
+                                <Button Content="{DynamicResource Lang_Explore_Next}" Command="{Binding NextPageCommand}" IsEnabled="{Binding HasNextPage}" Classes="SidebarButton" Padding="16,8"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- Right Side: Filters & Branding -->
+                <Border Grid.Column="1" Background="{DynamicResource CardBackground}" CornerRadius="16 0 0 16" Padding="20">
+                    <Grid RowDefinitions="*, Auto">
+                        <StackPanel Grid.Row="0" Spacing="24">
+                            <!-- Popularity / Sort -->
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="{DynamicResource Lang_Explore_Sort}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                                <ComboBox SelectedItem="{Binding SelectedSort}" HorizontalAlignment="Stretch" CornerRadius="8">
+                                    <sys:String>relevance</sys:String>
+                                    <sys:String>downloads</sys:String>
+                                    <sys:String>newest</sys:String>
+                                    <sys:String>updated</sys:String>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Project Type -->
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="{DynamicResource Lang_Explore_Type}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                                <ComboBox SelectedItem="{Binding SelectedType}" HorizontalAlignment="Stretch" CornerRadius="8">
+                                    <sys:String>mod</sys:String>
+                                    <sys:String>resourcepack</sys:String>
+                                    <sys:String>shader</sys:String>
+                                    <sys:String>datapack</sys:String>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Bottom Branding -->
+                        <StackPanel Grid.Row="1" Spacing="8" HorizontalAlignment="Center">
+                            <TextBlock Text="{DynamicResource Lang_Explore_PoweredBy}" FontSize="11" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                            <Image Source="avares://Piece%20Launcher/Assets/modrinth_logo.png" Width="120" Stretch="Uniform"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- DETAIL VIEW: Overlays the entire explore page -->
+        <Grid IsVisible="{Binding IsDetailViewOpen}">
+            <pages:ModDetailPageView DataContext="{Binding DetailViewModel}" />
+        </Grid>
+
+        <!-- VALIDATION POPUP OVERLAY -->
+        <Border IsVisible="{Binding ShowValidationPopup}" 
+                Background="{DynamicResource CardBackground}" BorderBrush="#e74c3c" BorderThickness="2"
+                CornerRadius="8" Padding="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0"
+                BoxShadow="0 10 30 0 #40000000">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock Text="⚠️" FontSize="20" VerticalAlignment="Center"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Incompatible Version" FontWeight="Bold" Foreground="#e74c3c"/>
+                    <TextBlock Text="Redirecting to Versions tab to select a compatible version..." FontSize="12" Foreground="{DynamicResource TextMuted}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+
+</UserControl>

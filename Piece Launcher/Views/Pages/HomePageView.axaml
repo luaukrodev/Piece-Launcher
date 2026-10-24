@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
+             x:Class="Piece_Launcher.Views.Pages.HomePageView"
+             x:DataType="vm:HomePageViewModel">
+
+    <Grid Margin="44,8,44,0">
+        <!-- Watermark -->
+        <TextBlock Text="PL" FontSize="200" FontWeight="Black" Foreground="{DynamicResource TextWatermark}"
+                   HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                   IsHitTestVisible="False"/>
+
+        <StackPanel Spacing="6" VerticalAlignment="Center">
+
+            <TextBlock Text="{DynamicResource Lang_Home_WelcomeBack}" FontSize="36" FontWeight="Light"
+                       Foreground="{DynamicResource TextSecondary}" Margin="0,8,0,0"/>
+
+            <TextBlock Text="{Binding SelectedProfile.Name, FallbackValue='Explorer'}"
+                       FontSize="54" FontWeight="Black" Foreground="{DynamicResource TextPrimary}" Margin="0,-8,0,0"/>
+
+            <TextBlock Text="{DynamicResource Lang_Home_ChooseVersion}"
+                       FontSize="14" Foreground="{DynamicResource TextVeryDimmed}" Margin="0,4,0,24"/>
+
+            <!-- Microsoft sign-in card -->
+             <Border CornerRadius="14" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}"
+                    BorderThickness="1" Padding="24,20" MaxWidth="440" HorizontalAlignment="Left">
+                <StackPanel Spacing="12">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Border Width="32" Height="32" CornerRadius="8" Background="{DynamicResource InnerCardBackground}">
+                            <TextBlock Text="⊞" FontSize="18" Foreground="#00a4ef"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{DynamicResource Lang_Home_MsAccount}" FontSize="13"
+                                       FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            <TextBlock Text="{DynamicResource Lang_Home_MsAccountDesc}"
+                                       FontSize="11" Foreground="{DynamicResource TextVeryDimmed}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Content="{DynamicResource Lang_Home_SignInMs}"
+                            Classes="MicrosoftButton"
+                            HorizontalAlignment="Stretch"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</UserControl>

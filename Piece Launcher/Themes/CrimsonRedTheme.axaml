@@ -1,0 +1,92 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ═══ BASE COLORS (CRIMSON RED) ═══ -->
+    <Color x:Key="WindowBgColor">#140505</Color>
+    <Color x:Key="SidebarBgColor">#0a0202</Color>
+    <Color x:Key="CardBgColor">#200a0a</Color>
+    <Color x:Key="InnerCardBgColor">#170707</Color>
+    
+    <Color x:Key="AccentColor">#ff1744</Color>
+    <Color x:Key="AccentPillColor">#ff1744</Color>
+
+    <!-- ═══ TEXT COLORS ═══ -->
+    <SolidColorBrush x:Key="TextPrimary" Color="#ffffff" />
+    <SolidColorBrush x:Key="TextSecondary" Color="#e0c2c2" />
+    <SolidColorBrush x:Key="TextMuted" Color="#c29b9b" />
+    <SolidColorBrush x:Key="TextDimmed" Color="#9c7272" />
+    <SolidColorBrush x:Key="TextVeryDimmed" Color="#755252" />
+    <SolidColorBrush x:Key="TextLabel" Color="#8a3c3c" />
+    <SolidColorBrush x:Key="TextError" Color="#ff5252" />
+    <SolidColorBrush x:Key="TextWatermark" Color="#1c0505" />
+
+    <!-- ═══ BRUSHES ═══ -->
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+    
+    <SolidColorBrush x:Key="WindowBackground" Color="{StaticResource WindowBgColor}" />
+    <SolidColorBrush x:Key="WindowBorderBrush" Color="#331414" />
+
+    <!-- Sidebar -->
+    <SolidColorBrush x:Key="SidebarBackground" Color="{StaticResource SidebarBgColor}" />
+    <SolidColorBrush x:Key="SidebarBorderBrush" Color="#260f0f" />
+    <SolidColorBrush x:Key="SidebarDividerBrush" Color="#1f0c0c" />
+    <SolidColorBrush x:Key="SidebarLogoBg" Color="#260d0d" />
+
+    <!-- Sidebar Navigation -->
+    <SolidColorBrush x:Key="SidebarHoverBg" Color="#291212" />
+    <SolidColorBrush x:Key="SidebarHoverText" Color="#ffffff" />
+    <SolidColorBrush x:Key="SidebarPressedBg" Color="#1c0b0b" />
+    <SolidColorBrush x:Key="SidebarActiveBg" Color="#3d1515" />
+    <SolidColorBrush x:Key="SidebarActiveText" Color="{StaticResource AccentColor}" />
+
+    <!-- Cards & Surfaces -->
+    <SolidColorBrush x:Key="ElevatedBackground" Color="#290e0e" />
+    <SolidColorBrush x:Key="CardBackground" Color="{StaticResource CardBgColor}" />
+    <SolidColorBrush x:Key="InnerCardBackground" Color="{StaticResource InnerCardBgColor}" />
+    <SolidColorBrush x:Key="CardBorderBrush" Color="#3d1a1a" />
+    <SolidColorBrush x:Key="SurfaceDivider" Color="#4d2424" />
+
+    <!-- Launch Bar -->
+    <SolidColorBrush x:Key="LaunchBarBackground" Color="#0f0303" />
+    <SolidColorBrush x:Key="LaunchBarBorderBrush" Color="#2b0e0e" />
+    <SolidColorBrush x:Key="LaunchBarInnerBg" Color="#240c0c" />
+    <SolidColorBrush x:Key="LaunchBarInnerBorder" Color="#3d1515" />
+
+    <!-- Badges & Pills -->
+    <Color x:Key="AccentPillBgColor">#ff1744</Color>
+    <SolidColorBrush x:Key="AccentPillBorder" Color="#80001a" />
+    
+    <SolidColorBrush x:Key="BadgeTypeBg" Color="#400b14" />
+    <SolidColorBrush x:Key="BadgeTypeFg" Color="#ff1744" />
+
+    <!-- ═══ BUTTONS ═══ -->
+    <!-- Play Button Gradient -->
+    <Color x:Key="PlayBtnTop">#ff1744</Color>
+    <Color x:Key="PlayBtnBottom">#c50026</Color>
+    <Color x:Key="PlayBtnHoverTop">#ff4d6d</Color>
+    <Color x:Key="PlayBtnHoverBottom">#e6002d</Color>
+    <Color x:Key="PlayBtnPressedTop">#d50032</Color>
+    <Color x:Key="PlayBtnPressedBottom">#99001d</Color>
+
+    <!-- Microsoft Button -->
+    <SolidColorBrush x:Key="MicrosoftBtnBg" Color="#ffffff" />
+    <SolidColorBrush x:Key="MicrosoftBtnFg" Color="#222222" />
+    <SolidColorBrush x:Key="MicrosoftBtnBorder" Color="#cccccc" />
+    <SolidColorBrush x:Key="MicrosoftBtnHoverBg" Color="#e6e6e6" />
+
+    <!-- Remove Button -->
+    <SolidColorBrush x:Key="RemoveHoverBg" Color="#4d2424" />
+    <SolidColorBrush x:Key="RemoveHoverFg" Color="#ff5252" />
+
+    <!-- Windows Control Buttons -->
+    <SolidColorBrush x:Key="WinBtnBg" Color="Transparent" />
+    <SolidColorBrush x:Key="WinBtnFg" Color="#9c7272" />
+    <SolidColorBrush x:Key="WinCloseBg" Color="#e81123" />
+    <SolidColorBrush x:Key="WinMaxBg" Color="#331414" />
+    <SolidColorBrush x:Key="WinMinBg" Color="#331414" />
+
+    <!-- ═══ GLOWS ═══ -->
+    <Color x:Key="GlowPrimary">#10ff1744</Color>
+    <Color x:Key="GlowSecondary">#0880001a</Color>
+
+</ResourceDictionary>
