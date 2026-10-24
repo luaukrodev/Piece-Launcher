@@ -82,7 +82,7 @@
                             <CheckBox Content="{DynamicResource Lang_Versions_Snapshots}" IsChecked="{Binding ShowSnapshots}" Margin="0,0,12,0"/>
                             <CheckBox Content="{DynamicResource Lang_Versions_Betas}" IsChecked="{Binding ShowBetas}" Margin="0,0,12,0"/>
                             <CheckBox Content="{DynamicResource Lang_Versions_Alphas}" IsChecked="{Binding ShowAlphas}" Margin="0,0,12,0"/>
-                            <CheckBox Content="Antigas" IsChecked="{Binding ShowOldVersions}" Margin="0,0,12,0"/>
+                            <CheckBox Content="{DynamicResource Lang_Versions_OldVersions}" IsChecked="{Binding ShowOldVersions}" Margin="0,0,12,0"/>
                         </WrapPanel>
                     </StackPanel>
 
@@ -122,7 +122,7 @@
                                         <!-- Action / Badge -->
                                         <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
                                             <Border IsVisible="{Binding IsInstalled}" Background="#182ecc71" BorderBrush="#2ecc71" BorderThickness="1" CornerRadius="6" Padding="10,5">
-                                                <TextBlock Text="✓ Instalado" Foreground="#2ecc71" FontSize="11" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{DynamicResource Lang_Versions_Installed}" Foreground="#2ecc71" FontSize="11" FontWeight="SemiBold"/>
                                             </Border>
                                             <Button Classes="MicrosoftButton" Content="{DynamicResource Lang_Versions_InstallBtn}" FontSize="11" Padding="12,5"
                                                     IsVisible="{Binding !IsInstalled}"
@@ -157,7 +157,7 @@
 
                         <!-- Step 2: Choose Loader -->
                         <StackPanel Spacing="8">
-                            <TextBlock Text="Selecione o Mod Loader" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            <TextBlock Text="{DynamicResource Lang_Versions_SelectLoader}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
                             
                             <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" Margin="0,0,0,0">
                                 <!-- Fabric -->
@@ -166,7 +166,7 @@
                                         Command="{Binding SelectLoaderCommand}" CommandParameter="Fabric">
                                     <StackPanel Spacing="4">
                                         <TextBlock Text="Fabric" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="Leve &amp; Rápido" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Lang_Versions_FabricDesc}" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
 
@@ -176,7 +176,7 @@
                                         Command="{Binding SelectLoaderCommand}" CommandParameter="Forge">
                                     <StackPanel Spacing="4">
                                         <TextBlock Text="Forge" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="Clássico &amp; Robusto" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Lang_Versions_ForgeDesc}" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
 
@@ -186,7 +186,7 @@
                                         Command="{Binding SelectLoaderCommand}" CommandParameter="NeoForge">
                                     <StackPanel Spacing="4">
                                         <TextBlock Text="NeoForge" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="Modern Forge" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Lang_Versions_NeoForgeDesc}" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
 
@@ -196,7 +196,7 @@
                                         Command="{Binding SelectLoaderCommand}" CommandParameter="Quilt">
                                     <StackPanel Spacing="4">
                                         <TextBlock Text="Quilt" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="Próxima Geração" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{DynamicResource Lang_Versions_QuiltDesc}" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </Grid>
@@ -204,7 +204,7 @@
 
                         <!-- Step 3: Choose Loader Version -->
                         <StackPanel Spacing="6">
-                            <TextBlock Text="Versão do Loader" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            <TextBlock Text="{DynamicResource Lang_Versions_LoaderVersion}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
 
                             <!-- Loader Spinner -->
                             <ProgressBar IsIndeterminate="True" Height="2" IsVisible="{Binding IsLoadingLoaderVersions}" Foreground="{DynamicResource AccentBrush}" Margin="0,0,0,4"/>
@@ -212,13 +212,19 @@
                             <ComboBox ItemsSource="{Binding AvailableLoaderVersions}" 
                                       SelectedItem="{Binding SelectedLoaderVersionEntry}" 
                                       HorizontalAlignment="Stretch" CornerRadius="8"
-                                      PlaceholderText="Selecione a versão">
+                                      PlaceholderText="{DynamicResource Lang_Versions_SelectVersionWatermark}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate DataType="models:LoaderVersionEntry">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
                                             <TextBlock Text="{Binding Version}" FontWeight="SemiBold"/>
-                                            <TextBlock Text="★ Recomendado" IsVisible="{Binding IsRecommended}" Foreground="{DynamicResource AccentBrush}" FontSize="11" VerticalAlignment="Center"/>
-                                            <TextBlock Text="✓ Instalado" IsVisible="{Binding IsInstalled}" Foreground="#2ecc71" FontSize="11" VerticalAlignment="Center"/>
+                                            <StackPanel Orientation="Horizontal" Spacing="3" IsVisible="{Binding IsRecommended}">
+                                                <TextBlock Text="★" Foreground="{DynamicResource AccentBrush}" FontSize="11" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{DynamicResource Lang_Versions_Recommended}" Foreground="{DynamicResource AccentBrush}" FontSize="11" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Spacing="3" IsVisible="{Binding IsInstalled}">
+                                                <TextBlock Text="✓" Foreground="#2ecc71" FontSize="11" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{DynamicResource Lang_Versions_Installed}" Foreground="#2ecc71" FontSize="11" VerticalAlignment="Center"/>
+                                            </StackPanel>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
@@ -230,7 +236,7 @@
                                 Background="#182ecc71" BorderBrush="#2ecc71" BorderThickness="1" CornerRadius="8" Padding="12,8">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <TextBlock Text="✓" Foreground="#2ecc71" FontWeight="Bold"/>
-                                <TextBlock Text="Este loader já está instalado para esta versão!" Foreground="#2ecc71" FontSize="11" VerticalAlignment="Center"/>
+                                <TextBlock Text="{DynamicResource Lang_Versions_LoaderAlreadyInstalled}" Foreground="#2ecc71" FontSize="11" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
@@ -242,8 +248,10 @@
                                 Command="{Binding InstallSelectedLoaderCommand}"
                                 IsEnabled="{Binding !IsInstalling}">
                             <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                                <TextBlock Text="📥" FontSize="14" VerticalAlignment="Center"/>
-                                <TextBlock Text="Instalar " FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <Path Width="16" Height="16" Stroke="White" StrokeThickness="1.8"
+                                      Data="M8,1 L8,10 M4,6 L8,10 L12,6 M2,12 L2,15 L14,15 L14,12"
+                                      VerticalAlignment="Center"/>
+                                <TextBlock Text="{DynamicResource Lang_Versions_InstallBtn}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
                                 <TextBlock Text="{Binding SelectedLoader}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
