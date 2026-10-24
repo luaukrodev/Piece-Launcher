@@ -48,13 +48,13 @@
                     <!-- Tab Contents -->
                     <Panel>
                         <!-- Description Tab -->
-                        <ScrollViewer IsVisible="{Binding SelectedTabIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"
+                        <ScrollViewer IsVisible="{Binding IsDescriptionTab}"
                                       Margin="0,8,0,0" MaxHeight="500">
                             <TextBlock Text="{Binding Project.Body}" TextWrapping="Wrap" Foreground="{DynamicResource TextPrimary}" FontSize="13" LineHeight="22"/>
                         </ScrollViewer>
 
                         <!-- Gallery Tab -->
-                        <ItemsControl IsVisible="{Binding SelectedTabIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}" 
+                        <ItemsControl IsVisible="{Binding IsGalleryTab}" 
                                       ItemsSource="{Binding Gallery}" Margin="0,8,0,0">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -71,7 +71,7 @@
                         </ItemsControl>
 
                         <!-- Versions Tab -->
-                        <ItemsControl IsVisible="{Binding SelectedTabIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=2}" 
+                        <ItemsControl IsVisible="{Binding IsVersionsTab}" 
                                       ItemsSource="{Binding Versions}" Margin="0,8,0,0">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>

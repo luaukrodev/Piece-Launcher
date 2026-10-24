@@ -1,34 +1,38 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Piece_Launcher.Helpers;
 using Piece_Launcher.Models;
 using Piece_Launcher.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
-using System.Linq;
 
 namespace Piece_Launcher.ViewModels.Pages
 {
     public partial class ExplorePageViewModel : ViewModelBase
     {
+        private const int PageSize = 20;
+
         private readonly IExploreService _modrinthService;
         private readonly LauncherConfig _config;
-        private CancellationTokenSource? _searchCts;
+        private CancellationTokenSource? _debounceCts;
+        private CancellationTokenSource? _requestCts;
+        private int _searchVersion;
+        private string? _selectedVersionName;
 
         public ObservableCollection<ExploreProject> SearchResults { get; } = new();
 
         [ObservableProperty] private string _searchQuery = "";
         [ObservableProperty] private string _selectedType = "mod"; // mod, resourcepack, shader, datapack
-        [ObservableProperty] private string _selectedSource = "Modrinth"; // All, Modrinth, CurseForge
         [ObservableProperty] private string _selectedSort = "relevance"; // relevance, downloads, newest, updated
-        
+
         [ObservableProperty] private int _currentPage = 1;
         [ObservableProperty] private bool _hasNextPage;
-        
+
         public bool HasPreviousPage => CurrentPage > 1;
-        
+
         [ObservableProperty] private bool _isLoading;
         [ObservableProperty] private string? _statusMessage;
 
@@ -52,70 +56,92 @@ namespace Piece_Launcher.ViewModels.Pages
             _config = config;
         }
 
+        public void UpdateSelectedVersion(string? versionName)
+        {
+            if (_selectedVersionName == versionName)
+                return;
+
+            _selectedVersionName = versionName;
+            if (IsActive && _config.ExploreOnlyCompatible)
+            {
+                CurrentPage = 1;
+                _ = PerformSearchCore();
+            }
+        }
+
         protected override async void OnActivated()
         {
             base.OnActivated();
             if (SearchResults.Count == 0 && !IsDetailViewOpen)
             {
-                await PerformSearch();
+                await PerformSearchCore();
             }
         }
 
         partial void OnSearchQueryChanged(string value) => DebouncedSearch();
-        partial void OnSelectedTypeChanged(string value) { CurrentPage = 1; _ = PerformSearch(); }
-        partial void OnSelectedSourceChanged(string value) { CurrentPage = 1; _ = PerformSearch(); }
-        partial void OnSelectedSortChanged(string value) { CurrentPage = 1; _ = PerformSearch(); }
+        partial void OnSelectedTypeChanged(string value) { CurrentPage = 1; _ = PerformSearchCore(); }
+        partial void OnSelectedSortChanged(string value) { CurrentPage = 1; _ = PerformSearchCore(); }
         partial void OnCurrentPageChanged(int value)
         {
             OnPropertyChanged(nameof(HasPreviousPage));
         }
 
-        private void DebouncedSearch()
+        private async void DebouncedSearch()
         {
             CurrentPage = 1;
-            _searchCts?.Cancel();
-            _searchCts = new CancellationTokenSource();
-            var token = _searchCts.Token;
+            _debounceCts?.Cancel();
+            var cts = _debounceCts = new CancellationTokenSource();
 
-            Task.Run(async () =>
+            try
             {
-                try
-                {
-                    await Task.Delay(300, token);
-                    if (!token.IsCancellationRequested)
-                    {
-                        Avalonia.Threading.Dispatcher.UIThread.Post(() => _ = PerformSearch(token));
-                    }
-                }
-                catch (TaskCanceledException) { }
-            }, token);
+                await Task.Delay(300, cts.Token);
+                await PerformSearchCore();
+            }
+            catch (OperationCanceledException) { }
         }
 
         [RelayCommand]
-        private async Task PerformSearch(CancellationToken ct = default)
+        private Task PerformSearch()
         {
+            CurrentPage = 1;
+            return PerformSearchCore();
+        }
+
+        private async Task PerformSearchCore()
+        {
+            _requestCts?.Cancel();
+            var cts = _requestCts = new CancellationTokenSource();
+            var version = ++_searchVersion;
+
             IsLoading = true;
             StatusMessage = null;
 
             try
             {
+                var target = ExploreInstallHelper.ParseVersionName(_selectedVersionName);
+                var filterByCompatibility = _config.ExploreOnlyCompatible;
                 var query = new ExploreSearchQuery(
                     SearchText: SearchQuery,
                     ProjectType: SelectedType,
+                    GameVersion: filterByCompatibility ? target.GameVersion : null,
+                    Loader: filterByCompatibility
+                        ? ExploreInstallHelper.GetLoaderFilter(SelectedType, target)
+                        : null,
                     SortBy: SelectedSort,
-                    Offset: (CurrentPage - 1) * 20,
-                    Limit: 20
+                    Offset: (CurrentPage - 1) * PageSize,
+                    Limit: PageSize
                 );
 
-                var result = await _modrinthService.SearchAsync(query, ct);
-                
+                var result = await _modrinthService.SearchAsync(query, cts.Token);
+                if (version != _searchVersion) return;
+
                 SearchResults.Clear();
                 foreach (var project in result.Projects)
                 {
                     SearchResults.Add(project);
                 }
 
-                HasNextPage = result.Projects.Count == 20; // Assume we have next page if we got full limit
+                HasNextPage = CurrentPage * PageSize < result.TotalCount;
 
                 if (SearchResults.Count == 0)
                 {
@@ -125,11 +151,17 @@ namespace Piece_Launcher.ViewModels.Pages
             catch (OperationCanceledException) { }
             catch (Exception ex)
             {
-                StatusMessage = $"Search failed: {ex.Message}";
+                if (version == _searchVersion)
+                {
+                    SearchResults.Clear();
+                    HasNextPage = false;
+                    StatusMessage = $"Search failed: {ex.Message}";
+                }
             }
             finally
             {
-                IsLoading = false;
+                if (version == _searchVersion)
+                    IsLoading = false;
             }
         }
 
@@ -139,7 +171,7 @@ namespace Piece_Launcher.ViewModels.Pages
             if (HasNextPage)
             {
                 CurrentPage++;
-                await PerformSearch();
+                await PerformSearchCore();
             }
         }
 
@@ -149,7 +181,7 @@ namespace Piece_Launcher.ViewModels.Pages
             if (HasPreviousPage)
             {
                 CurrentPage--;
-                await PerformSearch();
+                await PerformSearchCore();
             }
         }
 
@@ -159,29 +191,26 @@ namespace Piece_Launcher.ViewModels.Pages
             StatusMessage = $"Downloading {project.Title}...";
             try
             {
-                var versions = await _modrinthService.GetProjectVersionsAsync(project.Id);
-                var latest = versions.FirstOrDefault();
-                if (latest == null)
+                var target = ExploreInstallHelper.ParseVersionName(_selectedVersionName);
+                var versions = await _modrinthService.GetProjectVersionsAsync(project.Id, target.GameVersion);
+                var best = ExploreInstallHelper.PickBest(versions, target, project.ProjectType);
+
+                if (best == null)
                 {
-                    StatusMessage = $"No versions found for {project.Title}.";
+                    StatusMessage = $"No compatible version of {project.Title} found.";
+                    TriggerValidationPopup();
                     return;
                 }
-                
-                string targetFolder = Path.Combine(_config.GameDirectory ?? "", "mods");
-                if (!Directory.Exists(targetFolder))
-                    Directory.CreateDirectory(targetFolder);
-                    
-                string destPath = Path.Combine(targetFolder, latest.Filename);
-                await _modrinthService.DownloadFileAsync(latest.DownloadUrl, destPath);
-                
-                StatusMessage = $"Installed {latest.Filename} successfully!";
-                
-                // Clear message after 3 seconds
-                _ = Task.Run(async () => {
-                    await Task.Delay(3000);
-                    if (StatusMessage?.Contains("successfully") == true)
-                        Avalonia.Threading.Dispatcher.UIThread.Post(() => StatusMessage = "");
-                });
+
+                string targetFolder = ExploreInstallHelper.GetTargetFolder(_config, project.ProjectType);
+                Directory.CreateDirectory(targetFolder);
+
+                string destPath = Path.Combine(targetFolder, ExploreInstallHelper.SafeFileName(best.Filename));
+                await _modrinthService.DownloadFileAsync(best.DownloadUrl, destPath);
+
+                StatusMessage = $"Installed {best.Filename} successfully!";
+
+                _ = ClearSuccessMessageAsync();
             }
             catch (Exception ex)
             {
@@ -189,16 +218,24 @@ namespace Piece_Launcher.ViewModels.Pages
             }
         }
 
+        private async Task ClearSuccessMessageAsync()
+        {
+            await Task.Delay(3000);
+            if (StatusMessage?.Contains("successfully") == true)
+                StatusMessage = "";
+        }
+
         [RelayCommand]
         private async Task ViewProject(ExploreProject project)
         {
             var vm = new ModDetailPageViewModel(_modrinthService, _config,
                 onBack: () => IsDetailViewOpen = false,
-                onValidationFailed: () => TriggerValidationPopup());
-            
+                onValidationFailed: () => TriggerValidationPopup(),
+                getSelectedVersionName: () => _selectedVersionName);
+
             DetailViewModel = vm;
             IsDetailViewOpen = true;
-            
+
             await vm.LoadProjectAsync(project.Id);
         }
 

@@ -71,12 +71,14 @@ namespace Piece_Launcher.Services.Impl
             var p = await _httpClient.GetFromJsonAsync<ModrinthProject>($"project/{projectId}", cancellationToken: ct);
             if (p == null) throw new Exception("Project not found");
 
+            var author = await GetAuthorAsync(projectId, ct);
+
             return new ExploreProjectDetail(
                 p.Id,
                 p.Title,
                 p.Description,
                 p.Body,
-                "Unknown Author", // Author needs extra call or isn't directly on project root in same way sometimes, but we keep it simple
+                author,
                 p.IconUrl,
                 p.Downloads,
                 p.ProjectType,
@@ -89,23 +91,35 @@ namespace Piece_Launcher.Services.Impl
             );
         }
 
+        private async Task<string> GetAuthorAsync(string projectId, CancellationToken ct)
+        {
+            try
+            {
+                var members = await _httpClient.GetFromJsonAsync<List<ModrinthMember>>($"project/{projectId}/members", cancellationToken: ct);
+                var owner = members?.FirstOrDefault(m => m.Role == "Owner") ?? members?.FirstOrDefault();
+                return owner?.User?.Username ?? "Unknown Author";
+            }
+            catch (OperationCanceledException) { throw; }
+            catch { return "Unknown Author"; }
+        }
+
         public async Task<IReadOnlyList<ExploreProjectVersion>> GetProjectVersionsAsync(string projectId, string? gameVersion = null, string? loader = null, CancellationToken ct = default)
         {
             var url = $"project/{projectId}/version";
-            
+
             var queryParams = new List<string>();
             if (!string.IsNullOrEmpty(gameVersion))
-                queryParams.Add($"game_versions=[\"{gameVersion}\"]");
+                queryParams.Add("game_versions=" + Uri.EscapeDataString("[\"" + gameVersion + "\"]"));
             if (!string.IsNullOrEmpty(loader))
-                queryParams.Add($"loaders=[\"{loader}\"]");
-                
+                queryParams.Add("loaders=" + Uri.EscapeDataString("[\"" + loader + "\"]"));
+
             if (queryParams.Any())
                 url += "?" + string.Join("&", queryParams);
 
             var versions = await _httpClient.GetFromJsonAsync<List<ModrinthVersion>>(url, cancellationToken: ct);
             if (versions == null) return new List<ExploreProjectVersion>();
 
-            return versions.Select(v => 
+            return versions.Select(v =>
             {
                 var primaryFile = v.Files.FirstOrDefault(f => f.Primary) ?? v.Files.FirstOrDefault();
                 return new ExploreProjectVersion(
@@ -189,6 +203,17 @@ namespace Piece_Launcher.Services.Impl
             [JsonPropertyName("updated")] public DateTimeOffset Updated { get; set; }
             [JsonPropertyName("license")] public ModrinthLicense? License { get; set; }
             [JsonPropertyName("gallery")] public List<ModrinthGallery>? Gallery { get; set; }
+        }
+
+        private class ModrinthMember
+        {
+            [JsonPropertyName("role")] public string Role { get; set; } = "";
+            [JsonPropertyName("user")] public ModrinthUser? User { get; set; }
+        }
+
+        private class ModrinthUser
+        {
+            [JsonPropertyName("username")] public string Username { get; set; } = "";
         }
 
         private class ModrinthGallery

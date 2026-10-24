@@ -57,7 +57,7 @@ namespace Piece_Launcher.ViewModels
         {
             _config = LauncherConfig.Load();
             _minecraft = new MinecraftLauncher();
-            
+
             // In a real DI setup, these would be injected.
             var cmlVersionService = new Services.Impl.CmlLibVersionService(_minecraft);
             var modrinthExploreService = new Services.Impl.ModrinthExploreService();
@@ -70,7 +70,7 @@ namespace Piece_Launcher.ViewModels
             var quiltService = new Services.Impl.QuiltLoaderService(_minecraft);
 
             ServiceLocator.Initialize(
-                cmlVersionService, modrinthExploreService, curseForgeExploreService, 
+                cmlVersionService, modrinthExploreService, curseForgeExploreService,
                 avaloniaThemeService, avaloniaLanguageService, forgeService, fabricService, neoForgeService, quiltService);
 
             _versionService = cmlVersionService;
@@ -137,6 +137,7 @@ namespace Piece_Launcher.ViewModels
 
         partial void OnSelectedVersionChanged(string? value)
         {
+            _explorePage.UpdateSelectedVersion(value);
             if (value != null)
             {
                 _config.LastSelectedVersion = value;

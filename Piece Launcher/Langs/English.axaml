@@ -64,7 +64,7 @@
     <sys:String x:Key="Lang_Versions_QuiltDesc">Next-Gen Loader</sys:String>
 
     <!-- Explore Page -->
-    <sys:String x:Key="Lang_Explore_Title">Explore</sys:String>
+    <sys:String x:Key="Lang_Explore_Title">Discover</sys:String>
     <sys:String x:Key="Lang_Explore_Subtitle">Search and install mods, shaders, and maps from the community.</sys:String>
     <sys:String x:Key="Lang_Explore_SearchWatermark">Search mods, shaders, maps...</sys:String>
     <sys:String x:Key="Lang_Explore_SearchBtn">Search</sys:String>

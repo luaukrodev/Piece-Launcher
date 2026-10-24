@@ -1,11 +1,29 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Piece_Launcher.App"
-             xmlns:local="using:Piece_Launcher"
+             xmlns:pages="using:Piece_Launcher.Views.Pages"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
              RequestedThemeVariant="Dark">
 
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <DataTemplate DataType="vm:HomePageViewModel">
+            <pages:HomePageView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ProfilesPageViewModel">
+            <pages:ProfilesPageView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:VersionsPageViewModel">
+            <pages:VersionsPageView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:ExplorePageViewModel">
+            <pages:ExplorePageView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:MapsPageViewModel">
+            <pages:MapsPageView />
+        </DataTemplate>
+        <DataTemplate DataType="vm:SettingsPageViewModel">
+            <pages:SettingsPageView />
+        </DataTemplate>
     </Application.DataTemplates>
 
     <Application.Resources>

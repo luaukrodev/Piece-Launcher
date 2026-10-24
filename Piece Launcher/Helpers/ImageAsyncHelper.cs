@@ -34,35 +34,38 @@ namespace Piece_Launcher.Helpers
         private static async void OnSourceUrlChanged(Image sender, AvaloniaPropertyChangedEventArgs e)
         {
             var url = e.NewValue as string;
-            
+            sender.Source = null;
+
             if (string.IsNullOrWhiteSpace(url))
-            {
-                sender.Source = null;
                 return;
-            }
 
             try
             {
-                var bitmap = await _cache.GetOrAdd(url, async (u) =>
-                {
-                    try
-                    {
-                        var response = await _httpClient.GetAsync(u);
-                        response.EnsureSuccessStatusCode();
-                        await using var stream = await response.Content.ReadAsStreamAsync();
-                        return new Bitmap(stream);
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                });
+                var bitmap = await _cache.GetOrAdd(url, LoadBitmapAsync);
+                if (bitmap == null)
+                    _cache.TryRemove(url, out _);
 
-                sender.Source = bitmap;
+                if (GetSourceUrl(sender) == url)
+                    sender.Source = bitmap;
             }
             catch
             {
                 sender.Source = null;
+            }
+        }
+
+        private static async Task<Bitmap?> LoadBitmapAsync(string url)
+        {
+            try
+            {
+                using var response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                await using var stream = await response.Content.ReadAsStreamAsync();
+                return new Bitmap(stream);
+            }
+            catch
+            {
+                return null;
             }
         }
     }

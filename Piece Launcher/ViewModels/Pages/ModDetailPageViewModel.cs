@@ -1,12 +1,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Piece_Launcher.Helpers;
 using Piece_Launcher.Models;
 using Piece_Launcher.Services;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Piece_Launcher.ViewModels.Pages
 {
@@ -16,23 +16,41 @@ namespace Piece_Launcher.ViewModels.Pages
         private readonly LauncherConfig _config;
         private readonly Action _onBack;
         private readonly Action _onValidationFailed;
+        private readonly Func<string?>? _getSelectedVersionName;
 
         [ObservableProperty] private ExploreProjectDetail? _project;
         [ObservableProperty] private bool _isLoading;
         [ObservableProperty] private string? _errorMessage;
-        
+
         // Tab Management
         [ObservableProperty] private int _selectedTabIndex = 0;
+
+        public bool IsDescriptionTab => SelectedTabIndex == 0;
+        public bool IsGalleryTab => SelectedTabIndex == 1;
+        public bool IsVersionsTab => SelectedTabIndex == 2;
+
+        partial void OnSelectedTabIndexChanged(int value)
+        {
+            OnPropertyChanged(nameof(IsDescriptionTab));
+            OnPropertyChanged(nameof(IsGalleryTab));
+            OnPropertyChanged(nameof(IsVersionsTab));
+        }
 
         public ObservableCollection<ExploreProjectVersion> Versions { get; } = new();
         public ObservableCollection<string> Gallery { get; } = new();
 
-        public ModDetailPageViewModel(IExploreService exploreService, LauncherConfig config, Action onBack, Action onValidationFailed)
+        public ModDetailPageViewModel(
+            IExploreService exploreService,
+            LauncherConfig config,
+            Action onBack,
+            Action onValidationFailed,
+            Func<string?>? getSelectedVersionName = null)
         {
             _exploreService = exploreService;
             _config = config;
             _onBack = onBack;
             _onValidationFailed = onValidationFailed;
+            _getSelectedVersionName = getSelectedVersionName;
         }
 
         public async Task LoadProjectAsync(string projectId)
@@ -42,14 +60,11 @@ namespace Piece_Launcher.ViewModels.Pages
             try
             {
                 Project = await _exploreService.GetProjectDetailAsync(projectId);
-                
+
                 Gallery.Clear();
-                if (Project.Gallery != null)
+                foreach (var image in Project.Gallery)
                 {
-                    foreach (var image in Project.Gallery)
-                    {
-                        Gallery.Add(image);
-                    }
+                    Gallery.Add(image);
                 }
 
                 await LoadVersionsAsync(projectId);
@@ -90,15 +105,23 @@ namespace Piece_Launcher.ViewModels.Pages
         [RelayCommand]
         private async Task InstallLatest()
         {
-            if (Versions.Count > 0)
-            {
-                var latest = Versions.First();
-                await InstallVersion(latest);
-            }
-            else
+            if (Versions.Count == 0)
             {
                 ErrorMessage = "No versions available to install.";
+                return;
             }
+
+            var target = ExploreInstallHelper.ParseVersionName(_getSelectedVersionName?.Invoke());
+            var best = ExploreInstallHelper.PickBest(Versions, target, Project?.ProjectType);
+
+            if (best == null)
+            {
+                ErrorMessage = "No compatible version found for the selected Minecraft version.";
+                _onValidationFailed?.Invoke();
+                return;
+            }
+
+            await InstallVersion(best);
         }
 
         [RelayCommand]
@@ -107,26 +130,27 @@ namespace Piece_Launcher.ViewModels.Pages
             ErrorMessage = $"Installing {version.Name}...";
             try
             {
-                string targetFolder = Path.Combine(_config.GameDirectory ?? "", "mods");
-                if (!Directory.Exists(targetFolder))
-                    Directory.CreateDirectory(targetFolder);
+                string targetFolder = ExploreInstallHelper.GetTargetFolder(_config, Project?.ProjectType);
+                Directory.CreateDirectory(targetFolder);
 
-                string destPath = Path.Combine(targetFolder, version.Filename);
+                string destPath = Path.Combine(targetFolder, ExploreInstallHelper.SafeFileName(version.Filename));
                 await _exploreService.DownloadFileAsync(version.DownloadUrl, destPath);
 
                 ErrorMessage = $"Installed {version.Filename} successfully!";
-                
-                // Clear message after 3 seconds
-                _ = Task.Run(async () => {
-                    await Task.Delay(3000);
-                    if (ErrorMessage?.Contains("successfully") == true)
-                        Avalonia.Threading.Dispatcher.UIThread.Post(() => ErrorMessage = null);
-                });
+
+                _ = ClearSuccessMessageAsync();
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"Failed to install: {ex.Message}";
             }
+        }
+
+        private async Task ClearSuccessMessageAsync()
+        {
+            await Task.Delay(3000);
+            if (ErrorMessage?.Contains("successfully") == true)
+                ErrorMessage = null;
         }
 
         [RelayCommand]
