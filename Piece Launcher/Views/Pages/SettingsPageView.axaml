@@ -41,6 +41,17 @@
                 </StackPanel>
             </Border>
 
+            <Border Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
+                    CornerRadius="10" Padding="16,12">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="{DynamicResource Lang_Settings_Version}"
+                               Foreground="{DynamicResource TextMuted}"/>
+                    <TextBlock Text="{Binding LauncherVersion}"
+                               Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Border>
+
             <!-- Action Buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,0">
                 <Button Content="{DynamicResource Lang_Settings_Reset}" Padding="16,10" Classes="MicrosoftButton" Command="{Binding ResetToDefaultsCommand}"/>

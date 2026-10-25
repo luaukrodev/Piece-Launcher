@@ -45,7 +45,7 @@
                     <!-- Logo -->
                     <Border Grid.Row="0" Padding="20,10,10,10" BorderBrush="{DynamicResource SidebarDividerBrush}" BorderThickness="0,0,0,1">
                         <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Border Width="75" Height="75" CornerRadius="10" Background="{DynamicResource SidebarLogoBg}">
+                            <Border Width="75" Height="75" CornerRadius="10" Background="#00000000">
                                 <Image Source="/Assets/Piece Launcher.ico" Width="65" Height="65"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>

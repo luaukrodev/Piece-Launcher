@@ -5,6 +5,7 @@ using Piece_Launcher.Models;
 using Piece_Launcher.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Piece_Launcher.ViewModels.Pages
 
         private readonly IExploreService _modrinthService;
         private readonly LauncherConfig _config;
+        private readonly string _gameDirectory;
         private CancellationTokenSource? _debounceCts;
         private CancellationTokenSource? _requestCts;
         private int _searchVersion;
@@ -50,10 +52,11 @@ namespace Piece_Launcher.ViewModels.Pages
         // Popup state
         [ObservableProperty] private bool _showValidationPopup;
 
-        public ExplorePageViewModel(IExploreService modrinthService, LauncherConfig config)
+        public ExplorePageViewModel(IExploreService modrinthService, LauncherConfig config, string gameDirectory)
         {
             _modrinthService = modrinthService;
             _config = config;
+            _gameDirectory = gameDirectory;
         }
 
         public void UpdateSelectedVersion(string? versionName)
@@ -186,6 +189,28 @@ namespace Piece_Launcher.ViewModels.Pages
         }
 
         [RelayCommand]
+        private void OpenModsFolder()
+        {
+            var modsFolder = ExploreInstallHelper.GetTargetFolder(_gameDirectory, "mod");
+            try
+            {
+                Directory.CreateDirectory(modsFolder);
+
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = OperatingSystem.IsWindows() ? "explorer.exe" : OperatingSystem.IsMacOS() ? "open" : "xdg-open",
+                    UseShellExecute = false
+                };
+                startInfo.ArgumentList.Add(modsFolder);
+                Process.Start(startInfo);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Could not open mods folder: {ex.Message}";
+            }
+        }
+
+        [RelayCommand]
         private async Task InstallProject(ExploreProject project)
         {
             StatusMessage = $"Downloading {project.Title}...";
@@ -202,11 +227,21 @@ namespace Piece_Launcher.ViewModels.Pages
                     return;
                 }
 
-                string targetFolder = ExploreInstallHelper.GetTargetFolder(_config, project.ProjectType);
+                string targetFolder = ExploreInstallHelper.GetTargetFolder(_gameDirectory, project.ProjectType);
                 Directory.CreateDirectory(targetFolder);
 
                 string destPath = Path.Combine(targetFolder, ExploreInstallHelper.SafeFileName(best.Filename));
-                await _modrinthService.DownloadFileAsync(best.DownloadUrl, destPath);
+                var temporaryPath = Path.Combine(targetFolder, $".{Guid.NewGuid():N}.download");
+                try
+                {
+                    await _modrinthService.DownloadFileAsync(best.DownloadUrl, temporaryPath);
+                    File.Move(temporaryPath, destPath, true);
+                }
+                finally
+                {
+                    if (File.Exists(temporaryPath))
+                        File.Delete(temporaryPath);
+                }
 
                 StatusMessage = $"Installed {best.Filename} successfully!";
 
@@ -228,7 +263,7 @@ namespace Piece_Launcher.ViewModels.Pages
         [RelayCommand]
         private async Task ViewProject(ExploreProject project)
         {
-            var vm = new ModDetailPageViewModel(_modrinthService, _config,
+            var vm = new ModDetailPageViewModel(_modrinthService, _gameDirectory,
                 onBack: () => IsDetailViewOpen = false,
                 onValidationFailed: () => TriggerValidationPopup(),
                 getSelectedVersionName: () => _selectedVersionName);

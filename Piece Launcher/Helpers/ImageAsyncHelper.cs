@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Avalonia;
@@ -60,11 +62,15 @@ namespace Piece_Launcher.Helpers
             {
                 using var response = await _httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
-                await using var stream = await response.Content.ReadAsStreamAsync();
-                return new Bitmap(stream);
+                await using var responseStream = await response.Content.ReadAsStreamAsync();
+                using var bitmapStream = new MemoryStream();
+                await responseStream.CopyToAsync(bitmapStream);
+                bitmapStream.Position = 0;
+                return new Bitmap(bitmapStream);
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine($"Failed to load image '{url}': {ex.Message}");
                 return null;
             }
         }

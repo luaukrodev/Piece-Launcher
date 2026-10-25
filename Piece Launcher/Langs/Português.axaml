@@ -74,6 +74,7 @@
     <sys:String x:Key="Lang_Explore_Sort">Ordenar:</sys:String>
     <sys:String x:Key="Lang_Explore_NoImage">Sem Imagem</sys:String>
     <sys:String x:Key="Lang_Explore_PoweredBy">Distribuído por</sys:String>
+    <sys:String x:Key="Lang_Explore_OpenModsFolder">Abrir pasta de mods</sys:String>
     <sys:String x:Key="Lang_Explore_Previous">Anterior</sys:String>
     <sys:String x:Key="Lang_Explore_Next">Próxima</sys:String>
 
@@ -92,5 +93,6 @@
     <sys:String x:Key="Lang_Settings_KeepOpen">Manter o launcher aberto enquanto o Minecraft estiver em execução</sys:String>
     <sys:String x:Key="Lang_Settings_Reset">Restaurar Padrões</sys:String>
     <sys:String x:Key="Lang_Settings_Save">Salvar Configurações</sys:String>
+    <sys:String x:Key="Lang_Settings_Version">Versão:</sys:String>
 
 </ResourceDictionary>

@@ -2,7 +2,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Piece_Launcher.Models;
 using Piece_Launcher.Services;
+using System;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace Piece_Launcher.ViewModels.Pages
 {
@@ -12,6 +14,11 @@ namespace Piece_Launcher.ViewModels.Pages
         private readonly ILanguageService _languageService;
 
         public LauncherConfig Config { get; }
+        public string LauncherVersion { get; } =
+            typeof(SettingsPageViewModel).Assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                .Split('+')[0]
+            ?? throw new InvalidOperationException("The launcher version was not configured.");
 
         // Collections for ComboBox ItemsSource — plain strings so SelectedItem binding works
         public string[] AvailableLanguages { get; } = new[] { "Português", "English", "Español", "Français", "Deutsch" };

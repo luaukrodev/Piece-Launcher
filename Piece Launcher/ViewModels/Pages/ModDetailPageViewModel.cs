@@ -13,7 +13,7 @@ namespace Piece_Launcher.ViewModels.Pages
     public partial class ModDetailPageViewModel : ViewModelBase
     {
         private readonly IExploreService _exploreService;
-        private readonly LauncherConfig _config;
+        private readonly string _gameDirectory;
         private readonly Action _onBack;
         private readonly Action _onValidationFailed;
         private readonly Func<string?>? _getSelectedVersionName;
@@ -41,13 +41,13 @@ namespace Piece_Launcher.ViewModels.Pages
 
         public ModDetailPageViewModel(
             IExploreService exploreService,
-            LauncherConfig config,
+            string gameDirectory,
             Action onBack,
             Action onValidationFailed,
             Func<string?>? getSelectedVersionName = null)
         {
             _exploreService = exploreService;
-            _config = config;
+            _gameDirectory = gameDirectory;
             _onBack = onBack;
             _onValidationFailed = onValidationFailed;
             _getSelectedVersionName = getSelectedVersionName;
@@ -130,11 +130,21 @@ namespace Piece_Launcher.ViewModels.Pages
             ErrorMessage = $"Installing {version.Name}...";
             try
             {
-                string targetFolder = ExploreInstallHelper.GetTargetFolder(_config, Project?.ProjectType);
+                string targetFolder = ExploreInstallHelper.GetTargetFolder(_gameDirectory, Project?.ProjectType);
                 Directory.CreateDirectory(targetFolder);
 
                 string destPath = Path.Combine(targetFolder, ExploreInstallHelper.SafeFileName(version.Filename));
-                await _exploreService.DownloadFileAsync(version.DownloadUrl, destPath);
+                var temporaryPath = Path.Combine(targetFolder, $".{Guid.NewGuid():N}.download");
+                try
+                {
+                    await _exploreService.DownloadFileAsync(version.DownloadUrl, temporaryPath);
+                    File.Move(temporaryPath, destPath, true);
+                }
+                finally
+                {
+                    if (File.Exists(temporaryPath))
+                        File.Delete(temporaryPath);
+                }
 
                 ErrorMessage = $"Installed {version.Filename} successfully!";
 

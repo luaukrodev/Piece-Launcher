@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Piece_Launcher.Models;
+using Piece_Launcher.Services;
 using System.Collections.ObjectModel;
 using System;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Piece_Launcher.ViewModels.Pages
     public partial class ProfilesPageViewModel : ViewModelBase
     {
         private readonly LauncherConfig _config;
+        private readonly IMicrosoftAuthService _microsoftAuthService;
         
         public ObservableCollection<ProfileEntry> UserProfiles { get; }
 
@@ -37,14 +39,25 @@ namespace Piece_Launcher.ViewModels.Pages
 
         public event EventHandler<ProfileEntry?>? ProfileSelected;
 
-        public ProfilesPageViewModel(LauncherConfig config, ObservableCollection<ProfileEntry> sharedProfiles, ProfileEntry? currentSelected)
+        public ProfilesPageViewModel(
+            LauncherConfig config,
+            ObservableCollection<ProfileEntry> sharedProfiles,
+            ProfileEntry? currentSelected,
+            IMicrosoftAuthService microsoftAuthService)
         {
             _config = config;
+            _microsoftAuthService = microsoftAuthService;
             UserProfiles = sharedProfiles;
             _selectedProfile = currentSelected;
 
-            UserProfiles.CollectionChanged += (s, e) => OnPropertyChanged(nameof(HasNoProfiles));
+            UserProfiles.CollectionChanged += (s, e) =>
+            {
+                OnPropertyChanged(nameof(HasNoProfiles));
+                SaveProfiles();
+            };
         }
+
+        partial void OnStatusMessageChanged(string? value) => OnPropertyChanged(nameof(HasStatusMessage));
 
         partial void OnSelectedProfileChanged(ProfileEntry? value)
         {
@@ -74,20 +87,41 @@ namespace Piece_Launcher.ViewModels.Pages
         private async Task AddMicrosoftProfile()
         {
             IsLoggingIn = true;
-            StatusMessage = "Connecting to Microsoft... (Mocked in this viewmodel for now)";
-            
-            // In a real implementation, call Microsoft auth service
-            await Task.Delay(2000);
-            
-            var profile = new ProfileEntry { Name = "OnlineUser", Type = ProfileType.Microsoft };
-            UserProfiles.Add(profile);
-            SelectedProfile = profile;
-            ShowAddProfileForm = false;
-            StatusMessage = "Signed in successfully.";
-            
-            IsLoggingIn = false;
-            await Task.Delay(3000);
-            StatusMessage = null;
+            StatusMessage = "Connecting to Microsoft...";
+            try
+            {
+                var session = await _microsoftAuthService.SignInAsync();
+                if (string.IsNullOrWhiteSpace(session.UUID) || string.IsNullOrWhiteSpace(session.Username))
+                    throw new InvalidOperationException("Microsoft authentication returned an incomplete Minecraft profile.");
+
+                var profile = UserProfiles.FirstOrDefault(candidate =>
+                    candidate.Type == ProfileType.Microsoft &&
+                    string.Equals(candidate.Id, session.UUID, StringComparison.OrdinalIgnoreCase));
+
+                if (profile == null)
+                {
+                    profile = new ProfileEntry
+                    {
+                        Id = session.UUID,
+                        Name = session.Username,
+                        Type = ProfileType.Microsoft
+                    };
+                    UserProfiles.Add(profile);
+                }
+
+                SelectedProfile = profile;
+                ShowAddProfileForm = false;
+                StatusMessage = "Signed in successfully.";
+                _ = ClearStatusMessageAsync();
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Microsoft sign-in failed: {ex.Message}";
+            }
+            finally
+            {
+                IsLoggingIn = false;
+            }
         }
 
         [RelayCommand]
@@ -98,6 +132,19 @@ namespace Piece_Launcher.ViewModels.Pages
             {
                 SelectedProfile = UserProfiles.FirstOrDefault();
             }
+        }
+
+        private void SaveProfiles()
+        {
+            _config.Profiles = UserProfiles.ToList();
+            _config.Save();
+        }
+
+        private async Task ClearStatusMessageAsync()
+        {
+            await Task.Delay(3000);
+            if (StatusMessage == "Signed in successfully.")
+                StatusMessage = null;
         }
     }
 }

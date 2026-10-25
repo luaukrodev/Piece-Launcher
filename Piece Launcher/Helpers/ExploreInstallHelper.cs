@@ -60,8 +60,8 @@ namespace Piece_Launcher.Helpers
             _ => "mods"
         };
 
-        public static string GetTargetFolder(LauncherConfig config, string? projectType)
-            => Path.Combine(config.GameDirectory ?? "", GetFolderName(projectType));
+        public static string GetTargetFolder(string gameDirectory, string? projectType)
+            => Path.Combine(gameDirectory, GetFolderName(projectType));
 
         public static string SafeFileName(string filename)
         {

@@ -39,7 +39,11 @@
                     </StackPanel>
                     <Button Content="{DynamicResource Lang_Home_SignInMs}"
                             Classes="MicrosoftButton"
-                            HorizontalAlignment="Stretch"/>
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding SignInMicrosoftCommand}"/>
+                    <TextBlock Text="{Binding SignInStatusMessage}"
+                               IsVisible="{Binding HasSignInStatusMessage}"
+                               FontSize="11" Foreground="{DynamicResource TextError}" TextWrapping="Wrap"/>
                 </StackPanel>
             </Border>
         </StackPanel>

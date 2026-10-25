@@ -17,6 +17,7 @@ namespace Piece_Launcher.ViewModels
         private readonly LauncherConfig _config;
         private readonly MinecraftLauncher _minecraft;
         private readonly IVersionService _versionService;
+        private readonly Services.Impl.MicrosoftAuthService _microsoftAuthService;
 
         public ObservableCollection<ProfileEntry> UserProfiles { get; } = new();
         public ObservableCollection<string> InstalledVersions { get; } = new();
@@ -57,6 +58,7 @@ namespace Piece_Launcher.ViewModels
         {
             _config = LauncherConfig.Load();
             _minecraft = new MinecraftLauncher();
+            _microsoftAuthService = new Services.Impl.MicrosoftAuthService();
 
             // In a real DI setup, these would be injected.
             var cmlVersionService = new Services.Impl.CmlLibVersionService(_minecraft);
@@ -82,11 +84,11 @@ namespace Piece_Launcher.ViewModels
             _selectedProfile = UserProfiles.FirstOrDefault(p => p.Id == _config.LastSelectedProfileId) ?? UserProfiles.FirstOrDefault();
 
             // Initialize pages
-            _homePage = new HomePageViewModel(_selectedProfile);
-            _profilesPage = new ProfilesPageViewModel(_config, UserProfiles, _selectedProfile);
+            _profilesPage = new ProfilesPageViewModel(_config, UserProfiles, _selectedProfile, _microsoftAuthService);
+            _homePage = new HomePageViewModel(_selectedProfile, _profilesPage);
             _versionsPage = new VersionsPageViewModel(_versionService, forgeService, fabricService, neoForgeService, quiltService);
             _versionsPage.VersionInstalled += () => _ = LoadInstalledVersionsAsync();
-            _explorePage = new ExplorePageViewModel(modrinthExploreService, _config);
+            _explorePage = new ExplorePageViewModel(modrinthExploreService, _config, _minecraft.MinecraftPath.BasePath);
             _mapsPage = new MapsPageViewModel();
             _settingsPage = new SettingsPageViewModel(_config, avaloniaThemeService, avaloniaLanguageService);
 
@@ -187,8 +189,9 @@ namespace Piece_Launcher.ViewModels
             try
             {
                 StatusMessage = "Starting...";
-                // Simplify for refactoring, assuming offline session for now as auth is mocked above
-                var session = MSession.CreateOfflineSession(SelectedProfile.Name);
+                var session = SelectedProfile.Type == ProfileType.Microsoft
+                    ? await _microsoftAuthService.AuthenticateProfileAsync(SelectedProfile.Id)
+                    : MSession.CreateOfflineSession(SelectedProfile.Name);
                 var option = new CmlLib.Core.ProcessBuilder.MLaunchOption { Session = session };
                 var process = await _minecraft.InstallAndBuildProcessAsync(SelectedVersion, option);
                 process.Start();
