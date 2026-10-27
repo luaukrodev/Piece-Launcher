@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using Avalonia.Media.Imaging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,10 +10,19 @@ namespace Piece_Launcher.Models
 {
     public enum ProfileType { Offline, Microsoft }
 
-    public class ProfileEntry
+    public class ProfileEntry : ObservableObject
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string Name { get; set; } = "Steve";
+
+        private string _name = "Steve";
+        public string Name { get => _name; set => SetProperty(ref _name, value); }
+
+        public string? SkinPath { get; set; }
+
+        [JsonIgnore]
+        private Bitmap? _headImage;
+        [JsonIgnore]
+        public Bitmap? HeadImage { get => _headImage; set => SetProperty(ref _headImage, value); }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ProfileType Type { get; set; } = ProfileType.Offline;
@@ -46,7 +56,8 @@ namespace Piece_Launcher.Models
         private bool _launchOnStartup = false;
         public bool LaunchOnStartup { get => _launchOnStartup; set => SetProperty(ref _launchOnStartup, value); }
         
-        public bool CheckLauncherUpdates { get; set; } = true;
+        private bool _checkLauncherUpdates = true;
+        public bool CheckLauncherUpdates { get => _checkLauncherUpdates; set => SetProperty(ref _checkLauncherUpdates, value); }
         
         private bool _keepOpenWhilePlaying = true;
         public bool KeepOpenWhilePlaying { get => _keepOpenWhilePlaying; set => SetProperty(ref _keepOpenWhilePlaying, value); }

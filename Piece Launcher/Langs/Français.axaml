@@ -37,6 +37,25 @@
     <sys:String x:Key="Lang_Profiles_NoProfiles">Pas encore de profils</sys:String>
     <sys:String x:Key="Lang_Profiles_ClickToAdd">Cliquez sur "Nouveau Profil" pour ajouter</sys:String>
     <sys:String x:Key="Lang_Profiles_Remove">Supprimer</sys:String>
+    <sys:String x:Key="Lang_Profiles_Manage">Gérer le profil</sys:String>
+
+    <!-- Profile Management Page -->
+    <sys:String x:Key="Lang_ProfileManagement_Title">Gérer le profil</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Subtitle">Modifiez ce profil et consultez les détails du compte.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Back">Retour aux profils</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Name">Nom du profil</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Type">Type de compte</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Microsoft">Microsoft</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Offline">Hors ligne</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Id">ID du profil</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Cancel">Annuler</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Save">Enregistrer les modifications</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_MicrosoftNameReadOnly">Les noms des comptes Microsoft ne peuvent pas être modifiés ici.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Skin">Skin</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SkinDescription">Les profils hors ligne commencent avec un modèle neutre. Faites glisser le modèle pour le faire pivoter. Importez un PNG de skin 64x64 ou 64x32 ; les skins enregistrés servent à l’aperçu du lanceur.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SkinMicrosoftReadOnly">Les skins des comptes Microsoft sont visibles ici, mais ne peuvent pas être modifiés.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_EditSkin">Choisir un PNG de skin</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SaveSkin">Enregistrer le skin</sys:String>
 
     <!-- Versions Page -->
     <sys:String x:Key="Lang_Versions_Title">Versions</sys:String>
@@ -94,5 +113,16 @@
     <sys:String x:Key="Lang_Settings_Reset">Réinitialiser les Paramètres</sys:String>
     <sys:String x:Key="Lang_Settings_Save">Sauvegarder</sys:String>
     <sys:String x:Key="Lang_Settings_Version">Version :</sys:String>
+    <sys:String x:Key="Lang_Settings_AutomaticUpdates">Rechercher automatiquement les mises à jour du lanceur</sys:String>
+    <sys:String x:Key="Lang_Settings_Updates">Mises à jour du lanceur</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdatesDescription">Le lanceur recherche des mises à jour sur GitHub au démarrage.</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdatesRequireInstall">Les mises à jour sont disponibles pour la version installée du lanceur.</sys:String>
+    <sys:String x:Key="Lang_Settings_CheckForUpdates">Rechercher des mises à jour</sys:String>
+    <sys:String x:Key="Lang_Settings_CheckingForUpdates">Recherche des mises à jour...</sys:String>
+    <sys:String x:Key="Lang_Settings_UpToDate">Vous utilisez la dernière version.</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdateAvailable">Mise à jour disponible :</sys:String>
+    <sys:String x:Key="Lang_Settings_DownloadUpdate">Télécharger et redémarrer</sys:String>
+    <sys:String x:Key="Lang_Settings_DownloadingUpdate">Téléchargement de la mise à jour...</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdateFailed">Échec de la recherche ou du téléchargement :</sys:String>
 
 </ResourceDictionary>

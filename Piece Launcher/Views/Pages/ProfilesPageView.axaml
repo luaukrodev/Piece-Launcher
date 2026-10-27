@@ -22,6 +22,10 @@
                 </Button>
             </Grid>
 
+            <ProgressBar IsIndeterminate="True" Height="2"
+                         IsVisible="{Binding IsLoadingProfiles}"
+                         Foreground="{DynamicResource AccentBrush}" Margin="0,0,0,10"/>
+
             <!-- Add-profile form -->
             <Border IsVisible="{Binding ShowAddProfileForm}"
                     Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
@@ -66,12 +70,17 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Width="168" Height="112"
+                        <Border Width="300" Height="148"
                                 CornerRadius="12" Background="{DynamicResource CardBackground}"
                                 BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
                                 Margin="0,0,12,12" Padding="16,14">
-                            <Grid RowDefinitions="*,Auto">
-                                <StackPanel Grid.Row="0" Spacing="6">
+                            <Grid RowDefinitions="*,Auto" ColumnDefinitions="64,*,44">
+                                <Image Grid.Row="0" Grid.Column="0" Width="56" Height="56"
+                                       Source="{Binding HeadImage}" Stretch="Uniform"
+                                       RenderOptions.BitmapInterpolationMode="None"
+                                       VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="6"
+                                            VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Name}" FontSize="15"
                                                FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"
                                                TextTrimming="CharacterEllipsis"/>
@@ -82,12 +91,14 @@
                                     </Border>
                                 </StackPanel>
 
-                                <Button Grid.Row="1"
-                                        Content="{DynamicResource Lang_Profiles_Remove}"
-                                        Classes="RemoveButton"
-                                        HorizontalAlignment="Right"
-                                        Command="{Binding $parent[UserControl].((vm:ProfilesPageViewModel)DataContext).RemoveProfileCommand}"
+                                <Button Grid.Row="0" Grid.Column="2" Content="⋯"
+                                        Classes="MicrosoftButton" Padding="0"
+                                        MinWidth="36" MinHeight="36" FontSize="18"
+                                        ToolTip.Tip="{DynamicResource Lang_Profiles_Manage}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                                        Command="{Binding $parent[UserControl].((vm:ProfilesPageViewModel)DataContext).ManageProfileCommand}"
                                         CommandParameter="{Binding}"/>
+
                             </Grid>
                         </Border>
                     </DataTemplate>

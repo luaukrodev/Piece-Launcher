@@ -37,6 +37,25 @@
     <sys:String x:Key="Lang_Profiles_NoProfiles">Aún no hay perfiles</sys:String>
     <sys:String x:Key="Lang_Profiles_ClickToAdd">Haz clic en "Nuevo Perfil" para añadir</sys:String>
     <sys:String x:Key="Lang_Profiles_Remove">Eliminar</sys:String>
+    <sys:String x:Key="Lang_Profiles_Manage">Administrar perfil</sys:String>
+
+    <!-- Profile Management Page -->
+    <sys:String x:Key="Lang_ProfileManagement_Title">Administrar perfil</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Subtitle">Edita este perfil y consulta los datos de la cuenta.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Back">Volver a los perfiles</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Name">Nombre del perfil</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Type">Tipo de cuenta</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Microsoft">Microsoft</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Offline">Sin conexión</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Id">ID del perfil</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Cancel">Cancelar</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Save">Guardar cambios</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_MicrosoftNameReadOnly">Los nombres de cuentas Microsoft no se pueden editar aquí.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Skin">Skin</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SkinDescription">Los perfiles sin conexión comienzan con un modelo neutro. Arrástralo para girarlo. Importa un PNG de skin de 64x64 o 64x32; las skins guardadas se usan en la vista previa del launcher.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SkinMicrosoftReadOnly">Las skins de cuentas Microsoft se pueden ver aquí, pero no cambiar.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_EditSkin">Elegir PNG de skin</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SaveSkin">Guardar skin</sys:String>
 
     <!-- Versions Page -->
     <sys:String x:Key="Lang_Versions_Title">Versiones</sys:String>
@@ -94,5 +113,16 @@
     <sys:String x:Key="Lang_Settings_Reset">Restablecer Valores</sys:String>
     <sys:String x:Key="Lang_Settings_Save">Guardar Ajustes</sys:String>
     <sys:String x:Key="Lang_Settings_Version">Versión:</sys:String>
+    <sys:String x:Key="Lang_Settings_AutomaticUpdates">Buscar actualizaciones del launcher automáticamente</sys:String>
+    <sys:String x:Key="Lang_Settings_Updates">Actualizaciones del launcher</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdatesDescription">El launcher busca actualizaciones en GitHub al iniciarse.</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdatesRequireInstall">Las actualizaciones están disponibles para la versión instalada del launcher.</sys:String>
+    <sys:String x:Key="Lang_Settings_CheckForUpdates">Buscar actualizaciones</sys:String>
+    <sys:String x:Key="Lang_Settings_CheckingForUpdates">Buscando actualizaciones...</sys:String>
+    <sys:String x:Key="Lang_Settings_UpToDate">Estás usando la última versión.</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdateAvailable">Actualización disponible:</sys:String>
+    <sys:String x:Key="Lang_Settings_DownloadUpdate">Descargar y reiniciar</sys:String>
+    <sys:String x:Key="Lang_Settings_DownloadingUpdate">Descargando actualización...</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdateFailed">No se pudo buscar o descargar la actualización:</sys:String>
 
 </ResourceDictionary>

@@ -27,12 +27,13 @@
 
 - **Minecraft Java Edition** launcher with Microsoft account login
 - **Mod loaders:** Forge, NeoForge, Fabric and Quilt
-- **Profiles and Versions:** manage your installed versions and play with one click
+- **Profiles and Versions:** manage profiles and installed versions, and play with one click
+- **Skins:** view profile skins on a rotatable 3D model; import and save local skins for offline profiles
 - **Discover:** search and install mods, resource packs, shaders and data packs from [Modrinth](https://modrinth.com), filtered by your selected Minecraft version and loader
 - **6 themes:** Dark Orange (default), Crimson Red, Forest Green, Midnight Blue, Dark Purple and Light
 - **5 languages:** English, Português, Español, Français and Deutsch
 - **Settings:** launch on Windows startup, keep the launcher open while the game runs, choose your startup page
-- **Automatic updates** through [Velopack](https://velopack.io)
+- **Automatic update checks** through [Velopack](https://velopack.io), with update downloads and restart available in Settings
 
 > **Maps** is a placeholder for now and is planned for a future release.
 
@@ -41,6 +42,8 @@
 1. Go to the [latest release](https://github.com/luaukrodev/Piece-Launcher/releases/latest).
 2. Download the `Setup.exe` file and run it.
 3. If Windows SmartScreen shows "Windows protected your PC", click **More info** and then **Run anyway**. The installer is not code-signed yet.
+
+The installed launcher checks GitHub for updates at startup. When an update is available, open **Settings** and choose **Download and restart**. Automatic checks can be disabled in Settings. Updates require a Velopack-installed copy; portable and development builds are not updated in place. Published GitHub releases must include the Velopack release assets produced by `vpk pack`.
 
 ## Building from source
 

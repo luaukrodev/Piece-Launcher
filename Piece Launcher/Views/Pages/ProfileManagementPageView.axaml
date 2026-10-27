@@ -1,0 +1,135 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
+             xmlns:controls="using:Piece_Launcher.Controls"
+             x:Class="Piece_Launcher.Views.Pages.ProfileManagementPageView"
+             x:DataType="vm:ProfileManagementPageViewModel">
+
+    <Grid>
+        <ScrollViewer Margin="44,12,44,16" VerticalScrollBarVisibility="Auto"
+                      IsVisible="{Binding !IsLoading}">
+            <StackPanel Spacing="16">
+            <StackPanel Spacing="4">
+                <Button Classes="MicrosoftButton" Padding="12,8"
+                        HorizontalAlignment="Left" Command="{Binding CancelCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <TextBlock Text="←" FontSize="15" VerticalAlignment="Center"/>
+                        <TextBlock Text="{DynamicResource Lang_ProfileManagement_Back}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock Text="{DynamicResource Lang_ProfileManagement_Title}"
+                           FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                <TextBlock Text="{DynamicResource Lang_ProfileManagement_Subtitle}"
+                           Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <Border Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
+                    CornerRadius="12" Padding="20,16">
+                <StackPanel Spacing="12">
+                    <Grid ColumnDefinitions="64,*" RowDefinitions="Auto,Auto"
+                          ColumnSpacing="10" RowSpacing="6">
+                        <Image Grid.RowSpan="2" Grid.Column="0" Width="56" Height="56"
+                                   Source="{Binding HeadImage}" Stretch="Uniform"
+                                   RenderOptions.BitmapInterpolationMode="None"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   Text="{DynamicResource Lang_ProfileManagement_Name}"
+                                   FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1"
+                                 Text="{Binding ProfileName, Mode=TwoWay}"
+                                 IsReadOnly="{Binding IsMicrosoftProfile}"
+                                 VerticalAlignment="Center"
+                                 PlaceholderText="{DynamicResource Lang_Profiles_ProfileNameWatermark}"/>
+                    </Grid>
+                    <TextBlock Text="{DynamicResource Lang_ProfileManagement_MicrosoftNameReadOnly}"
+                               Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"
+                               IsVisible="{Binding IsMicrosoftProfile}"/>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{DynamicResource Lang_ProfileManagement_Type}"
+                                   FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                        <TextBlock Text="{DynamicResource Lang_ProfileManagement_Microsoft}"
+                                   Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold"
+                                   IsVisible="{Binding IsMicrosoftProfile}"/>
+                        <TextBlock Text="{DynamicResource Lang_ProfileManagement_Offline}"
+                                   Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold"
+                                   IsVisible="{Binding IsOfflineProfile}"/>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{DynamicResource Lang_ProfileManagement_Id}"
+                                   FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                        <TextBlock Text="{Binding ProfileId}" Foreground="{DynamicResource TextPrimary}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
+                    CornerRadius="12" Padding="20,16">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{DynamicResource Lang_ProfileManagement_Skin}"
+                               FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                    <TextBlock Text="{DynamicResource Lang_ProfileManagement_SkinDescription}"
+                               Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"/>
+                    <Border Background="{DynamicResource ElevatedBackground}" CornerRadius="10"
+                            Height="280" Padding="8">
+                        <controls:SkinModelViewer SkinBitmap="{Binding SkinBitmap}"/>
+                    </Border>
+                    <TextBlock Text="{DynamicResource Lang_ProfileManagement_SkinMicrosoftReadOnly}"
+                               Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"
+                               IsVisible="{Binding IsMicrosoftProfile}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="{DynamicResource Lang_ProfileManagement_EditSkin}"
+                                Padding="16,10" Classes="MicrosoftButton"
+                                Click="OnEditSkinClick"
+                                IsVisible="{Binding IsOfflineProfile}"/>
+                        <Button Content="{DynamicResource Lang_ProfileManagement_SaveSkin}"
+                                Padding="20,10" Classes="PlayButton"
+                                Command="{Binding SaveSkinCommand}"
+                                IsEnabled="{Binding CanSaveSkin}"
+                                IsVisible="{Binding IsOfflineProfile}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding SkinError}" Foreground="{DynamicResource TextError}"
+                               TextWrapping="Wrap" IsVisible="{Binding HasSkinError}"/>
+                </StackPanel>
+            </Border>
+
+            <Grid ColumnDefinitions="*,Auto">
+                <Button Grid.Column="0" Padding="16,10" Classes="RemoveButton"
+                        Background="{DynamicResource TextError}"
+                        BorderBrush="{DynamicResource TextError}" BorderThickness="1"
+                        Foreground="White" HorizontalAlignment="Left"
+                        Command="{Binding RemoveProfileCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Path Width="18" Height="18"
+                              Data="M6 7 L18 7 L17 21 L7 21 Z M4 5 L20 5 M9 5 L9 3 L15 3 L15 5 M10 10 L10 18 M14 10 L14 18"
+                              Stroke="White" StrokeThickness="1.8"
+                              StrokeLineCap="Round"/>
+                        <TextBlock Text="{DynamicResource Lang_Profiles_Remove}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <Button Content="{DynamicResource Lang_ProfileManagement_Cancel}"
+                            Padding="16,10" Classes="MicrosoftButton" Command="{Binding CancelCommand}"/>
+                    <Button Content="{DynamicResource Lang_ProfileManagement_Save}"
+                            Padding="20,10" Classes="PlayButton" Command="{Binding SaveCommand}"
+                            IsEnabled="{Binding CanSave}" IsVisible="{Binding IsOfflineProfile}"/>
+                </StackPanel>
+            </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
+                    IsVisible="{Binding IsLoading}">
+            <TextBlock Text="{DynamicResource Lang_Global_Loading}"
+                       HorizontalAlignment="Center" Foreground="{DynamicResource TextMuted}"/>
+            <ProgressBar Width="240" Height="4" IsIndeterminate="True"
+                         Foreground="{DynamicResource AccentBrush}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -37,6 +37,25 @@
     <sys:String x:Key="Lang_Profiles_NoProfiles">No profiles yet</sys:String>
     <sys:String x:Key="Lang_Profiles_ClickToAdd">Click "New Profile" to add one</sys:String>
     <sys:String x:Key="Lang_Profiles_Remove">Remove</sys:String>
+    <sys:String x:Key="Lang_Profiles_Manage">Manage profile</sys:String>
+
+    <!-- Profile Management Page -->
+    <sys:String x:Key="Lang_ProfileManagement_Title">Manage profile</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Subtitle">Edit this profile and review its account details.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Back">Back to profiles</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Name">Profile name</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Type">Account type</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Microsoft">Microsoft</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Offline">Offline</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Id">Profile ID</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Cancel">Cancel</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Save">Save changes</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_MicrosoftNameReadOnly">Microsoft account names cannot be edited here.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_Skin">Skin</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SkinDescription">Offline profiles start with a neutral placeholder. Drag the model to rotate it. Import a 64x64 or 64x32 skin PNG; saved skins are used for the launcher preview.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SkinMicrosoftReadOnly">Microsoft account skins can be viewed here but not changed.</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_EditSkin">Choose skin PNG</sys:String>
+    <sys:String x:Key="Lang_ProfileManagement_SaveSkin">Save skin</sys:String>
 
     <!-- Versions Page -->
     <sys:String x:Key="Lang_Versions_Title">Versions</sys:String>
@@ -94,5 +113,16 @@
     <sys:String x:Key="Lang_Settings_Reset">Reset to Defaults</sys:String>
     <sys:String x:Key="Lang_Settings_Save">Save Settings</sys:String>
     <sys:String x:Key="Lang_Settings_Version">Version:</sys:String>
+    <sys:String x:Key="Lang_Settings_AutomaticUpdates">Check for launcher updates automatically</sys:String>
+    <sys:String x:Key="Lang_Settings_Updates">Launcher updates</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdatesDescription">The launcher checks GitHub for updates when it starts.</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdatesRequireInstall">Updates are available for the installed version of the launcher.</sys:String>
+    <sys:String x:Key="Lang_Settings_CheckForUpdates">Check for updates</sys:String>
+    <sys:String x:Key="Lang_Settings_CheckingForUpdates">Checking for updates...</sys:String>
+    <sys:String x:Key="Lang_Settings_UpToDate">You are using the latest version.</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdateAvailable">Update available:</sys:String>
+    <sys:String x:Key="Lang_Settings_DownloadUpdate">Download and restart</sys:String>
+    <sys:String x:Key="Lang_Settings_DownloadingUpdate">Downloading update...</sys:String>
+    <sys:String x:Key="Lang_Settings_UpdateFailed">Update check or download failed:</sys:String>
 
 </ResourceDictionary>

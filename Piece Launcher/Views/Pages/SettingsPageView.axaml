@@ -37,7 +37,55 @@
                     <!-- Behavior Options -->
                     <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
                     <CheckBox Content="{DynamicResource Lang_Settings_LaunchStartup}" IsChecked="{Binding Config.LaunchOnStartup, Mode=TwoWay}"/>
+                    <CheckBox Content="{DynamicResource Lang_Settings_AutomaticUpdates}" IsChecked="{Binding Config.CheckLauncherUpdates, Mode=TwoWay}"/>
                     <CheckBox Content="{DynamicResource Lang_Settings_KeepOpen}" IsChecked="{Binding Config.KeepOpenWhilePlaying, Mode=TwoWay}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource CardBackground}"
+                    BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
+                    CornerRadius="12" Padding="20,16">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="{DynamicResource Lang_Settings_Updates}"
+                               FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                    <TextBlock Text="{DynamicResource Lang_Settings_UpdatesDescription}"
+                               Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"/>
+                    <TextBlock Text="{DynamicResource Lang_Settings_UpdatesRequireInstall}"
+                               Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"
+                               IsVisible="{Binding !IsUpdaterInstalled}"/>
+                    <TextBlock Text="{DynamicResource Lang_Settings_CheckingForUpdates}"
+                               Foreground="{DynamicResource TextMuted}"
+                               IsVisible="{Binding IsCheckingForUpdates}"/>
+                    <TextBlock Text="{DynamicResource Lang_Settings_UpToDate}"
+                               Foreground="{DynamicResource TextMuted}"
+                               IsVisible="{Binding IsUpToDate}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="4" IsVisible="{Binding HasUpdate}">
+                        <TextBlock Text="{DynamicResource Lang_Settings_UpdateAvailable}"
+                                   Foreground="{DynamicResource TextMuted}"/>
+                        <TextBlock Text="{Binding AvailableUpdateVersion}"
+                                   Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    <TextBlock Text="{DynamicResource Lang_Settings_DownloadingUpdate}"
+                               Foreground="{DynamicResource TextMuted}"
+                               IsVisible="{Binding IsDownloadingUpdate}"/>
+                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding UpdateDownloadProgress}"
+                                 IsVisible="{Binding IsDownloadingUpdate}"/>
+                    <StackPanel IsVisible="{Binding HasUpdateCheckFailed}" Spacing="4">
+                        <TextBlock Text="{DynamicResource Lang_Settings_UpdateFailed}"
+                                   Foreground="{DynamicResource TextMuted}"/>
+                        <TextBlock Text="{Binding UpdateError}" Foreground="{DynamicResource TextMuted}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="{DynamicResource Lang_Settings_CheckForUpdates}"
+                                Padding="14,8" Classes="MicrosoftButton"
+                                Command="{Binding CheckForUpdatesCommand}"
+                                IsEnabled="{Binding IsUpdaterInstalled}"/>
+                        <Button Content="{DynamicResource Lang_Settings_DownloadUpdate}"
+                                Padding="14,8" Classes="PlayButton"
+                                Command="{Binding DownloadAndInstallUpdateCommand}"
+                                IsVisible="{Binding HasUpdate}"/>
+                    </StackPanel>
                 </StackPanel>
             </Border>
 

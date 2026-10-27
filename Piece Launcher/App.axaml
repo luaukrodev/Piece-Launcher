@@ -12,6 +12,9 @@
         <DataTemplate DataType="vm:ProfilesPageViewModel">
             <pages:ProfilesPageView />
         </DataTemplate>
+        <DataTemplate DataType="vm:ProfileManagementPageViewModel">
+            <pages:ProfileManagementPageView />
+        </DataTemplate>
         <DataTemplate DataType="vm:VersionsPageViewModel">
             <pages:VersionsPageView />
         </DataTemplate>

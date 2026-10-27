@@ -37,7 +37,6 @@ namespace Piece_Launcher.ViewModels
             ProfileType.Offline => "Offline",
             _ => "None"
         };
-
         // Navigation Commands
         public RelayCommand NavigateHomeCommand { get; }
         public RelayCommand NavigateProfilesCommand { get; }
@@ -90,7 +89,9 @@ namespace Piece_Launcher.ViewModels
             _versionsPage.VersionInstalled += () => _ = LoadInstalledVersionsAsync();
             _explorePage = new ExplorePageViewModel(modrinthExploreService, _config, _minecraft.MinecraftPath.BasePath);
             _mapsPage = new MapsPageViewModel();
-            _settingsPage = new SettingsPageViewModel(_config, avaloniaThemeService, avaloniaLanguageService);
+            _settingsPage = new SettingsPageViewModel(
+                _config, avaloniaThemeService, avaloniaLanguageService,
+                new Services.Impl.LauncherUpdateService());
 
             // Apply initial theme and language
             avaloniaThemeService.ApplyTheme(_config.Theme);
@@ -109,6 +110,15 @@ namespace Piece_Launcher.ViewModels
 
             // Event subscriptions
             _profilesPage.ProfileSelected += (s, profile) => SelectedProfile = profile;
+            _profilesPage.ManageProfileRequested += (_, profile) =>
+            {
+                var previousPage = CurrentPage;
+                NavigateTo(new ProfileManagementPageViewModel(
+                    profile,
+                    _profilesPage.SaveProfile,
+                    _profilesPage.DeleteProfile,
+                    () => NavigateTo(previousPage)));
+            };
 
             NavigateHomeCommand = new RelayCommand(() => NavigateTo(_homePage));
             NavigateProfilesCommand = new RelayCommand(() => NavigateTo(_profilesPage));
