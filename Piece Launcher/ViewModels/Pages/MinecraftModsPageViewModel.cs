@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Piece_Launcher.ViewModels.Pages
 {
-    public partial class ExplorePageViewModel : ViewModelBase
+    public partial class MinecraftModsPageViewModel : ViewModelBase
     {
         private const int PageSize = 20;
 
@@ -52,7 +52,7 @@ namespace Piece_Launcher.ViewModels.Pages
         // Popup state
         [ObservableProperty] private bool _showValidationPopup;
 
-        public ExplorePageViewModel(IExploreService modrinthService, LauncherConfig config, string gameDirectory)
+        public MinecraftModsPageViewModel(IExploreService modrinthService, LauncherConfig config, string gameDirectory)
         {
             _modrinthService = modrinthService;
             _config = config;

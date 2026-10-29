@@ -41,7 +41,7 @@
         <Grid ColumnDefinitions="210,*">
             <!-- ════ SIDEBAR ════ -->
             <Border Grid.Column="0" Background="{DynamicResource SidebarBackground}" BorderBrush="{DynamicResource SidebarBorderBrush}" BorderThickness="0,0,1,0">
-                <Grid RowDefinitions="100,*,Auto,Auto">
+                <Grid RowDefinitions="100,*,Auto">
                     <!-- Logo -->
                     <Border Grid.Row="0" Padding="20,10,10,10" BorderBrush="{DynamicResource SidebarDividerBrush}" BorderThickness="0,0,0,1">
                         <StackPanel Orientation="Horizontal" Spacing="12">
@@ -60,8 +60,6 @@
 
                     <!-- Nav -->
                     <StackPanel Grid.Row="1" Margin="12,16,12,0" Spacing="4">
-                        <TextBlock Text="{DynamicResource Lang_Nav_Main}" HorizontalAlignment="Center" FontWeight="Light" Foreground="{DynamicResource TextDimmed}"></TextBlock>
-
                         <Button Classes="SidebarButton" Command="{Binding NavigateHomeCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="⌂" FontSize="16" VerticalAlignment="Center"/>
@@ -83,41 +81,39 @@
                             </StackPanel>
                         </Button>
 
-                        <Border Height="1" Background="{DynamicResource SidebarDividerBrush}" Margin="4,8"/>
-
-                        <TextBlock Text="{DynamicResource Lang_Nav_Community}" HorizontalAlignment="Center" FontWeight="Light" Foreground="{DynamicResource TextDimmed}"></TextBlock>
-
-                        <Button Classes="SidebarButton" Command="{Binding NavigateDiscoverCommand}">
+                        <Button Classes="SidebarButton" Command="{Binding NavigateMinecraftModsCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="🗲" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource Lang_Nav_Discover}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{DynamicResource Lang_Nav_MinecraftMods}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <Button Classes="SidebarButton" Command="{Binding NavigateMapsCommand}">
+                        <Button Classes="SidebarButton" Command="{Binding NavigateCommunityCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="12">
                                 <TextBlock Text="◈" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource Lang_Nav_Maps}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{DynamicResource Lang_Nav_Community}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
 
-                    <!-- Version badge -->
-                    <Border Grid.Row="2" Margin="12,8" Padding="12,8" CornerRadius="8" Background="{DynamicResource ElevatedBackground}">
-                        <StackPanel Spacing="2">
-                            <TextBlock Text="{DynamicResource Lang_Global_JavaEdition}" FontSize="9" FontWeight="Bold"
-                                       Foreground="{DynamicResource TextLabel}" LetterSpacing="2"/>
-                            <TextBlock Text="{Binding SelectedVersion, FallbackValue='...'}"
-                                       FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextMuted}"/>
-                        </StackPanel>
-                    </Border>
-
                     <!-- Settings -->
-                    <Button Grid.Row="3" Classes="SidebarButton" Margin="12,0,12,16" Command="{Binding NavigateSettingsCommand}">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <TextBlock Text="⚙" FontSize="16" VerticalAlignment="Center"/>
-                            <TextBlock Text="{DynamicResource Lang_Nav_Settings}" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="2" Margin="0,0,0,16" Spacing="2">
+                        <Button Classes="SidebarButton" Margin="12,0,12,0" Command="{Binding NavigateSettingsCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <PathIcon Width="16" Height="16" VerticalAlignment="Center"
+                                          Data="M19.14,12.94C19.2,12.48 19.24,12 19.24,11.5C19.24,11.03 19.2,10.56 19.13,10.1L20.65,8.92C20.79,8.81 20.83,8.61 20.74,8.45L19.3,5.95C19.21,5.79 19.02,5.73 18.85,5.79L17.06,6.51C16.32,5.94 15.48,5.48 14.56,5.19L14.29,3.3C14.26,3.12 14.11,3 13.93,3H11.07C10.89,3 10.74,3.12 10.71,3.3L10.44,5.19C9.52,5.48 8.68,5.94 7.94,6.51L6.15,5.79C5.98,5.73 5.79,5.79 5.7,5.95L4.26,8.45C4.17,8.61 4.21,8.81 4.35,8.92L5.87,10.1C5.8,10.56 5.76,11.03 5.76,11.5C5.76,12 5.8,12.48 5.86,12.94L4.35,14.08C4.21,14.19 4.17,14.39 4.26,14.55L5.7,17.05C5.79,17.21 5.98,17.27 6.15,17.21L7.94,16.49C8.68,17.06 9.52,17.52 10.44,17.81L10.71,19.7C10.74,19.88 10.89,20 11.07,20H13.93C14.11,20 14.26,19.88 14.29,19.7L14.56,17.81C15.48,17.52 16.32,17.06 17.06,16.49L18.85,17.21C19.02,17.27 19.21,17.21 19.3,17.05L20.74,14.55C20.83,14.39 20.79,14.19 20.65,14.08L19.14,12.94ZM12.5,15C10.57,15 9,13.43 9,11.5C9,9.57 10.57,8 12.5,8C14.43,8 16,9.57 16,11.5C16,13.43 14.43,15 12.5,15Z"/>
+                                <TextBlock Text="{DynamicResource Lang_Nav_Settings}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <StackPanel Orientation="Horizontal" Margin="26,4,12,0" Spacing="4">
+                            <TextBlock Text="{DynamicResource Lang_Settings_Version}"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource TextMuted}"/>
+                            <TextBlock Text="{Binding LauncherVersion}"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource TextPrimary}"
+                                       FontWeight="SemiBold"/>
                         </StackPanel>
-                    </Button>
+                    </StackPanel>
                 </Grid>
             </Border>
 

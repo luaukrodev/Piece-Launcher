@@ -37,6 +37,7 @@ namespace Piece_Launcher.Controls
         public SkinModelViewer()
         {
             ClipToBounds = true;
+            RenderOptions.SetEdgeMode(this, EdgeMode.Aliased);
             PointerPressed += OnPointerPressed;
             PointerMoved += OnPointerMoved;
             PointerReleased += OnPointerReleased;
@@ -51,7 +52,7 @@ namespace Piece_Launcher.Controls
             var cells = new List<RenderCell>(1800);
 
             AddBox(cells, new Point3(0, -12, 0), 8, 8, 8,
-                8, 8, 24, 8, 0, 8, 16, 8, 8, 0, 16, 0);
+                8, 8, 24, 8, 16, 8, 0, 8, 8, 0, 16, 0);
             AddBox(cells, new Point3(0, -2, 0), 8, 12, 4,
                 20, 20, 32, 20, 28, 20, 16, 20, 20, 16, 28, 16);
             AddBox(cells, new Point3(-6, -2, 0), 4, 12, 4,
@@ -70,7 +71,7 @@ namespace Piece_Launcher.Controls
                 if (_skinHeight == 64)
                 {
                     AddBox(cells, new Point3(0, -12, 0), 8, 8, 8,
-                        40, 8, 56, 8, 32, 8, 48, 8, 40, 0, 48, 0, 0.5);
+                        40, 8, 56, 8, 48, 8, 32, 8, 40, 0, 48, 0, 0.5);
                     AddBox(cells, new Point3(0, -2, 0), 8, 12, 4,
                         20, 36, 32, 36, 16, 36, 28, 36, 20, 32, 28, 32, 0.25);
                     AddBox(cells, new Point3(-6, -2, 0), 4, 12, 4,

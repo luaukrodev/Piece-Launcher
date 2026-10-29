@@ -3,9 +3,9 @@ using Avalonia.Controls;
 
 namespace Piece_Launcher.Views.Pages
 {
-    public partial class ExplorePageView : UserControl
+    public partial class MinecraftModsPageView : UserControl
     {
-        public ExplorePageView()
+        public MinecraftModsPageView()
         {
             InitializeComponent();
         }

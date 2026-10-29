@@ -18,11 +18,11 @@
         <DataTemplate DataType="vm:VersionsPageViewModel">
             <pages:VersionsPageView />
         </DataTemplate>
-        <DataTemplate DataType="vm:ExplorePageViewModel">
-            <pages:ExplorePageView />
+        <DataTemplate DataType="vm:MinecraftModsPageViewModel">
+            <pages:MinecraftModsPageView />
         </DataTemplate>
-        <DataTemplate DataType="vm:MapsPageViewModel">
-            <pages:MapsPageView />
+        <DataTemplate DataType="vm:CommunityPageViewModel">
+            <pages:CommunityPageView />
         </DataTemplate>
         <DataTemplate DataType="vm:SettingsPageViewModel">
             <pages:SettingsPageView />
@@ -180,6 +180,53 @@
         </Style>
         <Style Selector="Button.WinMinimize:pointerover">
             <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style Selector="Border.SectionCard">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20,16"/>
+        </Style>
+        <Style Selector="TextBlock.SectionLabel">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+        </Style>
+        <Style Selector="Border.SettingsNavPanel">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+        </Style>
+        <Style Selector="TextBlock.SettingsNavTitle">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
+            <Setter Property="Margin" Value="8,4,8,6"/>
+        </Style>
+        <Style Selector="Button.SettingsNavItem">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
+            <Setter Property="Padding" Value="10,9"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="Button.SettingsNavItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SidebarHoverBg}"/>
+        </Style>
+        <Style Selector="Button.SettingsNavItem:pointerover">
+            <Setter Property="Foreground" Value="{DynamicResource SidebarHoverText}"/>
+        </Style>
+        <Style Selector="Button.SettingsNavItem.SettingsNavActive /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SidebarActiveBg}"/>
+        </Style>
+        <Style Selector="Button.SettingsNavItem.SettingsNavActive">
+            <Setter Property="Foreground" Value="{DynamicResource SidebarActiveText}"/>
         </Style>
 
     </Application.Styles>

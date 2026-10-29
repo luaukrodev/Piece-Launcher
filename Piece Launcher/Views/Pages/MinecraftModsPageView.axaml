@@ -4,8 +4,8 @@
              xmlns:helpers="using:Piece_Launcher.Helpers"
              xmlns:sys="clr-namespace:System;assembly=netstandard"
              xmlns:pages="using:Piece_Launcher.Views.Pages"
-             x:Class="Piece_Launcher.Views.Pages.ExplorePageView"
-             x:DataType="vm:ExplorePageViewModel">
+             x:Class="Piece_Launcher.Views.Pages.MinecraftModsPageView"
+             x:DataType="vm:MinecraftModsPageViewModel">
 
     <Grid>
         <!-- MASTER VIEW: Search and Mod List -->
@@ -15,10 +15,10 @@
                 <Grid Grid.Column="0" RowDefinitions="Auto, *">
                     <!-- Header & Search -->
                     <StackPanel Grid.Row="0" Margin="44,12,24,16" Spacing="12">
-                        <TextBlock Text="{DynamicResource Lang_Explore_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                        <TextBlock Text="{DynamicResource Lang_MinecraftMods_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBox Grid.Column="0" Text="{Binding SearchQuery}" PlaceholderText="{DynamicResource Lang_Explore_SearchWatermark}" Padding="12,10" Margin="0,0,8,0" CornerRadius="8" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}"/>
-                            <Button Grid.Column="1" Content="{DynamicResource Lang_Explore_SearchBtn}" Command="{Binding PerformSearchCommand}" Padding="20,10" Classes="PlayButton"/>
+                            <TextBox Grid.Column="0" Text="{Binding SearchQuery}" PlaceholderText="{DynamicResource Lang_MinecraftMods_SearchWatermark}" Padding="12,10" Margin="0,0,8,0" CornerRadius="8" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}"/>
+                            <Button Grid.Column="1" Content="{DynamicResource Lang_MinecraftMods_SearchBtn}" Command="{Binding PerformSearchCommand}" Padding="20,10" Classes="PlayButton"/>
                         </Grid>
                     </StackPanel>
 
@@ -68,8 +68,8 @@
                                                     <TextBlock Text="{Binding Downloads, StringFormat='↓ {0}'}" FontSize="11" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Right"/>
                                                     
                                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                                        <Button Content="View" Command="{Binding $parent[UserControl].((vm:ExplorePageViewModel)DataContext).ViewProjectCommand}" CommandParameter="{Binding}" Classes="SidebarButton" Padding="16,8" Background="{DynamicResource InnerCardBackground}"/>
-                                                        <Button Content="Install" Command="{Binding $parent[UserControl].((vm:ExplorePageViewModel)DataContext).InstallProjectCommand}" CommandParameter="{Binding}" Classes="PlayButton" Padding="16,8" Background="{DynamicResource PlayBtnTop}"/>
+                                                        <Button Content="View" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).ViewProjectCommand}" CommandParameter="{Binding}" Classes="SidebarButton" Padding="16,8" Background="{DynamicResource InnerCardBackground}"/>
+                                                        <Button Content="Install" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).InstallProjectCommand}" CommandParameter="{Binding}" Classes="PlayButton" Padding="16,8" Background="{DynamicResource PlayBtnTop}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </Grid>
@@ -80,9 +80,9 @@
 
                             <!-- Pagination -->
                             <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center" Margin="0,16,0,24" IsVisible="{Binding !IsLoading}">
-                                <Button Content="{DynamicResource Lang_Explore_Previous}" Command="{Binding PreviousPageCommand}" IsEnabled="{Binding HasPreviousPage}" Classes="SidebarButton" Padding="16,8"/>
+                                <Button Content="{DynamicResource Lang_MinecraftMods_Previous}" Command="{Binding PreviousPageCommand}" IsEnabled="{Binding HasPreviousPage}" Classes="SidebarButton" Padding="16,8"/>
                                 <TextBlock Text="{Binding CurrentPage}" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
-                                <Button Content="{DynamicResource Lang_Explore_Next}" Command="{Binding NextPageCommand}" IsEnabled="{Binding HasNextPage}" Classes="SidebarButton" Padding="16,8"/>
+                                <Button Content="{DynamicResource Lang_MinecraftMods_Next}" Command="{Binding NextPageCommand}" IsEnabled="{Binding HasNextPage}" Classes="SidebarButton" Padding="16,8"/>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
@@ -94,7 +94,7 @@
                         <StackPanel Grid.Row="0" Spacing="24">
                             <!-- Popularity / Sort -->
                             <StackPanel Spacing="8">
-                                <TextBlock Text="{DynamicResource Lang_Explore_Sort}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="{DynamicResource Lang_MinecraftMods_Sort}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
                                 <ComboBox SelectedItem="{Binding SelectedSort}" HorizontalAlignment="Stretch" CornerRadius="8">
                                     <sys:String>relevance</sys:String>
                                     <sys:String>downloads</sys:String>
@@ -105,7 +105,7 @@
 
                             <!-- Project Type -->
                             <StackPanel Spacing="8">
-                                <TextBlock Text="{DynamicResource Lang_Explore_Type}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="{DynamicResource Lang_MinecraftMods_Type}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
                                 <ComboBox SelectedItem="{Binding SelectedType}" HorizontalAlignment="Stretch" CornerRadius="8">
                                     <sys:String>mod</sys:String>
                                     <sys:String>resourcepack</sys:String>
@@ -132,12 +132,12 @@
                                               Stroke="{DynamicResource TextPrimary}"
                                               StrokeThickness="1.6"
                                               VerticalAlignment="Center"/>
-                                        <TextBlock Text="{DynamicResource Lang_Explore_OpenModsFolder}"
+                                        <TextBlock Text="{DynamicResource Lang_MinecraftMods_OpenModsFolder}"
                                                    VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </Border>
-                            <TextBlock Text="{DynamicResource Lang_Explore_PoweredBy}" FontSize="11" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Lang_MinecraftMods_PoweredBy}" FontSize="11" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                             <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                                 <Image Source="avares://Piece%20Launcher/Assets/modrinth_logo.png" Width="28" Height="28" Stretch="Uniform"/>
                                 <TextBlock Text="Modrinth" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>

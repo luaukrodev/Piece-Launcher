@@ -3,17 +3,14 @@
                     xmlns:sys="clr-namespace:System;assembly=netstandard">
 
     <!-- Navigation -->
-    <sys:String x:Key="Lang_Nav_Main">principal</sys:String>
     <sys:String x:Key="Lang_Nav_Home">Início</sys:String>
     <sys:String x:Key="Lang_Nav_Profiles">Perfis</sys:String>
     <sys:String x:Key="Lang_Nav_Versions">Versões</sys:String>
-    <sys:String x:Key="Lang_Nav_Community">comunidade</sys:String>
-    <sys:String x:Key="Lang_Nav_Discover">Descobrir</sys:String>
-    <sys:String x:Key="Lang_Nav_Maps">Mapas</sys:String>
+    <sys:String x:Key="Lang_Nav_MinecraftMods">Mods do Minecraft</sys:String>
+    <sys:String x:Key="Lang_Nav_Community">Comunidade</sys:String>
     <sys:String x:Key="Lang_Nav_Settings">Configurações</sys:String>
 
     <!-- Global / Launch Bar -->
-    <sys:String x:Key="Lang_Global_JavaEdition">EDIÇÃO JAVA</sys:String>
     <sys:String x:Key="Lang_Global_Player">JOGADOR</sys:String>
     <sys:String x:Key="Lang_Global_Type">TIPO</sys:String>
     <sys:String x:Key="Lang_Global_Version">VERSÃO</sys:String>
@@ -82,29 +79,56 @@
     <sys:String x:Key="Lang_Versions_NeoForgeDesc">Fork Moderno</sys:String>
     <sys:String x:Key="Lang_Versions_QuiltDesc">Próxima Geração</sys:String>
 
-    <!-- Explore Page -->
-    <sys:String x:Key="Lang_Explore_Title">Descobrir</sys:String>
-    <sys:String x:Key="Lang_Explore_Subtitle">Procure e instale mods, shaders e mapas da comunidade.</sys:String>
-    <sys:String x:Key="Lang_Explore_SearchWatermark">Pesquisar mods, shaders, mapas...</sys:String>
-    <sys:String x:Key="Lang_Explore_SearchBtn">Buscar</sys:String>
-    <sys:String x:Key="Lang_Explore_Filters">Filtros</sys:String>
-    <sys:String x:Key="Lang_Explore_Type">Tipo:</sys:String>
-    <sys:String x:Key="Lang_Explore_Source">Fonte:</sys:String>
-    <sys:String x:Key="Lang_Explore_Sort">Ordenar:</sys:String>
-    <sys:String x:Key="Lang_Explore_NoImage">Sem Imagem</sys:String>
-    <sys:String x:Key="Lang_Explore_PoweredBy">Distribuído por</sys:String>
-    <sys:String x:Key="Lang_Explore_OpenModsFolder">Abrir pasta de mods</sys:String>
-    <sys:String x:Key="Lang_Explore_Previous">Anterior</sys:String>
-    <sys:String x:Key="Lang_Explore_Next">Próxima</sys:String>
+    <!-- Minecraft Mods Page -->
+    <sys:String x:Key="Lang_MinecraftMods_Title">Minecraft Mods</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_Subtitle">Procure e instale mods, shaders e mapas da comunidade.</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_SearchWatermark">Pesquisar mods, shaders, mapas...</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_SearchBtn">Buscar</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_Filters">Filtros</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_Type">Tipo:</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_Source">Fonte:</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_Sort">Ordenar:</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_NoImage">Sem Imagem</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_PoweredBy">Distribuído por</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_OpenModsFolder">Abrir pasta de mods</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_Previous">Anterior</sys:String>
+    <sys:String x:Key="Lang_MinecraftMods_Next">Próxima</sys:String>
 
-    <!-- Maps Page -->
-    <sys:String x:Key="Lang_Maps_Title">Mapas</sys:String>
-    <sys:String x:Key="Lang_Maps_Subtitle">Esta seção exibirá mapas em destaque e permitirá procurar mapas da comunidade.</sys:String>
+    <!-- Community Page -->
+    <sys:String x:Key="Lang_Community_Title">Community</sys:String>
+    <sys:String x:Key="Lang_Community_Subtitle">Estou trabalhando nisso. Vai ser um projeto grande, então vou precisar de algumas semanas para concluí-lo. Fique ligado!</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="Lang_Settings_Title">Configurações</sys:String>
     <sys:String x:Key="Lang_Settings_Subtitle">Personalize seu launcher e experiência de jogo.</sys:String>
     <sys:String x:Key="Lang_Settings_General">Geral</sys:String>
+    <sys:String x:Key="Lang_Settings_Appearance">Aparência</sys:String>
+    <sys:String x:Key="Lang_Settings_Game">Jogo</sys:String>
+    <sys:String x:Key="Lang_Settings_Memory">Memória</sys:String>
+    <sys:String x:Key="Lang_Settings_Versions">Versões</sys:String>
+    <sys:String x:Key="Lang_Settings_About">Sobre</sys:String>
+    <sys:String x:Key="Lang_Settings_Sections">Seções</sys:String>
+    <sys:String x:Key="Lang_Settings_AutoDetectJava">Detectar Java automaticamente</sys:String>
+    <sys:String x:Key="Lang_Settings_JavaPath">Caminho do executável Java</sys:String>
+    <sys:String x:Key="Lang_Settings_JavaArguments">Argumentos JVM adicionais</sys:String>
+    <sys:String x:Key="Lang_Settings_GameDirectory">Pasta atual do jogo</sys:String>
+    <sys:String x:Key="Lang_Settings_OpenFolder">Abrir pasta</sys:String>
+    <sys:String x:Key="Lang_Settings_MinimizeToTray">Minimizar para a bandeja</sys:String>
+    <sys:String x:Key="Lang_Settings_MinecraftConsole">Exibir console do Minecraft</sys:String>
+    <sys:String x:Key="Lang_Settings_ComingSoon">Em breve</sys:String>
+    <sys:String x:Key="Lang_Settings_AutoRam">Usar memória recomendada automaticamente</sys:String>
+    <sys:String x:Key="Lang_Settings_AutoRamDescription">O launcher escolhe uma quantidade recomendada de memória ao iniciar o jogo.</sys:String>
+    <sys:String x:Key="Lang_Settings_CustomRam">Memória personalizada</sys:String>
+    <sys:String x:Key="Lang_Settings_SafeModeLimit">Limitar a memória a no máximo metade da RAM do sistema</sys:String>
+    <sys:String x:Key="Lang_Settings_DefaultLoader">Loader padrão</sys:String>
+    <sys:String x:Key="Lang_Settings_GitHub">GitHub</sys:String>
+    <sys:String x:Key="Lang_Settings_Releases">Versões</sys:String>
+    <sys:String x:Key="Lang_Settings_License">Licença</sys:String>
+    <sys:String x:Key="Lang_Settings_OpenDataFolder">Abrir pasta de dados do launcher</sys:String>
+    <sys:String x:Key="Lang_Settings_InvalidJavaPath">Não foi possível encontrar o executável Java selecionado.</sys:String>
+    <sys:String x:Key="Lang_Settings_StartupWindowsOnly">O registro de inicialização só está disponível no Windows.</sys:String>
+    <sys:String x:Key="Lang_Settings_StartupRegistryUnavailable">Não foi possível abrir a chave de inicialização do Windows.</sys:String>
+    <sys:String x:Key="Lang_Settings_LauncherPathUnavailable">Não foi possível determinar o caminho do executável do launcher.</sys:String>
     <sys:String x:Key="Lang_Settings_Language">Idioma</sys:String>
     <sys:String x:Key="Lang_Settings_Theme">Tema</sys:String>
     <sys:String x:Key="Lang_Settings_StartupPage">Página Inicial</sys:String>

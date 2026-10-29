@@ -36,6 +36,7 @@ namespace Piece_Launcher.Models
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PieceLauncher");
 
         private static readonly string ConfigPath = Path.Combine(ConfigDir, "config.json");
+        public static string DataDirectory => ConfigDir;
 
         public string ClientId { get; set; } = string.Empty;
         public bool UseCustomClientId { get; set; }
@@ -68,11 +69,39 @@ namespace Piece_Launcher.Models
         public bool ReducedMotion { get; set; } = false;
 
         // Minecraft
-        public string DefaultJava { get; set; } = @"C:\\Program Files\\Java\\jdk-21\\bin\\java.exe";
-        public bool AutoDetectJava { get; set; } = true;
-        public bool UseCustomJava { get; set; } = false;
-        public string GameDirectory { get; set; } = @"D:\\PieceLauncher\\Instances";
-        public string DownloadsDirectory { get; set; } = @"D:\\PieceLauncher\\Downloads";
+        private string _defaultJava = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Java", "jdk-21", "bin", "java.exe");
+        public string DefaultJava { get => _defaultJava; set => SetProperty(ref _defaultJava, value); }
+
+        private bool _autoDetectJava = true;
+        public bool AutoDetectJava
+        {
+            get => _autoDetectJava;
+            set
+            {
+                if (SetProperty(ref _autoDetectJava, value))
+                    UseCustomJava = !value;
+            }
+        }
+
+        private bool _useCustomJava;
+        public bool UseCustomJava
+        {
+            get => _useCustomJava;
+            set
+            {
+                if (SetProperty(ref _useCustomJava, value))
+                    AutoDetectJava = !value;
+            }
+        }
+
+        private string _gameDirectory = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PieceLauncher", "Instances");
+        public string GameDirectory { get => _gameDirectory; set => SetProperty(ref _gameDirectory, value); }
+
+        private string _downloadsDirectory = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PieceLauncher", "Downloads");
+        public string DownloadsDirectory { get => _downloadsDirectory; set => SetProperty(ref _downloadsDirectory, value); }
         public bool VerifyBeforeLaunch { get; set; } = true;
         public bool VerifyAssets { get; set; } = true;
         public bool ShowMinecraftConsole { get; set; } = false;
@@ -80,11 +109,17 @@ namespace Piece_Launcher.Models
         public bool CheckMissingDependencies { get; set; } = true;
 
         // Memory
-        public bool AutoRam { get; set; } = true;
-        public int RecommendedRamGb { get; set; } = 4;
-        public int CustomRamGb { get; set; } = 4;
+        private bool _autoRam = true;
+        public bool AutoRam { get => _autoRam; set => SetProperty(ref _autoRam, value); }
+
+        private int _recommendedRamGb = 4;
+        public int RecommendedRamGb { get => _recommendedRamGb; set => SetProperty(ref _recommendedRamGb, value); }
+
+        private int _customRamGb = 4;
+        public int CustomRamGb { get => _customRamGb; set => SetProperty(ref _customRamGb, value); }
         public bool AutoAdjustForModded { get; set; } = true;
-        public bool SafeModeLimit { get; set; } = true;
+        private bool _safeModeLimit = true;
+        public bool SafeModeLimit { get => _safeModeLimit; set => SetProperty(ref _safeModeLimit, value); }
         public string SafeModeMaximum { get; set; } = "RAM / 2";
         public bool AdvancedRamMode { get; set; } = false;
         public string AdvancedMaximum { get; set; } = "100% RAM";
@@ -93,13 +128,20 @@ namespace Piece_Launcher.Models
         public string PerformancePreset { get; set; } = "Balanced";
 
         // Versions
-        public bool ShowSnapshots { get; set; } = false;
-        public bool ShowBetas { get; set; } = false;
-        public bool ShowAlphas { get; set; } = false;
+        private bool _showSnapshots;
+        public bool ShowSnapshots { get => _showSnapshots; set => SetProperty(ref _showSnapshots, value); }
+
+        private bool _showBetas;
+        public bool ShowBetas { get => _showBetas; set => SetProperty(ref _showBetas, value); }
+
+        private bool _showAlphas;
+        public bool ShowAlphas { get => _showAlphas; set => SetProperty(ref _showAlphas, value); }
         public bool ShowExperimental { get; set; } = false;
-        public bool ShowOldVersions { get; set; } = false;
+        private bool _showOldVersions;
+        public bool ShowOldVersions { get => _showOldVersions; set => SetProperty(ref _showOldVersions, value); }
         public bool ShowInstalledOnly { get; set; } = true;
-        public string DefaultLoader { get; set; } = "Vanilla";
+        private string _defaultLoader = "Vanilla";
+        public string DefaultLoader { get => _defaultLoader; set => SetProperty(ref _defaultLoader, value); }
         public bool ShowOnlyCompatibleMods { get; set; } = true;
         public bool AutoInstallDependencies { get; set; } = true;
         public bool SuggestCompatibleVersions { get; set; } = true;
@@ -144,7 +186,8 @@ namespace Piece_Launcher.Models
         public bool BackupSettings { get; set; } = true;
 
         // Advanced
-        public string JavaArguments { get; set; } = "-XX:+UseG1GC";
+        private string _javaArguments = "-XX:+UseG1GC";
+        public string JavaArguments { get => _javaArguments; set => SetProperty(ref _javaArguments, value); }
         public bool EnableDebugLogs { get; set; } = false;
         public bool EnableDeveloperMode { get; set; } = false;
         public bool ShowApiRequests { get; set; } = false;
@@ -157,8 +200,34 @@ namespace Piece_Launcher.Models
             try
             {
                 if (File.Exists(ConfigPath))
-                    return JsonSerializer.Deserialize<LauncherConfig>(File.ReadAllText(ConfigPath))
-                           ?? new LauncherConfig();
+                {
+                    var config = JsonSerializer.Deserialize<LauncherConfig>(File.ReadAllText(ConfigPath))
+                                 ?? new LauncherConfig();
+                    var migrated = false;
+
+                    if (config.GameDirectory == @"D:\\PieceLauncher\\Instances")
+                    {
+                        config.GameDirectory = new LauncherConfig().GameDirectory;
+                        migrated = true;
+                    }
+
+                    if (config.DownloadsDirectory == @"D:\\PieceLauncher\\Downloads")
+                    {
+                        config.DownloadsDirectory = new LauncherConfig().DownloadsDirectory;
+                        migrated = true;
+                    }
+
+                    if (config.DefaultJava == @"C:\\Program Files\\Java\\jdk-21\\bin\\java.exe")
+                    {
+                        config.DefaultJava = new LauncherConfig().DefaultJava;
+                        migrated = true;
+                    }
+
+                    if (migrated)
+                        config.Save();
+
+                    return config;
+                }
             }
             catch (Exception ex)
             {

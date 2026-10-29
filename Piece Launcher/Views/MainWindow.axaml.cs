@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Piece_Launcher.ViewModels;
 
 namespace Piece_Launcher.Views
 {
@@ -8,7 +9,24 @@ namespace Piece_Launcher.Views
         public MainWindow()
         {
             InitializeComponent();
+            Opened += OnOpened;
+            Closed += OnClosed;
         }
+
+        private void OnOpened(object? sender, System.EventArgs e)
+        {
+            if (DataContext is MainWindowViewModel viewModel)
+                viewModel.MinimizeLauncherRequested += OnMinimizeLauncherRequested;
+        }
+
+        private void OnClosed(object? sender, System.EventArgs e)
+        {
+            if (DataContext is MainWindowViewModel viewModel)
+                viewModel.MinimizeLauncherRequested -= OnMinimizeLauncherRequested;
+        }
+
+        private void OnMinimizeLauncherRequested()
+            => WindowState = WindowState.Minimized;
 
         private void OnTitleBarPointerPressed(object? sender, PointerPressedEventArgs e)
         {

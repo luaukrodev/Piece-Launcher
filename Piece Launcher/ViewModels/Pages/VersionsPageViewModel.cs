@@ -17,6 +17,7 @@ namespace Piece_Launcher.ViewModels.Pages
         private readonly IModLoaderService _fabricService;
         private readonly IModLoaderService _neoForgeService;
         private readonly IModLoaderService _quiltService;
+        private readonly LauncherConfig _config;
 
         public event Action? VersionInstalled;
 
@@ -40,11 +41,12 @@ namespace Piece_Launcher.ViewModels.Pages
         public ObservableCollection<string> MinecraftReleaseVersions { get; } = new();
         [ObservableProperty] private string? _selectedMinecraftVersion;
 
-        [ObservableProperty] private string _selectedLoader = "Fabric";
-        public bool IsFabricSelected => SelectedLoader.Equals("Fabric", StringComparison.OrdinalIgnoreCase);
-        public bool IsForgeSelected => SelectedLoader.Equals("Forge", StringComparison.OrdinalIgnoreCase);
-        public bool IsNeoForgeSelected => SelectedLoader.Equals("NeoForge", StringComparison.OrdinalIgnoreCase);
-        public bool IsQuiltSelected => SelectedLoader.Equals("Quilt", StringComparison.OrdinalIgnoreCase);
+        [ObservableProperty] private string _selectedLoader = "Vanilla";
+        public bool IsVanillaSelected => string.Equals(SelectedLoader, "Vanilla", StringComparison.OrdinalIgnoreCase);
+        public bool IsFabricSelected => string.Equals(SelectedLoader, "Fabric", StringComparison.OrdinalIgnoreCase);
+        public bool IsForgeSelected => string.Equals(SelectedLoader, "Forge", StringComparison.OrdinalIgnoreCase);
+        public bool IsNeoForgeSelected => string.Equals(SelectedLoader, "NeoForge", StringComparison.OrdinalIgnoreCase);
+        public bool IsQuiltSelected => string.Equals(SelectedLoader, "Quilt", StringComparison.OrdinalIgnoreCase);
 
         public ObservableCollection<LoaderVersionEntry> AvailableLoaderVersions { get; } = new();
         [ObservableProperty] private LoaderVersionEntry? _selectedLoaderVersionEntry;
@@ -56,13 +58,24 @@ namespace Piece_Launcher.ViewModels.Pages
             IModLoaderService forgeService,
             IModLoaderService fabricService,
             IModLoaderService neoForgeService,
-            IModLoaderService quiltService)
+            IModLoaderService quiltService,
+            LauncherConfig config)
         {
             _versionService = versionService;
             _forgeService = forgeService;
             _fabricService = fabricService;
             _neoForgeService = neoForgeService;
             _quiltService = quiltService;
+            _config = config;
+
+            ShowSnapshots = config.ShowSnapshots;
+            ShowBetas = config.ShowBetas;
+            ShowAlphas = config.ShowAlphas;
+            ShowOldVersions = config.ShowOldVersions;
+            SelectedLoader = config.DefaultLoader is "Vanilla" or "Fabric" or "Forge" or "NeoForge" or "Quilt"
+                ? config.DefaultLoader
+                : "Vanilla";
+            _config.PropertyChanged += OnConfigPropertyChanged;
         }
 
         protected override async void OnActivated()
@@ -71,10 +84,29 @@ namespace Piece_Launcher.ViewModels.Pages
             await LoadVersionsAsync();
         }
 
-        partial void OnShowSnapshotsChanged(bool value) => ApplyFilters();
-        partial void OnShowBetasChanged(bool value) => ApplyFilters();
-        partial void OnShowAlphasChanged(bool value) => ApplyFilters();
-        partial void OnShowOldVersionsChanged(bool value) => ApplyFilters();
+        partial void OnShowSnapshotsChanged(bool value)
+        {
+            _config.ShowSnapshots = value;
+            ApplyFilters();
+        }
+
+        partial void OnShowBetasChanged(bool value)
+        {
+            _config.ShowBetas = value;
+            ApplyFilters();
+        }
+
+        partial void OnShowAlphasChanged(bool value)
+        {
+            _config.ShowAlphas = value;
+            ApplyFilters();
+        }
+
+        partial void OnShowOldVersionsChanged(bool value)
+        {
+            _config.ShowOldVersions = value;
+            ApplyFilters();
+        }
         partial void OnSearchQueryChanged(string value) => ApplyFilters();
 
         partial void OnSelectedMinecraftVersionChanged(string? value)
@@ -84,11 +116,35 @@ namespace Piece_Launcher.ViewModels.Pages
 
         partial void OnSelectedLoaderChanged(string value)
         {
+            _config.DefaultLoader = value;
+            OnPropertyChanged(nameof(IsVanillaSelected));
             OnPropertyChanged(nameof(IsFabricSelected));
             OnPropertyChanged(nameof(IsForgeSelected));
             OnPropertyChanged(nameof(IsNeoForgeSelected));
             OnPropertyChanged(nameof(IsQuiltSelected));
             _ = LoadLoaderVersionsAsync();
+        }
+
+        private void OnConfigPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(LauncherConfig.ShowSnapshots):
+                    ShowSnapshots = _config.ShowSnapshots;
+                    break;
+                case nameof(LauncherConfig.ShowBetas):
+                    ShowBetas = _config.ShowBetas;
+                    break;
+                case nameof(LauncherConfig.ShowAlphas):
+                    ShowAlphas = _config.ShowAlphas;
+                    break;
+                case nameof(LauncherConfig.ShowOldVersions):
+                    ShowOldVersions = _config.ShowOldVersions;
+                    break;
+                case nameof(LauncherConfig.DefaultLoader):
+                    SelectedLoader = _config.DefaultLoader;
+                    break;
+            }
         }
 
         [RelayCommand]
@@ -139,23 +195,26 @@ namespace Piece_Launcher.ViewModels.Pages
             IsLoadingLoaderVersions = true;
             AvailableLoaderVersions.Clear();
             SelectedLoaderVersionEntry = null;
+            var service = GetServiceForLoader(SelectedLoader);
+            if (service == null)
+            {
+                IsCurrentLoaderInstalled = IsVanillaSelected;
+                IsLoadingLoaderVersions = false;
+                return;
+            }
 
             try
             {
-                var service = GetServiceForLoader(SelectedLoader);
-                if (service != null)
+                var versions = await service.GetAvailableVersionsAsync(SelectedMinecraftVersion);
+                foreach (var v in versions)
                 {
-                    var versions = await service.GetAvailableVersionsAsync(SelectedMinecraftVersion);
-                    foreach (var v in versions)
-                    {
-                        AvailableLoaderVersions.Add(v);
-                    }
-
-                    SelectedLoaderVersionEntry = AvailableLoaderVersions.FirstOrDefault(v => v.IsRecommended) 
-                        ?? AvailableLoaderVersions.FirstOrDefault();
-
-                    IsCurrentLoaderInstalled = await service.IsInstalledAsync(SelectedMinecraftVersion);
+                    AvailableLoaderVersions.Add(v);
                 }
+
+                SelectedLoaderVersionEntry = AvailableLoaderVersions.FirstOrDefault(v => v.IsRecommended)
+                    ?? AvailableLoaderVersions.FirstOrDefault();
+
+                IsCurrentLoaderInstalled = await service.IsInstalledAsync(SelectedMinecraftVersion);
             }
             catch (Exception ex)
             {

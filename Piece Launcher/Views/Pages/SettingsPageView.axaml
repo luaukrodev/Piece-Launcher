@@ -4,108 +4,199 @@
              x:Class="Piece_Launcher.Views.Pages.SettingsPageView"
              x:DataType="vm:SettingsPageViewModel">
 
-    <ScrollViewer Margin="44,12,44,16" VerticalScrollBarVisibility="Auto">
-        <StackPanel Spacing="16">
-            <!-- Header -->
-            <StackPanel Spacing="4">
-                <TextBlock Text="{DynamicResource Lang_Settings_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
-                <TextBlock Text="{DynamicResource Lang_Settings_Subtitle}" Foreground="{DynamicResource TextMuted}"/>
-            </StackPanel>
+    <Grid ColumnDefinitions="*,210">
+        <ScrollViewer x:Name="SettingsScroll" Grid.Column="0" Margin="44,12,24,16"
+                      VerticalScrollBarVisibility="Auto" ScrollChanged="OnSettingsScrollChanged">
+            <StackPanel x:Name="SectionContent" Spacing="16">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{DynamicResource Lang_Settings_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                    <TextBlock Text="{DynamicResource Lang_Settings_Subtitle}" Foreground="{DynamicResource TextMuted}"/>
+                </StackPanel>
 
-            <!-- ─── GENERAL SETTINGS ─── -->
-            <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20,16">
-                <StackPanel Spacing="12">
-                    <TextBlock Text="{DynamicResource Lang_Settings_General}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
-
-                    <!-- Appearance Options -->
-                    <Grid ColumnDefinitions="*,*">
-                        <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,8,0">
-                            <TextBlock Text="{DynamicResource Lang_Settings_Language}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
-                            <ComboBox ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding Config.Language, Mode=TwoWay}"/>
+                <Border x:Name="GeneralSection" Classes="SectionCard">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="{DynamicResource Lang_Settings_General}" Classes="SectionLabel"/>
+                        <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{DynamicResource Lang_Settings_StartupPage}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            <ComboBox ItemsSource="{Binding AvailableStartupPages}" SelectedItem="{Binding Config.StartupPage, Mode=TwoWay}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Spacing="6">
-                            <TextBlock Text="{DynamicResource Lang_Settings_Theme}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
-                            <ComboBox ItemsSource="{Binding AvailableThemes}" SelectedItem="{Binding Config.Theme, Mode=TwoWay}"/>
+                        <CheckBox Content="{DynamicResource Lang_Settings_LaunchStartup}" IsChecked="{Binding Config.LaunchOnStartup, Mode=TwoWay}"/>
+                        <CheckBox Content="{DynamicResource Lang_Settings_KeepOpen}" IsChecked="{Binding Config.KeepOpenWhilePlaying, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="AppearanceSection" Classes="SectionCard">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="{DynamicResource Lang_Settings_Appearance}" Classes="SectionLabel"/>
+                        <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,8,0">
+                                <TextBlock Text="{DynamicResource Lang_Settings_Language}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                                <ComboBox ItemsSource="{Binding AvailableLanguages}" SelectedItem="{Binding Config.Language, Mode=TwoWay}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="6">
+                                <TextBlock Text="{DynamicResource Lang_Settings_Theme}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                                <ComboBox ItemsSource="{Binding AvailableThemes}" SelectedItem="{Binding Config.Theme, Mode=TwoWay}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="GameSection" Classes="SectionCard">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="{DynamicResource Lang_Settings_Game}" Classes="SectionLabel"/>
+                        <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
+                        <CheckBox Content="{DynamicResource Lang_Settings_AutoDetectJava}" IsChecked="{Binding Config.AutoDetectJava, Mode=TwoWay}"/>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{DynamicResource Lang_Settings_JavaPath}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            <TextBox Text="{Binding Config.DefaultJava, Mode=TwoWay}" IsEnabled="{Binding !Config.AutoDetectJava}"/>
                         </StackPanel>
-                    </Grid>
-
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{DynamicResource Lang_Settings_StartupPage}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
-                        <ComboBox ItemsSource="{Binding AvailableStartupPages}" SelectedItem="{Binding Config.StartupPage, Mode=TwoWay}"/>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{DynamicResource Lang_Settings_JavaArguments}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            <TextBox Text="{Binding Config.JavaArguments, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{DynamicResource Lang_Settings_GameDirectory}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <TextBox Grid.Column="0" Text="{Binding GameDirectory}" IsReadOnly="True"/>
+                                <Button Grid.Column="1" Content="{DynamicResource Lang_Settings_OpenFolder}" Classes="MicrosoftButton"
+                                        Command="{Binding OpenGameDirectoryCommand}"/>
+                            </Grid>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="{DynamicResource Lang_Settings_MinimizeToTray}" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Lang_Settings_ComingSoon}" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="{DynamicResource Lang_Settings_MinecraftConsole}" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{DynamicResource Lang_Settings_ComingSoon}" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
+                        </Grid>
                     </StackPanel>
+                </Border>
 
-                    <!-- Behavior Options -->
-                    <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
-                    <CheckBox Content="{DynamicResource Lang_Settings_LaunchStartup}" IsChecked="{Binding Config.LaunchOnStartup, Mode=TwoWay}"/>
-                    <CheckBox Content="{DynamicResource Lang_Settings_AutomaticUpdates}" IsChecked="{Binding Config.CheckLauncherUpdates, Mode=TwoWay}"/>
-                    <CheckBox Content="{DynamicResource Lang_Settings_KeepOpen}" IsChecked="{Binding Config.KeepOpenWhilePlaying, Mode=TwoWay}"/>
+                <Border x:Name="MemorySection" Classes="SectionCard">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="{DynamicResource Lang_Settings_Memory}" Classes="SectionLabel"/>
+                        <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
+                        <CheckBox Content="{DynamicResource Lang_Settings_AutoRam}" IsChecked="{Binding Config.AutoRam, Mode=TwoWay}"/>
+                        <TextBlock Text="{DynamicResource Lang_Settings_AutoRamDescription}" FontSize="11" Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="{DynamicResource Lang_Settings_CustomRam}" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Config.CustomRamGb, StringFormat='{}{0} GB'}" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Slider Minimum="1" Maximum="{Binding MaxCustomRamGb}" TickFrequency="1" IsSnapToTickEnabled="True"
+                                Value="{Binding Config.CustomRamGb, Mode=TwoWay}" IsEnabled="{Binding !Config.AutoRam}"/>
+                        <CheckBox Content="{DynamicResource Lang_Settings_SafeModeLimit}" IsChecked="{Binding Config.SafeModeLimit, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="VersionsSection" Classes="SectionCard">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="{DynamicResource Lang_Settings_Versions}" Classes="SectionLabel"/>
+                        <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
+                        <CheckBox Content="{DynamicResource Lang_Versions_Snapshots}" IsChecked="{Binding Config.ShowSnapshots, Mode=TwoWay}"/>
+                        <CheckBox Content="{DynamicResource Lang_Versions_Betas}" IsChecked="{Binding Config.ShowBetas, Mode=TwoWay}"/>
+                        <CheckBox Content="{DynamicResource Lang_Versions_Alphas}" IsChecked="{Binding Config.ShowAlphas, Mode=TwoWay}"/>
+                        <CheckBox Content="{DynamicResource Lang_Versions_OldVersions}" IsChecked="{Binding Config.ShowOldVersions, Mode=TwoWay}"/>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="{DynamicResource Lang_Settings_DefaultLoader}" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            <ComboBox ItemsSource="{Binding AvailableDefaultLoaders}" SelectedItem="{Binding Config.DefaultLoader, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="UpdatesSection" Classes="SectionCard">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="{DynamicResource Lang_Settings_Updates}" Classes="SectionLabel"/>
+                        <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
+                        <CheckBox Content="{DynamicResource Lang_Settings_AutomaticUpdates}" IsChecked="{Binding Config.CheckLauncherUpdates, Mode=TwoWay}"/>
+                        <TextBlock Text="{DynamicResource Lang_Settings_UpdatesDescription}" Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"/>
+                        <TextBlock Text="{DynamicResource Lang_Settings_UpdatesRequireInstall}" Foreground="{DynamicResource TextMuted}"
+                                   TextWrapping="Wrap" IsVisible="{Binding !IsUpdaterInstalled}"/>
+                        <TextBlock Text="{DynamicResource Lang_Settings_CheckingForUpdates}" Foreground="{DynamicResource TextMuted}"
+                                   IsVisible="{Binding IsCheckingForUpdates}"/>
+                        <TextBlock Text="{DynamicResource Lang_Settings_UpToDate}" Foreground="{DynamicResource TextMuted}"
+                                   IsVisible="{Binding IsUpToDate}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="4" IsVisible="{Binding HasUpdate}">
+                            <TextBlock Text="{DynamicResource Lang_Settings_UpdateAvailable}" Foreground="{DynamicResource TextMuted}"/>
+                            <TextBlock Text="{Binding AvailableUpdateVersion}" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <TextBlock Text="{DynamicResource Lang_Settings_DownloadingUpdate}" Foreground="{DynamicResource TextMuted}"
+                                   IsVisible="{Binding IsDownloadingUpdate}"/>
+                        <ProgressBar Minimum="0" Maximum="100" Value="{Binding UpdateDownloadProgress}"
+                                     IsVisible="{Binding IsDownloadingUpdate}"/>
+                        <StackPanel IsVisible="{Binding HasUpdateCheckFailed}" Spacing="4">
+                            <TextBlock Text="{DynamicResource Lang_Settings_UpdateFailed}" Foreground="{DynamicResource TextMuted}"/>
+                            <TextBlock Text="{Binding UpdateError}" Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Content="{DynamicResource Lang_Settings_CheckForUpdates}" Padding="14,8" Classes="MicrosoftButton"
+                                    Command="{Binding CheckForUpdatesCommand}" IsEnabled="{Binding IsUpdaterInstalled}"/>
+                            <Button Content="{DynamicResource Lang_Settings_DownloadUpdate}" Padding="14,8" Classes="PlayButton"
+                                    Command="{Binding DownloadAndInstallUpdateCommand}" IsVisible="{Binding HasUpdate}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="AboutSection" Classes="SectionCard">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="{DynamicResource Lang_Settings_About}" Classes="SectionLabel"/>
+                        <Border Height="1" Background="{DynamicResource SurfaceDivider}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{DynamicResource Lang_Settings_Version}" Foreground="{DynamicResource TextMuted}"/>
+                            <TextBlock Text="{Binding LauncherVersion}" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <WrapPanel Orientation="Horizontal">
+                            <Button Content="{DynamicResource Lang_Settings_GitHub}" Classes="MicrosoftButton" Margin="0,0,8,8"
+                                    Command="{Binding OpenExternalLinkCommand}" CommandParameter="https://github.com/luaukrodev/Piece-Launcher"/>
+                            <Button Content="{DynamicResource Lang_Settings_Releases}" Classes="MicrosoftButton" Margin="0,0,8,8"
+                                    Command="{Binding OpenExternalLinkCommand}" CommandParameter="https://github.com/luaukrodev/Piece-Launcher/releases"/>
+                            <Button Content="{DynamicResource Lang_Settings_License}" Classes="MicrosoftButton" Margin="0,0,8,8"
+                                    Command="{Binding OpenExternalLinkCommand}" CommandParameter="https://github.com/luaukrodev/Piece-Launcher/blob/master/LICENSE.txt"/>
+                        </WrapPanel>
+                        <Button Content="{DynamicResource Lang_Settings_OpenDataFolder}" Classes="MicrosoftButton"
+                                HorizontalAlignment="Left" Command="{Binding OpenLauncherDataDirectoryCommand}"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="{Binding SettingsError}" Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"
+                           IsVisible="{Binding SettingsError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,0">
+                    <Button Content="{DynamicResource Lang_Settings_Reset}" Padding="16,10" Classes="MicrosoftButton"
+                            Command="{Binding ResetToDefaultsCommand}"/>
+                    <Button Content="{DynamicResource Lang_Settings_Save}" Padding="20,10" Classes="PlayButton"
+                            Command="{Binding SaveSettingsCommand}"/>
                 </StackPanel>
-            </Border>
-
-            <Border Background="{DynamicResource CardBackground}"
-                    BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
-                    CornerRadius="12" Padding="20,16">
-                <StackPanel Spacing="10">
-                    <TextBlock Text="{DynamicResource Lang_Settings_Updates}"
-                               FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
-                    <TextBlock Text="{DynamicResource Lang_Settings_UpdatesDescription}"
-                               Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"/>
-                    <TextBlock Text="{DynamicResource Lang_Settings_UpdatesRequireInstall}"
-                               Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"
-                               IsVisible="{Binding !IsUpdaterInstalled}"/>
-                    <TextBlock Text="{DynamicResource Lang_Settings_CheckingForUpdates}"
-                               Foreground="{DynamicResource TextMuted}"
-                               IsVisible="{Binding IsCheckingForUpdates}"/>
-                    <TextBlock Text="{DynamicResource Lang_Settings_UpToDate}"
-                               Foreground="{DynamicResource TextMuted}"
-                               IsVisible="{Binding IsUpToDate}"/>
-                    <StackPanel Orientation="Horizontal" Spacing="4" IsVisible="{Binding HasUpdate}">
-                        <TextBlock Text="{DynamicResource Lang_Settings_UpdateAvailable}"
-                                   Foreground="{DynamicResource TextMuted}"/>
-                        <TextBlock Text="{Binding AvailableUpdateVersion}"
-                                   Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold"/>
-                    </StackPanel>
-                    <TextBlock Text="{DynamicResource Lang_Settings_DownloadingUpdate}"
-                               Foreground="{DynamicResource TextMuted}"
-                               IsVisible="{Binding IsDownloadingUpdate}"/>
-                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding UpdateDownloadProgress}"
-                                 IsVisible="{Binding IsDownloadingUpdate}"/>
-                    <StackPanel IsVisible="{Binding HasUpdateCheckFailed}" Spacing="4">
-                        <TextBlock Text="{DynamicResource Lang_Settings_UpdateFailed}"
-                                   Foreground="{DynamicResource TextMuted}"/>
-                        <TextBlock Text="{Binding UpdateError}" Foreground="{DynamicResource TextMuted}"
-                                   TextWrapping="Wrap"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <Button Content="{DynamicResource Lang_Settings_CheckForUpdates}"
-                                Padding="14,8" Classes="MicrosoftButton"
-                                Command="{Binding CheckForUpdatesCommand}"
-                                IsEnabled="{Binding IsUpdaterInstalled}"/>
-                        <Button Content="{DynamicResource Lang_Settings_DownloadUpdate}"
-                                Padding="14,8" Classes="PlayButton"
-                                Command="{Binding DownloadAndInstallUpdateCommand}"
-                                IsVisible="{Binding HasUpdate}"/>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <Border Background="{DynamicResource CardBackground}"
-                    BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
-                    CornerRadius="10" Padding="16,12">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <TextBlock Text="{DynamicResource Lang_Settings_Version}"
-                               Foreground="{DynamicResource TextMuted}"/>
-                    <TextBlock Text="{Binding LauncherVersion}"
-                               Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold"/>
-                </StackPanel>
-            </Border>
-
-            <!-- Action Buttons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,0">
-                <Button Content="{DynamicResource Lang_Settings_Reset}" Padding="16,10" Classes="MicrosoftButton" Command="{Binding ResetToDefaultsCommand}"/>
-                <Button Content="{DynamicResource Lang_Settings_Save}" Padding="20,10" Classes="PlayButton" Command="{Binding SaveSettingsCommand}"/>
             </StackPanel>
+        </ScrollViewer>
 
-        </StackPanel>
-    </ScrollViewer>
+        <Border Grid.Column="1" Classes="SettingsNavPanel" Margin="0,24,20,24" Padding="12">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{DynamicResource Lang_Settings_Sections}" Classes="SettingsNavTitle"/>
+                <Button x:Name="GeneralNavItem" Classes="SettingsNavItem SettingsNavActive" Tag="General" Click="OnSectionNavigationClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="⚙"/><TextBlock Text="{DynamicResource Lang_Settings_General}"/></StackPanel>
+                </Button>
+                <Button x:Name="AppearanceNavItem" Classes="SettingsNavItem" Tag="Appearance" Click="OnSectionNavigationClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="◐"/><TextBlock Text="{DynamicResource Lang_Settings_Appearance}"/></StackPanel>
+                </Button>
+                <Button x:Name="GameNavItem" Classes="SettingsNavItem" Tag="Game" Click="OnSectionNavigationClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="⌂"/><TextBlock Text="{DynamicResource Lang_Settings_Game}"/></StackPanel>
+                </Button>
+                <Button x:Name="MemoryNavItem" Classes="SettingsNavItem" Tag="Memory" Click="OnSectionNavigationClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="▤"/><TextBlock Text="{DynamicResource Lang_Settings_Memory}"/></StackPanel>
+                </Button>
+                <Button x:Name="VersionsNavItem" Classes="SettingsNavItem" Tag="Versions" Click="OnSectionNavigationClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="◷"/><TextBlock Text="{DynamicResource Lang_Settings_Versions}"/></StackPanel>
+                </Button>
+                <Button x:Name="UpdatesNavItem" Classes="SettingsNavItem" Tag="Updates" Click="OnSectionNavigationClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="↻"/><TextBlock Text="{DynamicResource Lang_Settings_Updates}"/></StackPanel>
+                </Button>
+                <Button x:Name="AboutNavItem" Classes="SettingsNavItem" Tag="About" Click="OnSectionNavigationClick">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="ⓘ"/><TextBlock Text="{DynamicResource Lang_Settings_About}"/></StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

@@ -3,9 +3,9 @@ using Avalonia.Controls;
 
 namespace Piece_Launcher.Views.Pages
 {
-    public partial class MapsPageView : UserControl
+    public partial class CommunityPageView : UserControl
     {
-        public MapsPageView()
+        public CommunityPageView()
         {
             InitializeComponent();
         }

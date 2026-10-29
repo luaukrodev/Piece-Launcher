@@ -159,7 +159,7 @@
                         <StackPanel Spacing="8">
                             <TextBlock Text="{DynamicResource Lang_Versions_SelectLoader}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
                             
-                            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" Margin="0,0,0,0">
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,Auto" Margin="0,0,0,0">
                                 <!-- Fabric -->
                                 <Button Grid.Row="0" Grid.Column="0" Margin="0,0,4,4"
                                         Classes="LoaderBtn" Classes.active="{Binding IsFabricSelected}"
@@ -199,11 +199,17 @@
                                         <TextBlock Text="{DynamicResource Lang_Versions_QuiltDesc}" FontSize="10" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
+
+                                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,0"
+                                        Classes="LoaderBtn" Classes.active="{Binding IsVanillaSelected}"
+                                        Command="{Binding SelectLoaderCommand}" CommandParameter="Vanilla">
+                                    <TextBlock Text="Vanilla" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center"/>
+                                </Button>
                             </Grid>
                         </StackPanel>
 
                         <!-- Step 3: Choose Loader Version -->
-                        <StackPanel Spacing="6">
+                        <StackPanel Spacing="6" IsVisible="{Binding !IsVanillaSelected}">
                             <TextBlock Text="{DynamicResource Lang_Versions_LoaderVersion}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
 
                             <!-- Loader Spinner -->
@@ -246,7 +252,8 @@
                                 Height="44"
                                 Margin="0,8,0,0"
                                 Command="{Binding InstallSelectedLoaderCommand}"
-                                IsEnabled="{Binding !IsInstalling}">
+                                IsEnabled="{Binding !IsInstalling}"
+                                IsVisible="{Binding !IsVanillaSelected}">
                             <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                                 <Path Width="16" Height="16" Stroke="White" StrokeThickness="1.8"
                                       Data="M8,1 L8,10 M4,6 L8,10 L12,6 M2,12 L2,15 L14,15 L14,12"

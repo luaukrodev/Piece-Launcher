@@ -1,13 +1,13 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
-             x:Class="Piece_Launcher.Views.Pages.MapsPageView"
-             x:DataType="vm:MapsPageViewModel">
+             x:Class="Piece_Launcher.Views.Pages.CommunityPageView"
+             x:DataType="vm:CommunityPageViewModel">
 
     <ScrollViewer Margin="44,12,44,16">
         <StackPanel>
-            <TextBlock Text="{DynamicResource Lang_Maps_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
-            <TextBlock Text="{DynamicResource Lang_Maps_Subtitle}" Foreground="{DynamicResource TextMuted}"/>
+            <TextBlock Text="{DynamicResource Lang_Community_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+            <TextBlock Text="{DynamicResource Lang_Community_Subtitle}" Foreground="{DynamicResource TextMuted}"/>
             <!-- Placeholder cards -->
             <ItemsControl>
                 <ItemsControl.ItemsPanel>
