@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Resolve version
+        id: version
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME.Substring(1)
+          $pre = $version.Contains('-').ToString().ToLowerInvariant()
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "pre=$pre" >> $env:GITHUB_OUTPUT
+
+      - name: Install Velopack CLI
+        run: dotnet tool install -g vpk --version 1.2.161
+
+      - name: Publish launcher
+        run: dotnet publish "Piece Launcher/Piece Launcher.csproj" -c Release -r win-x64 --self-contained -p:Version=${{ steps.version.outputs.version }} -o publish
+
+      - name: Download previous releases for delta packages
+        continue-on-error: true
+        run: vpk download github --repoUrl "https://github.com/${{ github.repository }}" --token "${{ secrets.GITHUB_TOKEN }}" --pre
+
+      - name: Pack Velopack release
+        run: vpk pack --packId PieceLauncher --packTitle "Piece Launcher" --packVersion "${{ steps.version.outputs.version }}" --packDir publish --mainExe "Piece Launcher.exe" --icon "Piece Launcher/Assets/Piece Launcher.ico" --runtime win-x64
+
+      - name: Upload GitHub release
+        shell: pwsh
+        run: |
+          $arguments = @(
+            'upload',
+            'github',
+            '--repoUrl', "https://github.com/${{ github.repository }}",
+            '--publish',
+            '--releaseName', "Version ${{ steps.version.outputs.version }}",
+            '--tag', "v${{ steps.version.outputs.version }}",
+            '--token', '${{ secrets.GITHUB_TOKEN }}'
+          )
+          if ('${{ steps.version.outputs.pre }}' -eq 'true') {
+            $arguments += '--pre'
+          }
+          vpk @arguments

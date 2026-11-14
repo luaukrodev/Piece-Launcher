@@ -11,7 +11,7 @@
 <p align="center">A dark, compact and fast Minecraft launcher.</p>
 
 <p align="center">
-  <a href="https://github.com/luaukrodev/Piece-Launcher/releases/latest"><img alt="Download" src="https://img.shields.io/badge/Download-latest-e67e22?style=for-the-badge"></a>
+  <a href="https://github.com/luaukrodev/Piece-Launcher/releases"><img alt="Download" src="https://img.shields.io/badge/Download-latest-e67e22?style=for-the-badge"></a>
 </p>
 
 <p align="center">
@@ -39,11 +39,11 @@
 
 ## Installation
 
-1. Go to the [latest release](https://github.com/luaukrodev/Piece-Launcher/releases/latest).
-2. Download the `Setup.exe` file and run it.
+1. Go to the [releases page](https://github.com/luaukrodev/Piece-Launcher/releases).
+2. Download `PieceLauncher-win-Setup.exe` and run it.
 3. If Windows SmartScreen shows "Windows protected your PC", click **More info** and then **Run anyway**. The installer is not code-signed yet.
 
-The installed launcher checks GitHub for updates at startup. When an update is available, open **Settings** and choose **Download and restart**. Automatic checks can be disabled in Settings. Updates require a Velopack-installed copy; portable and development builds are not updated in place. Published GitHub releases must include the Velopack release assets produced by `vpk pack`.
+The installed launcher checks GitHub for updates at startup. When an update is available, open **Settings** and choose **Download and restart**. Automatic checks can be disabled in Settings. Updates require a Velopack-installed copy; portable and development builds are not updated in place. Releases are built and uploaded automatically by pushing a tag like `v0.8.4-alpha`.
 
 ## Building from source
 
@@ -53,13 +53,6 @@ You need the [.NET 10 SDK](https://dotnet.microsoft.com/download).
 git clone https://github.com/luaukrodev/Piece-Launcher.git
 cd Piece-Launcher/"Piece Launcher"
 dotnet run
-```
-
-To create the installer:
-
-```bash
-dotnet publish -c Release -r win-x64 --self-contained -o publish
-vpk pack --packId PieceLauncher --packTitle "Piece Launcher" --packVersion <version> --packDir publish --mainExe "Piece Launcher.exe" --icon "Assets/Piece Launcher.ico"
 ```
 
 ## Built with
