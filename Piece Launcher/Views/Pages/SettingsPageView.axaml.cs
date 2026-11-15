@@ -2,8 +2,13 @@ using Avalonia;
 using Avalonia.Markup.Xaml;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using Piece_Launcher.Helpers;
+using Piece_Launcher.Models;
+using Piece_Launcher.ViewModels.Pages;
 using System;
+using System.Linq;
 
 namespace Piece_Launcher.Views.Pages
 {
@@ -51,6 +56,7 @@ namespace Piece_Launcher.Views.Pages
                 || GameSection is null
                 || MemorySection is null
                 || VersionsSection is null
+                || ImporterSection is null
                 || UpdatesSection is null
                 || AboutSection is null)
                 return;
@@ -62,6 +68,7 @@ namespace Piece_Launcher.Views.Pages
                 ("Game", GameSection),
                 ("Memory", MemorySection),
                 ("Versions", VersionsSection),
+                ("Importer", ImporterSection),
                 ("Updates", UpdatesSection),
                 ("About", AboutSection)
             };
@@ -88,6 +95,7 @@ namespace Piece_Launcher.Views.Pages
             "Game" => GameSection,
             "Memory" => MemorySection,
             "Versions" => VersionsSection,
+            "Importer" => ImporterSection,
             "Updates" => UpdatesSection,
             "About" => AboutSection,
             _ => null
@@ -100,17 +108,19 @@ namespace Piece_Launcher.Views.Pages
                 || GameNavItem is null
                 || MemoryNavItem is null
                 || VersionsNavItem is null
+                || ImporterNavItem is null
                 || UpdatesNavItem is null
                 || AboutNavItem is null)
                 return;
 
-            GeneralNavItem.Classes.Set("SettingsNavActive", name == "General");
-            AppearanceNavItem.Classes.Set("SettingsNavActive", name == "Appearance");
-            GameNavItem.Classes.Set("SettingsNavActive", name == "Game");
-            MemoryNavItem.Classes.Set("SettingsNavActive", name == "Memory");
-            VersionsNavItem.Classes.Set("SettingsNavActive", name == "Versions");
-            UpdatesNavItem.Classes.Set("SettingsNavActive", name == "Updates");
-            AboutNavItem.Classes.Set("SettingsNavActive", name == "About");
+            GeneralNavItem.Classes.Set("active", name == "General");
+            AppearanceNavItem.Classes.Set("active", name == "Appearance");
+            GameNavItem.Classes.Set("active", name == "Game");
+            MemoryNavItem.Classes.Set("active", name == "Memory");
+            VersionsNavItem.Classes.Set("active", name == "Versions");
+            ImporterNavItem.Classes.Set("active", name == "Importer");
+            UpdatesNavItem.Classes.Set("active", name == "Updates");
+            AboutNavItem.Classes.Set("active", name == "About");
         }
 
         private void InitializeComponent()
@@ -130,6 +140,8 @@ namespace Piece_Launcher.Views.Pages
                 ?? throw new InvalidOperationException("The Memory settings section was not found.");
             VersionsSection = this.FindControl<Border>(nameof(VersionsSection))
                 ?? throw new InvalidOperationException("The Versions settings section was not found.");
+            ImporterSection = this.FindControl<Border>(nameof(ImporterSection))
+                ?? throw new InvalidOperationException("The Importer settings section was not found.");
             UpdatesSection = this.FindControl<Border>(nameof(UpdatesSection))
                 ?? throw new InvalidOperationException("The Updates settings section was not found.");
             AboutSection = this.FindControl<Border>(nameof(AboutSection))
@@ -144,10 +156,49 @@ namespace Piece_Launcher.Views.Pages
                 ?? throw new InvalidOperationException("The Memory navigation button was not found.");
             VersionsNavItem = this.FindControl<Button>(nameof(VersionsNavItem))
                 ?? throw new InvalidOperationException("The Versions navigation button was not found.");
+            ImporterNavItem = this.FindControl<Button>(nameof(ImporterNavItem))
+                ?? throw new InvalidOperationException("The Importer navigation button was not found.");
             UpdatesNavItem = this.FindControl<Button>(nameof(UpdatesNavItem))
                 ?? throw new InvalidOperationException("The Updates navigation button was not found.");
             AboutNavItem = this.FindControl<Button>(nameof(AboutNavItem))
                 ?? throw new InvalidOperationException("The About navigation button was not found.");
+        }
+
+        private async void OnBrowseImportFolderClick(object? sender, RoutedEventArgs e)
+        {
+            if (DataContext is not SettingsPageViewModel viewModel)
+                return;
+
+            try
+            {
+                var topLevel = TopLevel.GetTopLevel(this)
+                    ?? throw new InvalidOperationException("The folder picker is unavailable.");
+                var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+                {
+                    Title = LocalizationHelper.Get("Lang_Settings_BrowseLauncherFolder"),
+                    AllowMultiple = false
+                });
+                if (folders.Count == 0)
+                    return;
+
+                var folderPath = folders[0].TryGetLocalPath()
+                    ?? throw new InvalidOperationException("The selected folder does not have a local file-system path.");
+                await viewModel.ImportLauncherDataAsync(folderPath);
+            }
+            catch (Exception exception)
+            {
+                viewModel.ShowLauncherImportError(exception.Message);
+            }
+        }
+
+        private void OnImportSourcesSelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is SettingsPageViewModel viewModel && sender is ListBox listBox)
+            {
+                var selectedSources = listBox.SelectedItems?.OfType<LauncherImportSource>()
+                    ?? Enumerable.Empty<LauncherImportSource>();
+                viewModel.SetSelectedImportSources(selectedSources);
+            }
         }
     }
 }

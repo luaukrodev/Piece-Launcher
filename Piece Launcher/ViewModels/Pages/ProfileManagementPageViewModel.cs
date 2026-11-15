@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Avalonia.Media.Imaging;
 using Piece_Launcher.Helpers;
 using Piece_Launcher.Models;
+using Piece_Launcher.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -120,6 +121,7 @@ namespace Piece_Launcher.ViewModels.Pages
             if (!IsOfflineProfile || _pendingSkin == null)
                 return;
 
+            using var loading = ServiceLocator.LoadingService.Begin();
             try
             {
                 var path = SkinTextureService.GetSavedSkinPath(_profile.Id);
@@ -159,6 +161,7 @@ namespace Piece_Launcher.ViewModels.Pages
 
         private async Task LoadProfileSkinAsync()
         {
+            using var loading = ServiceLocator.LoadingService.Begin();
             try
             {
                 SkinBitmap = await SkinTextureService.LoadProfileSkinAsync(_profile);

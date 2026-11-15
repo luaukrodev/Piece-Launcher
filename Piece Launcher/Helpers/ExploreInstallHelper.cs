@@ -12,7 +12,7 @@ namespace Piece_Launcher.Helpers
     public static class ExploreInstallHelper
     {
         private static readonly Regex NeoForgeRegex = new(@"neoforge-(\d+)\.(\d+)", RegexOptions.IgnoreCase);
-        private static readonly Regex ReleaseRegex = new(@"(?<![\d.])1\.\d+(?:\.\d+)?(?![\d.])");
+        private static readonly Regex ReleaseRegex = new(@"(?<![\d.])\d+\.\d+(?:\.\d+)?(?![\d.])");
         private static readonly Regex SnapshotRegex = new(@"\d{2}w\d{2}[a-z]");
 
         public static InstallTarget ParseVersionName(string? name)
@@ -30,9 +30,19 @@ namespace Piece_Launcher.Helpers
             var neo = NeoForgeRegex.Match(name);
             if (neo.Success)
             {
-                var major = neo.Groups[1].Value;
-                var minor = neo.Groups[2].Value;
-                gameVersion = minor == "0" ? $"1.{major}" : $"1.{major}.{minor}";
+                var versionAfterNeoForge = ReleaseRegex.Match(name[(neo.Index + neo.Length)..]);
+                if (versionAfterNeoForge.Success)
+                {
+                    gameVersion = versionAfterNeoForge.Value;
+                }
+                else
+                {
+                    var major = neo.Groups[1].Value;
+                    var minor = neo.Groups[2].Value;
+                    gameVersion = int.TryParse(major, out var majorNumber) && majorNumber >= 26
+                        ? $"{major}.{minor}"
+                        : minor == "0" ? $"1.{major}" : $"1.{major}.{minor}";
+                }
             }
             else
             {

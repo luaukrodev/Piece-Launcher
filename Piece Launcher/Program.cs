@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using System;
+using System.Threading;
 using Velopack;
 
 namespace Piece_Launcher
@@ -10,6 +11,13 @@ namespace Piece_Launcher
         public static void Main(string[] args)
         {
             VelopackApp.Build().Run();
+
+            using var singleInstanceMutex = new Mutex(
+                initiallyOwned: true,
+                name: @"Local\PieceLauncher.SingleInstance",
+                createdNew: out var isFirstInstance);
+            if (!isFirstInstance)
+                return;
 
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }

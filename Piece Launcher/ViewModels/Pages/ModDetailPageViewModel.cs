@@ -6,6 +6,7 @@ using Piece_Launcher.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Piece_Launcher.ViewModels.Pages
@@ -17,10 +18,49 @@ namespace Piece_Launcher.ViewModels.Pages
         private readonly Action _onBack;
         private readonly Action _onValidationFailed;
         private readonly Func<string?>? _getSelectedVersionName;
+        private readonly ILoadingService _loadingService = ServiceLocator.LoadingService;
+        private readonly AutoDismissMessage _errorMessageAutoDismiss = new();
 
         [ObservableProperty] private ExploreProjectDetail? _project;
         [ObservableProperty] private bool _isLoading;
+        [ObservableProperty] private bool _isInstallingContent;
         [ObservableProperty] private string? _errorMessage;
+        [ObservableProperty] private string _supportedLoadersText = "";
+
+        partial void OnErrorMessageChanged(string? value)
+        {
+            if (IsLoading || IsInstallingContent)
+            {
+                _errorMessageAutoDismiss.Cancel();
+                return;
+            }
+
+            _errorMessageAutoDismiss.Schedule(value, () => ErrorMessage, () => ErrorMessage = null);
+        }
+
+        partial void OnIsLoadingChanged(bool value)
+            => RefreshErrorMessageDismissal();
+
+        partial void OnIsInstallingContentChanged(bool value)
+            => RefreshErrorMessageDismissal();
+
+        private void RefreshErrorMessageDismissal()
+        {
+            if (IsLoading || IsInstallingContent)
+            {
+                _errorMessageAutoDismiss.Cancel();
+                return;
+            }
+
+            _errorMessageAutoDismiss.Schedule(ErrorMessage, () => ErrorMessage, () => ErrorMessage = null);
+        }
+
+        public bool HasSupportedLoaders => !string.IsNullOrWhiteSpace(SupportedLoadersText);
+
+        partial void OnSupportedLoadersTextChanged(string value)
+        {
+            OnPropertyChanged(nameof(HasSupportedLoaders));
+        }
 
         // Tab Management
         [ObservableProperty] private int _selectedTabIndex = 0;
@@ -55,6 +95,7 @@ namespace Piece_Launcher.ViewModels.Pages
 
         public async Task LoadProjectAsync(string projectId)
         {
+            using var loading = _loadingService.Begin();
             IsLoading = true;
             ErrorMessage = null;
             try
@@ -71,7 +112,7 @@ namespace Piece_Launcher.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Failed to load project details: {ex.Message}";
+                ErrorMessage = LocalizationHelper.Format("Lang_ModDetail_LoadProjectFailed", ex.Message);
             }
             finally
             {
@@ -81,20 +122,44 @@ namespace Piece_Launcher.ViewModels.Pages
 
         private async Task LoadVersionsAsync(string projectId)
         {
+            using var loading = _loadingService.Begin();
+            Versions.Clear();
+            SupportedLoadersText = "";
             try
             {
-                var versions = await _exploreService.GetProjectVersionsAsync(projectId);
-                Versions.Clear();
-                foreach (var v in versions)
+                var target = ExploreInstallHelper.ParseVersionName(_getSelectedVersionName?.Invoke());
+                var versions = await _exploreService.GetProjectVersionsAsync(projectId, target.GameVersion);
+
+                SupportedLoadersText = string.Join(", ", versions
+                    .SelectMany(version => version.Loaders)
+                    .Where(loader => !string.IsNullOrWhiteSpace(loader))
+                    .Select(FormatLoaderName)
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .OrderBy(loader => loader, StringComparer.OrdinalIgnoreCase));
+
+                foreach (var version in versions.Where(version =>
+                    ExploreInstallHelper.IsCompatible(version, target, Project?.ProjectType)))
                 {
-                    Versions.Add(v);
+                    Versions.Add(version);
                 }
+
+                if (Versions.Count == 0)
+                    ErrorMessage = LocalizationHelper.Get("Lang_ModDetail_NoCompatibleVersion");
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Failed to load versions: {ex.Message}";
+                ErrorMessage = LocalizationHelper.Format("Lang_ModDetail_LoadVersionsFailed", ex.Message);
             }
         }
+
+        private static string FormatLoaderName(string loader) => loader.ToLowerInvariant() switch
+        {
+            "neoforge" => "NeoForge",
+            "fabric" => "Fabric",
+            "forge" => "Forge",
+            "quilt" => "Quilt",
+            _ => loader
+        };
 
         [RelayCommand]
         private void GoBack()
@@ -107,7 +172,7 @@ namespace Piece_Launcher.ViewModels.Pages
         {
             if (Versions.Count == 0)
             {
-                ErrorMessage = "No versions available to install.";
+                ErrorMessage = LocalizationHelper.Get("Lang_ModDetail_NoCompatibleVersion");
                 return;
             }
 
@@ -116,7 +181,7 @@ namespace Piece_Launcher.ViewModels.Pages
 
             if (best == null)
             {
-                ErrorMessage = "No compatible version found for the selected Minecraft version.";
+                ErrorMessage = LocalizationHelper.Get("Lang_ModDetail_NoCompatibleVersion");
                 _onValidationFailed?.Invoke();
                 return;
             }
@@ -127,7 +192,17 @@ namespace Piece_Launcher.ViewModels.Pages
         [RelayCommand]
         private async Task InstallVersion(ExploreProjectVersion version)
         {
-            ErrorMessage = $"Installing {version.Name}...";
+            var target = ExploreInstallHelper.ParseVersionName(_getSelectedVersionName?.Invoke());
+            if (!ExploreInstallHelper.IsCompatible(version, target, Project?.ProjectType))
+            {
+                ErrorMessage = LocalizationHelper.Get("Lang_ModDetail_NoCompatibleVersion");
+                _onValidationFailed?.Invoke();
+                return;
+            }
+
+            using var loading = _loadingService.Begin();
+            IsInstallingContent = true;
+            ErrorMessage = LocalizationHelper.Format("Lang_ModDetail_Installing", version.Name);
             try
             {
                 string targetFolder = ExploreInstallHelper.GetTargetFolder(_gameDirectory, Project?.ProjectType);
@@ -146,21 +221,17 @@ namespace Piece_Launcher.ViewModels.Pages
                         File.Delete(temporaryPath);
                 }
 
-                ErrorMessage = $"Installed {version.Filename} successfully!";
-
-                _ = ClearSuccessMessageAsync();
+                var successMessage = LocalizationHelper.Format("Lang_ModDetail_Installed", version.Filename);
+                ErrorMessage = successMessage;
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Failed to install: {ex.Message}";
+                ErrorMessage = LocalizationHelper.Format("Lang_ModDetail_InstallFailed", ex.Message);
             }
-        }
-
-        private async Task ClearSuccessMessageAsync()
-        {
-            await Task.Delay(3000);
-            if (ErrorMessage?.Contains("successfully") == true)
-                ErrorMessage = null;
+            finally
+            {
+                IsInstallingContent = false;
+            }
         }
 
         [RelayCommand]

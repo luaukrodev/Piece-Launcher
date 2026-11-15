@@ -4,10 +4,10 @@
              x:Class="Piece_Launcher.Views.Pages.CommunityPageView"
              x:DataType="vm:CommunityPageViewModel">
 
-    <ScrollViewer Margin="44,12,44,16">
-        <StackPanel>
-            <TextBlock Text="{DynamicResource Lang_Community_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
-            <TextBlock Text="{DynamicResource Lang_Community_Subtitle}" Foreground="{DynamicResource TextMuted}"/>
+    <ScrollViewer Margin="0">
+        <StackPanel Spacing="8">
+            <TextBlock Text="{DynamicResource Lang_Community_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
+            <TextBlock Text="{DynamicResource Lang_Community_Subtitle}" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
             <!-- Placeholder cards -->
             <ItemsControl>
                 <ItemsControl.ItemsPanel>
@@ -17,10 +17,11 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Width="220" Height="120" CornerRadius="10" Background="{DynamicResource CardBackground}" Margin="6">
-                        <StackPanel>
-                                <TextBlock Text="Map Title" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
-                                <TextBlock Text="Author · Downloads" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                        <Border Width="220" Height="120" CornerRadius="0" Background="{DynamicResource ThemeCardBackgroundBrush}"
+                                BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2" Padding="16" Margin="6">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Lang_Community_MapTitle}" FontWeight="SemiBold" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
+                                <TextBlock Text="{DynamicResource Lang_Community_AuthorDownloads}" FontSize="11" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>

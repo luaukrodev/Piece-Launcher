@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:easing="using:Avalonia.Animation.Easings">
+    <sys:TimeSpan x:Key="PieceMotionFast">00:00:00.120</sys:TimeSpan>
+    <sys:TimeSpan x:Key="PieceMotionPress">00:00:00.080</sys:TimeSpan>
+    <sys:TimeSpan x:Key="PieceMotionBase">00:00:00.200</sys:TimeSpan>
+    <sys:TimeSpan x:Key="PieceMotionSlow">00:00:00.350</sys:TimeSpan>
+    <sys:TimeSpan x:Key="PieceMotionCoverFade">00:00:00.800</sys:TimeSpan>
+    <x:Double x:Key="PieceMotionScale">1</x:Double>
+
+    <easing:CubicEaseOut x:Key="PieceEaseOut" />
+    <easing:CubicEaseIn x:Key="PieceEaseIn" />
+    <easing:CubicEaseInOut x:Key="PieceEaseInOut" />
+</ResourceDictionary>

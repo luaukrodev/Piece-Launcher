@@ -99,7 +99,10 @@ StyleCopReport.xml
 *.scc
 *.bat
 .env
+updater.py
+updater.exe
 commands.txt
+backend
 # Chutzpah Test files
 _Chutzpah*
 

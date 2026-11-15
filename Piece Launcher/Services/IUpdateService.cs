@@ -1,15 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Velopack;
 
 namespace Piece_Launcher.Services
 {
     public interface IUpdateService
     {
         bool IsInstalled { get; }
-        Task<UpdateInfo?> CheckForUpdatesAsync();
-        async Task<UpdateInfo?> CheckForUpdatesAsync(CancellationToken cancellationToken)
+        Task<LauncherUpdateResult?> CheckForUpdatesAsync();
+        async Task<LauncherUpdateResult?> CheckForUpdatesAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var update = await CheckForUpdatesAsync();
@@ -17,8 +16,8 @@ namespace Piece_Launcher.Services
             return update;
         }
 
-        Task DownloadAndRestartAsync(UpdateInfo updateInfo, IProgress<int> progress);
-        async Task DownloadAndRestartAsync(UpdateInfo updateInfo, IProgress<int> progress, CancellationToken cancellationToken)
+        Task DownloadAndRestartAsync(LauncherUpdateResult updateInfo, IProgress<int> progress);
+        async Task DownloadAndRestartAsync(LauncherUpdateResult updateInfo, IProgress<int> progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             await DownloadAndRestartAsync(updateInfo, progress);

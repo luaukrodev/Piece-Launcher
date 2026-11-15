@@ -20,8 +20,8 @@ namespace Piece_Launcher
                 return null;
 
             // Map view model full name to view full name:
-            // Example: Piece_Launcher.ViewModels.Pages.HomePageViewModel
-            // -> Piece_Launcher.Views.Pages.HomePage
+            // Example: Piece_Launcher.ViewModels.Pages.JavaEditionPageViewModel
+            // -> Piece_Launcher.Views.Pages.JavaEditionPageView
             var vmFullName = param.GetType().FullName!;
             var viewName = vmFullName.Replace(".ViewModels.", ".Views.", StringComparison.Ordinal)
                                      .Replace("ViewModel", "View", StringComparison.Ordinal);

@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 
 namespace Piece_Launcher.ViewModels.Pages
 {
@@ -15,6 +16,8 @@ namespace Piece_Launcher.ViewModels.Pages
     {
         private readonly LauncherConfig _config;
         private readonly IMicrosoftAuthService _microsoftAuthService;
+        private readonly ILoadingService _loadingService;
+        private readonly AutoDismissMessage _statusMessageAutoDismiss = new();
         
         public ObservableCollection<ProfileEntry> UserProfiles { get; }
 
@@ -54,8 +57,20 @@ namespace Piece_Launcher.ViewModels.Pages
         {
             _config = config;
             _microsoftAuthService = microsoftAuthService;
+            _loadingService = ServiceLocator.LoadingService;
             UserProfiles = sharedProfiles;
             _selectedProfile = currentSelected;
+            _config.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(LauncherConfig.Language))
+                {
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        foreach (var profile in UserProfiles)
+                            profile.RefreshDisplayType();
+                    });
+                }
+            };
 
             UserProfiles.CollectionChanged += (s, e) =>
             {
@@ -70,7 +85,25 @@ namespace Piece_Launcher.ViewModels.Pages
             }
         }
 
-        partial void OnStatusMessageChanged(string? value) => OnPropertyChanged(nameof(HasStatusMessage));
+        partial void OnStatusMessageChanged(string? value)
+        {
+            OnPropertyChanged(nameof(HasStatusMessage));
+            if (string.IsNullOrWhiteSpace(value)
+                || value == LocalizationHelper.Get("Lang_Profiles_Connecting"))
+            {
+                _statusMessageAutoDismiss.Cancel();
+                return;
+            }
+
+            var duration = value == LocalizationHelper.Get("Lang_Profiles_SignedIn")
+                ? TimeSpan.FromSeconds(3)
+                : TimeSpan.FromSeconds(5);
+            _statusMessageAutoDismiss.Schedule(
+                value,
+                () => StatusMessage,
+                () => StatusMessage = null,
+                duration);
+        }
 
         partial void OnSelectedProfileChanged(ProfileEntry? value)
         {
@@ -101,13 +134,14 @@ namespace Piece_Launcher.ViewModels.Pages
         [RelayCommand]
         private async Task AddMicrosoftProfile()
         {
+            using var loading = _loadingService.Begin();
             IsLoggingIn = true;
-            StatusMessage = "Connecting to Microsoft...";
+            StatusMessage = LocalizationHelper.Get("Lang_Profiles_Connecting");
             try
             {
                 var session = await _microsoftAuthService.SignInAsync();
                 if (string.IsNullOrWhiteSpace(session.UUID) || string.IsNullOrWhiteSpace(session.Username))
-                    throw new InvalidOperationException("Microsoft authentication returned an incomplete Minecraft profile.");
+                    throw new InvalidOperationException(LocalizationHelper.Get("Lang_Profiles_IncompleteMicrosoftProfile"));
 
                 var profile = UserProfiles.FirstOrDefault(candidate =>
                     candidate.Type == ProfileType.Microsoft &&
@@ -128,12 +162,11 @@ namespace Piece_Launcher.ViewModels.Pages
 
                 SelectedProfile = profile;
                 ShowAddProfileForm = false;
-                StatusMessage = "Signed in successfully.";
-                _ = ClearStatusMessageAsync();
+                StatusMessage = LocalizationHelper.Get("Lang_Profiles_SignedIn");
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Microsoft sign-in failed: {ex.Message}";
+                StatusMessage = LocalizationHelper.Format("Lang_Profiles_SignInFailed", ex.Message);
             }
             finally
             {
@@ -176,13 +209,6 @@ namespace Piece_Launcher.ViewModels.Pages
             _config.Save();
         }
 
-        private async Task ClearStatusMessageAsync()
-        {
-            await Task.Delay(3000);
-            if (StatusMessage == "Signed in successfully.")
-                StatusMessage = null;
-        }
-
         private void LoadHeadImage(ProfileEntry profile)
         {
             _pendingSkinLoads++;
@@ -192,6 +218,7 @@ namespace Piece_Launcher.ViewModels.Pages
 
         private async Task LoadHeadImageAsync(ProfileEntry profile)
         {
+            using var loading = _loadingService.Begin();
             try
             {
                 var skin = await SkinTextureService.LoadProfileSkinAsync(profile);

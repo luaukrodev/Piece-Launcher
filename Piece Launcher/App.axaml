@@ -6,8 +6,8 @@
              RequestedThemeVariant="Dark">
 
     <Application.DataTemplates>
-        <DataTemplate DataType="vm:HomePageViewModel">
-            <pages:HomePageView />
+        <DataTemplate DataType="vm:JavaEditionPageViewModel">
+            <pages:JavaEditionPageView />
         </DataTemplate>
         <DataTemplate DataType="vm:ProfilesPageViewModel">
             <pages:ProfilesPageView />
@@ -32,7 +32,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Piece%20Launcher/Styles/PieceTokens.axaml" />
+                <!-- The selected theme follows the defaults so it can override every color token. -->
                 <ResourceInclude Source="avares://Piece%20Launcher/Themes/DarkOrangeTheme.axaml" />
+                <ResourceInclude Source="avares://Piece%20Launcher/Styles/PieceMotion.axaml" />
                 <ResourceInclude Source="avares://Piece%20Launcher/Langs/English.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -42,168 +45,32 @@
         <FluentTheme />
 
         <!-- ═══ SIDEBAR BUTTON ═══ -->
-        <Style Selector="Button.SidebarButton">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextDimmed}"/>
-            <Setter Property="Padding" Value="14,11"/>
-            <Setter Property="CornerRadius" Value="10"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-        </Style>
-        <Style Selector="Button.SidebarButton:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource SidebarHoverBg}"/>
-        </Style>
-        <Style Selector="Button.SidebarButton:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource SidebarHoverText}"/>
-        </Style>
-        <Style Selector="Button.SidebarButton:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource SidebarPressedBg}"/>
-        </Style>
-
-        <!-- Active nav item -->
-        <Style Selector="Button.SidebarActive /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource SidebarActiveBg}"/>
-        </Style>
-        <Style Selector="Button.SidebarActive">
-            <Setter Property="Foreground" Value="{DynamicResource SidebarActiveText}"/>
-        </Style>
-
         <!-- ═══ PLAY BUTTON ═══ -->
-        <Style Selector="Button.PlayButton">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontWeight" Value="Black"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="{DynamicResource PlayBtnTop}" Offset="0"/>
-                        <GradientStop Color="{DynamicResource PlayBtnBottom}" Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style Selector="Button.PlayButton:pointerover /template/ ContentPresenter">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="{DynamicResource PlayBtnHoverTop}" Offset="0"/>
-                        <GradientStop Color="{DynamicResource PlayBtnHoverBottom}" Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style Selector="Button.PlayButton:pressed /template/ ContentPresenter">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="{DynamicResource PlayBtnPressedTop}" Offset="0"/>
-                        <GradientStop Color="{DynamicResource PlayBtnPressedBottom}" Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style Selector="Button.PlayButton:disabled /template/ ContentPresenter">
-            <Setter Property="Opacity" Value="0.45"/>
-        </Style>
-
         <!-- ═══ MICROSOFT BUTTON ═══ -->
-        <Style Selector="Button.MicrosoftButton">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource MicrosoftBtnBorder}"/>
-            <Setter Property="Background" Value="{DynamicResource MicrosoftBtnBg}"/>
-            <Setter Property="Foreground" Value="{DynamicResource MicrosoftBtnFg}"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Padding" Value="14,10"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style Selector="Button.MicrosoftButton:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource MicrosoftBtnHoverBg}"/>
-        </Style>
-        <Style Selector="Button.MicrosoftButton:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
-        </Style>
-
         <!-- ═══ REMOVE BUTTON (profile cards) ═══ -->
-        <Style Selector="Button.RemoveButton">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextLabel}"/>
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Padding" Value="6,3"/>
-            <Setter Property="CornerRadius" Value="6"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style Selector="Button.RemoveButton:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource RemoveHoverBg}"/>
-        </Style>
-        <Style Selector="Button.RemoveButton:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource RemoveHoverFg}"/>
-        </Style>
-
         <!-- ═══ WINDOW CONTROL BUTTONS ═══ -->
-        <Style Selector="Button.WinBtn">
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="CornerRadius" Value="14"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="{DynamicResource WinBtnBg}"/>
-            <Setter Property="Foreground" Value="{DynamicResource WinBtnFg}"/>
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style Selector="Button.WinClose:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource WinCloseBg}"/>
-        </Style>
-        <Style Selector="Button.WinMaximize:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource WinMaxBg}"/>
-        </Style>
-        <Style Selector="Button.WinClose:pointerover">
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-        <Style Selector="Button.WinMinimize:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource WinMinBg}"/>
-        </Style>
-        <Style Selector="Button.WinMinimize:pointerover">
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
         <Style Selector="Border.SectionCard">
-            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeCardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="0"/>
             <Setter Property="Padding" Value="20,16"/>
         </Style>
         <Style Selector="TextBlock.SectionLabel">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}"/>
         </Style>
         <Style Selector="Border.SettingsNavPanel">
-            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeCardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="0"/>
         </Style>
         <Style Selector="TextBlock.SettingsNavTitle">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PieceTextSecondaryBrush}"/>
             <Setter Property="Margin" Value="8,4,8,6"/>
         </Style>
         <Style Selector="Button.SettingsNavItem">
@@ -211,24 +78,25 @@
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
-            <Setter Property="Padding" Value="10,9"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="FontSize" Value="12"/>
-        </Style>
-        <Style Selector="Button.SettingsNavItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource SidebarHoverBg}"/>
-        </Style>
-        <Style Selector="Button.SettingsNavItem:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource SidebarHoverText}"/>
-        </Style>
-        <Style Selector="Button.SettingsNavItem.SettingsNavActive /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource SidebarActiveBg}"/>
-        </Style>
-        <Style Selector="Button.SettingsNavItem.SettingsNavActive">
-            <Setter Property="Foreground" Value="{DynamicResource SidebarActiveText}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PieceTextSecondaryBrush}"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="FontSize" Value="13"/>
         </Style>
 
+        <StyleInclude Source="avares://Piece%20Launcher/Styles/PieceTheme.axaml" />
     </Application.Styles>
 
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/Piece Launcher.ico" ToolTipText="Piece Launcher" IsVisible="False">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="{DynamicResource Lang_Tray_Open}" />
+                        <NativeMenuItem Header="{DynamicResource Lang_Tray_Exit}" />
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
 </Application>

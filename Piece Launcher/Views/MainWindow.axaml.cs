@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Piece_Launcher.ViewModels;
@@ -26,34 +27,39 @@ namespace Piece_Launcher.Views
         }
 
         private void OnMinimizeLauncherRequested()
-            => WindowState = WindowState.Minimized;
+            => MinimizeWindow();
 
         private void OnTitleBarPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-                BeginMoveDrag(e);
+            {
+                if (e.ClickCount == 2)
+                    WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+                else
+                    BeginMoveDrag(e);
+            }
         }
 
         private void OnCloseClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
             => Close();
 
         private void OnMinimizeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-            => WindowState = WindowState.Minimized;
+            => MinimizeWindow();
 
-        private bool isMaximized = false;
+        private void MinimizeWindow()
+        {
+            if (DataContext is MainWindowViewModel viewModel
+                && viewModel.MinimizeToTray
+                && Application.Current is App app
+                && app.TryHideInTray(this))
+                return;
 
- 
+            WindowState = WindowState.Minimized;
+        }
+
         private void OnMaximizeClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (!isMaximized)
-            {
-                isMaximized = true;
-                WindowState = WindowState.Maximized;
-            } else
-            {
-                isMaximized = false;
-                WindowState = WindowState.Normal;
-            }
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
     }
 }

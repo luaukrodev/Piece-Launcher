@@ -2,50 +2,91 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
              xmlns:helpers="using:Piece_Launcher.Helpers"
+             xmlns:converters="using:Piece_Launcher.Converters"
              xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:models="using:Piece_Launcher.Models"
              xmlns:pages="using:Piece_Launcher.Views.Pages"
+             xmlns:controls="using:Piece_Launcher.Controls"
              x:Class="Piece_Launcher.Views.Pages.MinecraftModsPageView"
              x:DataType="vm:MinecraftModsPageViewModel">
 
+    <UserControl.Resources>
+        <converters:CompactDownloadCountConverter x:Key="CompactDownloadCountConverter"/>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="Button.piece">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Styles>
+
     <Grid>
         <!-- MASTER VIEW: Search and Mod List -->
-        <Grid IsVisible="{Binding IsMasterViewOpen}">
-            <Grid ColumnDefinitions="*, 280">
+        <Grid IsVisible="{Binding IsMasterViewOpen}" RowDefinitions="Auto,*">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="{DynamicResource Lang_MinecraftMods_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource PieceTextPrimaryBrush}" IsVisible="{Binding IsBrowseView}"/>
+                    <TextBlock Text="{DynamicResource Lang_ModsManager_Title}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource PieceTextPrimaryBrush}" IsVisible="{Binding IsManagerView}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{DynamicResource Lang_ModsManager_InstanceSectionTitle}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ComboBox ItemsSource="{Binding Instances}" SelectedItem="{Binding SelectedInstance}" MinWidth="180">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="models:MinecraftInstanceEntry">
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button Content="{DynamicResource Lang_InstanceManager_Manage}" Command="{Binding OpenInstanceManagerCommand}" Classes="piece" Padding="12,8"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Border Width="1" Height="44" Background="{DynamicResource ThemeCardBorderBrush}" VerticalAlignment="Center"/>
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{DynamicResource Lang_ModsManager_ContentSectionTitle}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Content="{DynamicResource Lang_ModsManager_Browse}" Command="{Binding ShowBrowseCommand}" Classes="piece" Classes.primary="{Binding IsBrowseView}" Padding="12,8"/>
+                            <Button Content="{DynamicResource Lang_ModsManager_Manage}" Command="{Binding ShowManagerCommand}" Classes="piece" Classes.primary="{Binding IsManagerView}" Padding="12,8"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,280" IsVisible="{Binding IsBrowseView}">
                 <!-- Left Side: Header, Search & List -->
                 <Grid Grid.Column="0" RowDefinitions="Auto, *">
                     <!-- Header & Search -->
-                    <StackPanel Grid.Row="0" Margin="44,12,24,16" Spacing="12">
-                        <TextBlock Text="{DynamicResource Lang_MinecraftMods_Title}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                    <StackPanel Grid.Row="0" Margin="0" Spacing="12">
                         <Grid ColumnDefinitions="*,Auto">
-                            <TextBox Grid.Column="0" Text="{Binding SearchQuery}" PlaceholderText="{DynamicResource Lang_MinecraftMods_SearchWatermark}" Padding="12,10" Margin="0,0,8,0" CornerRadius="8" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}"/>
-                            <Button Grid.Column="1" Content="{DynamicResource Lang_MinecraftMods_SearchBtn}" Command="{Binding PerformSearchCommand}" Padding="20,10" Classes="PlayButton"/>
+                            <TextBox Grid.Column="0" Text="{Binding SearchQuery}" PlaceholderText="{DynamicResource Lang_MinecraftMods_SearchWatermark}" Padding="12,10" Margin="0,0,8,0" CornerRadius="0" Background="{DynamicResource ThemeCardBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}"/>
+                            <Button Grid.Column="1" Content="{DynamicResource Lang_MinecraftMods_SearchBtn}" Command="{Binding PerformSearchCommand}" Padding="20,10" Classes="piece primary"/>
                         </Grid>
                     </StackPanel>
 
                     <!-- Mods List -->
-                    <ScrollViewer Grid.Row="1" Margin="44,0,24,0">
+                    <ScrollViewer Grid.Row="1" Padding="4,4,20,4">
                         <StackPanel Spacing="16">
-                            <TextBlock Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Foreground="{DynamicResource AccentColor}"/>
-                            <TextBlock Text="{DynamicResource Lang_Global_Loading}" IsVisible="{Binding IsLoading}" Foreground="{DynamicResource TextMuted}"/>
+                            <TextBlock Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Foreground="{DynamicResource PieceOrangeFaceBrush}"/>
 
                             <ItemsControl ItemsSource="{Binding SearchResults}" IsVisible="{Binding !IsLoading}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="16" Margin="0,0,0,12">
+                                        <Border Background="{DynamicResource ThemeCardBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2" CornerRadius="0" Padding="16" Margin="4,0,4,12">
                                             <Grid ColumnDefinitions="Auto, *, Auto">
                                                 <!-- Icon -->
-                                                <Border Grid.Column="0" Width="64" Height="64" CornerRadius="12" Background="{DynamicResource InnerCardBackground}" ClipToBounds="True" Margin="0,0,16,0">
+                                                <Border Grid.Column="0" Width="64" Height="64" CornerRadius="0" Background="{DynamicResource ThemeSidebarBackgroundBrush}" ClipToBounds="True" Margin="0,0,16,0">
                                                     <Image helpers:ImageAsyncHelper.SourceUrl="{Binding IconUrl}" Stretch="UniformToFill" />
                                                 </Border>
 
                                                 <!-- Info -->
                                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
                                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                                        <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
-                                                        <TextBlock Text="{Binding Author}" FontSize="12" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                                                        <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
+                                                        <TextBlock Text="{Binding Author}" FontSize="12" Foreground="{DynamicResource PieceTextSecondaryBrush}" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
                                                     </StackPanel>
                                                     
-                                                    <TextBlock Text="{Binding Description}" FontSize="12" Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock Text="{Binding Description}" FontSize="12" Foreground="{DynamicResource PieceTextSecondaryBrush}" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis"/>
                                                     
                                                     <ItemsControl ItemsSource="{Binding Categories}">
                                                         <ItemsControl.ItemsPanel>
@@ -55,8 +96,8 @@
                                                         </ItemsControl.ItemsPanel>
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Border Background="{DynamicResource InnerCardBackground}" CornerRadius="4" Padding="6,2">
-                                                                    <TextBlock Text="{Binding}" FontSize="10" Foreground="{DynamicResource TextPrimary}"/>
+                                                                <Border Background="{DynamicResource ThemeSidebarBackgroundBrush}" CornerRadius="0" Padding="6,2">
+                                                                    <TextBlock Text="{Binding}" FontSize="10" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
                                                                 </Border>
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
@@ -65,11 +106,11 @@
 
                                                 <!-- Action Buttons & Stats -->
                                                 <StackPanel Grid.Column="2" VerticalAlignment="Center" Spacing="8" HorizontalAlignment="Right">
-                                                    <TextBlock Text="{Binding Downloads, StringFormat='↓ {0}'}" FontSize="11" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Right"/>
+                                                    <TextBlock Text="{Binding Downloads, Converter={StaticResource CompactDownloadCountConverter}, StringFormat='↓ {0}'}" FontSize="11" Foreground="{DynamicResource PieceTextSecondaryBrush}" HorizontalAlignment="Right"/>
                                                     
                                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                                        <Button Content="View" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).ViewProjectCommand}" CommandParameter="{Binding}" Classes="SidebarButton" Padding="16,8" Background="{DynamicResource InnerCardBackground}"/>
-                                                        <Button Content="Install" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).InstallProjectCommand}" CommandParameter="{Binding}" Classes="PlayButton" Padding="16,8" Background="{DynamicResource PlayBtnTop}"/>
+                                                        <Button Content="{DynamicResource Lang_MinecraftMods_View}" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).ViewProjectCommand}" CommandParameter="{Binding}" Classes="piece" Background="{DynamicResource ThemeSidebarBackgroundBrush}"/>
+                                                        <Button Content="{DynamicResource Lang_Versions_InstallBtn}" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).InstallProjectCommand}" CommandParameter="{Binding}" Classes="piece primary" Background="{DynamicResource PieceOrangeFaceBrush}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </Grid>
@@ -80,48 +121,46 @@
 
                             <!-- Pagination -->
                             <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center" Margin="0,16,0,24" IsVisible="{Binding !IsLoading}">
-                                <Button Content="{DynamicResource Lang_MinecraftMods_Previous}" Command="{Binding PreviousPageCommand}" IsEnabled="{Binding HasPreviousPage}" Classes="SidebarButton" Padding="16,8"/>
-                                <TextBlock Text="{Binding CurrentPage}" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
-                                <Button Content="{DynamicResource Lang_MinecraftMods_Next}" Command="{Binding NextPageCommand}" IsEnabled="{Binding HasNextPage}" Classes="SidebarButton" Padding="16,8"/>
+                                <Button Content="{DynamicResource Lang_MinecraftMods_Previous}" Command="{Binding PreviousPageCommand}" IsEnabled="{Binding HasPreviousPage}" Classes="piece" Padding="16,8"/>
+                                <TextBlock Text="{Binding CurrentPage}" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
+                                <Button Content="{DynamicResource Lang_MinecraftMods_Next}" Command="{Binding NextPageCommand}" IsEnabled="{Binding HasNextPage}" Classes="piece" Padding="16,8"/>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
 
                 <!-- Right Side: Filters & Branding -->
-                <Border Grid.Column="1" Background="{DynamicResource CardBackground}" CornerRadius="16 0 0 16" Padding="20">
+                <Border Grid.Column="1" Background="{DynamicResource ThemeCardBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2" CornerRadius="0" Padding="20">
                     <Grid RowDefinitions="*, Auto">
                         <StackPanel Grid.Row="0" Spacing="24">
                             <!-- Popularity / Sort -->
                             <StackPanel Spacing="8">
-                                <TextBlock Text="{DynamicResource Lang_MinecraftMods_Sort}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
-                                <ComboBox SelectedItem="{Binding SelectedSort}" HorizontalAlignment="Stretch" CornerRadius="8">
-                                    <sys:String>relevance</sys:String>
-                                    <sys:String>downloads</sys:String>
-                                    <sys:String>newest</sys:String>
-                                    <sys:String>updated</sys:String>
+                                <TextBlock Text="{DynamicResource Lang_MinecraftMods_Sort}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
+                                <ComboBox ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" HorizontalAlignment="Stretch" CornerRadius="0">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate DataType="models:LocalizedChoice"><TextBlock Text="{Binding Label}"/></DataTemplate>
+                                    </ComboBox.ItemTemplate>
                                 </ComboBox>
                             </StackPanel>
 
                             <!-- Project Type -->
                             <StackPanel Spacing="8">
-                                <TextBlock Text="{DynamicResource Lang_MinecraftMods_Type}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
-                                <ComboBox SelectedItem="{Binding SelectedType}" HorizontalAlignment="Stretch" CornerRadius="8">
-                                    <sys:String>mod</sys:String>
-                                    <sys:String>resourcepack</sys:String>
-                                    <sys:String>shader</sys:String>
-                                    <sys:String>datapack</sys:String>
+                                <TextBlock Text="{DynamicResource Lang_MinecraftMods_Type}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
+                                <ComboBox ItemsSource="{Binding TypeOptions}" SelectedItem="{Binding SelectedTypeOption}" HorizontalAlignment="Stretch" CornerRadius="0">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate DataType="models:LocalizedChoice"><TextBlock Text="{Binding Label}"/></DataTemplate>
+                                    </ComboBox.ItemTemplate>
                                 </ComboBox>
                             </StackPanel>
                         </StackPanel>
 
                         <!-- Bottom Branding -->
                         <StackPanel Grid.Row="1" Spacing="8" HorizontalAlignment="Center">
-                            <Border Background="{DynamicResource InnerCardBackground}"
-                                    BorderBrush="{DynamicResource TextMuted}" BorderThickness="1"
-                                    CornerRadius="8">
+                            <Border Background="{DynamicResource ThemeSidebarBackgroundBrush}"
+                                    BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2"
+                                    CornerRadius="0">
                                 <Button Command="{Binding OpenModsFolderCommand}"
-                                        Classes="SidebarButton" Padding="12,8"
+                                        Classes="piece" Padding="12,8"
                                         HorizontalAlignment="Stretch"
                                         Background="Transparent"
                                         BorderThickness="0">
@@ -129,7 +168,7 @@
                                         <Path Width="18" Height="18"
                                               Data="M 3,6 L 9,6 L 11,8 L 21,8 L 21,18 L 3,18 Z"
                                               Fill="Transparent"
-                                              Stroke="{DynamicResource TextPrimary}"
+                                              Stroke="{DynamicResource PieceTextPrimaryBrush}"
                                               StrokeThickness="1.6"
                                               VerticalAlignment="Center"/>
                                         <TextBlock Text="{DynamicResource Lang_MinecraftMods_OpenModsFolder}"
@@ -137,14 +176,75 @@
                                     </StackPanel>
                                 </Button>
                             </Border>
-                            <TextBlock Text="{DynamicResource Lang_MinecraftMods_PoweredBy}" FontSize="11" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Lang_MinecraftMods_Source}" FontSize="11" Foreground="{DynamicResource PieceTextSecondaryBrush}" HorizontalAlignment="Center"/>
                             <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                                <Image Source="avares://Piece%20Launcher/Assets/modrinth_logo.png" Width="28" Height="28" Stretch="Uniform"/>
-                                <TextBlock Text="Modrinth" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                <Button Command="{Binding SelectSourceCommand}" CommandParameter="Modrinth"
+                                        Classes="piece" Classes.primary="{Binding IsModrinthSelected}" Padding="8,6">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Image Source="avares://Piece%20Launcher/Assets/modrinth_logo.png" Width="22" Height="22" Stretch="Uniform"/>
+                                        <TextBlock Text="Modrinth" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Command="{Binding SelectSourceCommand}" CommandParameter="CurseForge"
+                                        Classes="piece" Classes.primary="{Binding IsCurseForgeSelected}" Padding="8,6">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Image Source="avares://Piece%20Launcher/Assets/curseforge_logo.png" Width="22" Height="22" Stretch="Uniform"/>
+                                        <TextBlock Text="CurseForge" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
                 </Border>
+            </Grid>
+
+            <Grid Grid.Row="1" IsVisible="{Binding IsManagerView}" RowDefinitions="Auto,*">
+                <Border Grid.Row="0" Background="{DynamicResource ThemeCardBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2" Padding="16" Margin="0,0,0,12">
+                    <Grid ColumnDefinitions="Auto,Auto,*" RowDefinitions="Auto,Auto">
+                        <Button Grid.Row="0" Grid.Column="0" Content="{DynamicResource Lang_ModsManager_Refresh}" Command="{Binding RefreshManagedContentCommand}" Classes="piece" Padding="12,8"/>
+                        <Button Grid.Row="0" Grid.Column="1" Content="{DynamicResource Lang_ModsManager_ImportPack}" Click="OnImportPackClick" IsEnabled="{Binding !IsImportingModpack}" Classes="piece primary" Padding="12,8" Margin="8,0,0,0"/>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
+                            <TextBlock Text="{DynamicResource Lang_ModsManager_Category}" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding ManagerCategoryOptions}" SelectedItem="{Binding SelectedManagerCategoryOption}" MinWidth="180">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="models:LocalizedChoice">
+                                        <TextBlock Text="{Binding Label}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <ScrollViewer Grid.Row="1" Padding="4,0,4,12">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Foreground="{DynamicResource PieceOrangeFaceBrush}"/>
+                        <TextBlock Text="{DynamicResource Lang_ModsManager_Empty}" IsVisible="{Binding !HasInstalledContent}" Foreground="{DynamicResource PieceTextSecondaryBrush}" Margin="8"/>
+                        <ItemsControl ItemsSource="{Binding FilteredInstalledContent}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="models:InstalledContentItem">
+                                    <Border Background="{DynamicResource ThemeCardBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2" Padding="14">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <StackPanel Grid.Column="0" Spacing="4" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="15"/>
+                                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                                    <TextBlock Text="{Binding TypeLabel}" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                                                    <TextBlock Text="{Binding Size}" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                                                    <TextBlock Text="{Binding ManagedRecord.Source}" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                                <Button Content="{DynamicResource Lang_ModsManager_Update}" IsVisible="{Binding IsManaged}" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).UpdateManagedContentCommand}" CommandParameter="{Binding}" Classes="piece"/>
+                                                <Button Content="{DynamicResource Lang_ModsManager_Enable}" IsVisible="{Binding !IsEnabled}" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).ToggleContentCommand}" CommandParameter="{Binding}" Classes="piece"/>
+                                                <Button Content="{DynamicResource Lang_ModsManager_Disable}" IsVisible="{Binding IsEnabled}" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).ToggleContentCommand}" CommandParameter="{Binding}" Classes="piece"/>
+                                                <Button Content="{DynamicResource Lang_ModsManager_Remove}" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).RequestRemoveContentCommand}" CommandParameter="{Binding}" Classes="piece"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
             </Grid>
         </Grid>
 
@@ -155,14 +255,120 @@
 
         <!-- VALIDATION POPUP OVERLAY -->
         <Border IsVisible="{Binding ShowValidationPopup}" 
-                Background="{DynamicResource CardBackground}" BorderBrush="#e74c3c" BorderThickness="2"
-                CornerRadius="8" Padding="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0"
-                BoxShadow="0 10 30 0 #40000000">
+                Background="{DynamicResource ThemeCardBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2"
+                CornerRadius="0" Padding="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0">
             <StackPanel Orientation="Horizontal" Spacing="12">
                 <TextBlock Text="⚠️" FontSize="20" VerticalAlignment="Center"/>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="Incompatible Version" FontWeight="Bold" Foreground="#e74c3c"/>
-                    <TextBlock Text="No compatible version found for the selected Minecraft version. Pick another one in the Versions tab." FontSize="12" Foreground="{DynamicResource TextMuted}"/>
+                    <TextBlock Text="{DynamicResource Lang_MinecraftMods_IncompatibleVersion}" FontWeight="Bold" Foreground="{DynamicResource PieceOrangeFaceBrush}"/>
+                    <TextBlock Text="{DynamicResource Lang_MinecraftMods_NoCompatibleVersionInfo}" FontSize="12" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border IsVisible="{Binding ShowRemoveConfirmation}"
+                Background="{DynamicResource ThemeCardBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2"
+                Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="480">
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding PendingRemovalName}" FontSize="18" FontWeight="Bold"/>
+                <TextBlock Text="{DynamicResource Lang_ModsManager_RemovePrompt}" TextWrapping="Wrap"/>
+                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                    <Button Content="{DynamicResource Lang_ModsManager_Cancel}" Command="{Binding CancelRemoveContentCommand}" Classes="piece"/>
+                    <Button Content="{DynamicResource Lang_ModsManager_ConfirmRemove}" Command="{Binding ConfirmRemoveContentCommand}" Classes="piece primary"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Grid IsVisible="{Binding IsInstanceManagerOpen}">
+            <Border Background="#99000000"/>
+            <Border Background="{DynamicResource ThemeCardBackgroundBrush}"
+                    BorderBrush="{DynamicResource ThemeCardBorderBrush}"
+                    BorderThickness="2"
+                    Padding="20"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="760"
+                    MaxHeight="680">
+                <Grid RowDefinitions="Auto,*">
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                        <TextBlock Text="{DynamicResource Lang_InstanceManager_Title}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="{DynamicResource Lang_ModsManager_Cancel}" Command="{Binding CloseInstanceManagerCommand}" Classes="piece" Padding="12,8"/>
+                    </Grid>
+                    <ScrollViewer Grid.Row="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="{DynamicResource Lang_InstanceManager_Instances}" FontSize="17" FontWeight="Bold"/>
+                            <ItemsControl ItemsSource="{Binding Instances}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="models:MinecraftInstanceEntry">
+                                        <Border Background="{DynamicResource ThemeSidebarBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" Padding="10" Margin="0,0,0,6">
+                                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="3">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                                    <TextBlock Text="{Binding Description}" IsVisible="{Binding !IsDefault}" FontSize="12" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                                                    <TextBlock Text="{DynamicResource Lang_InstanceManager_Default}" IsVisible="{Binding IsDefault}" FontSize="12" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                                                </StackPanel>
+                                                <Button Grid.Column="1" Content="{DynamicResource Lang_InstanceManager_Use}" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).SelectInstanceCommand}" CommandParameter="{Binding}" Classes="piece"/>
+                                                <Button Grid.Column="2" Content="{DynamicResource Lang_InstanceManager_Delete}" IsVisible="{Binding !IsDefault}" Command="{Binding $parent[UserControl].((vm:MinecraftModsPageViewModel)DataContext).RequestDeleteInstanceCommand}" CommandParameter="{Binding}" Classes="piece"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Border Height="1" Background="{DynamicResource ThemeCardBorderBrush}" Margin="0,4"/>
+                            <TextBlock Text="{DynamicResource Lang_InstanceManager_Create}" FontSize="17" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Foreground="{DynamicResource PieceOrangeFaceBrush}" TextWrapping="Wrap"/>
+                            <StackPanel IsVisible="{Binding IsInstanceInstallProgressVisible}" Spacing="6">
+                                <TextBlock Text="{Binding InstanceInstallProgressText}" TextWrapping="Wrap" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                    <ProgressBar Grid.Column="0" Value="{Binding InstanceInstallProgressValue}" Maximum="100" Height="8" VerticalAlignment="Center"/>
+                                    <controls:HatSpinner Grid.Column="1" IsVisible="{Binding IsInstanceDownloadActive}" Width="32" Height="32"/>
+                                </Grid>
+                            </StackPanel>
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="{DynamicResource Lang_InstanceManager_Name}"/>
+                                    <TextBox Text="{Binding NewInstanceName}" PlaceholderText="{DynamicResource Lang_InstanceManager_NameWatermark}" IsEnabled="{Binding !IsCreatingInstance}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="6">
+                                    <TextBlock Text="{DynamicResource Lang_InstanceManager_Version}"/>
+                                    <ComboBox ItemsSource="{Binding InstanceVersions}" SelectedItem="{Binding SelectedNewInstanceVersion}" IsEnabled="{Binding !IsCreatingInstance}" PlaceholderText="{DynamicResource Lang_Versions_SelectVersionWatermark}"/>
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{DynamicResource Lang_InstanceManager_Loader}"/>
+                                <ComboBox ItemsSource="{Binding InstanceLoaderOptions}" SelectedItem="{Binding SelectedNewInstanceLoaderOption}" IsEnabled="{Binding !IsCreatingInstance}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate DataType="models:LocalizedChoice">
+                                            <TextBlock Text="{Binding Label}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <TextBlock Text="{DynamicResource Lang_InstanceManager_RecommendedLoader}" FontSize="12" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                            </StackPanel>
+                            <TextBlock Text="{DynamicResource Lang_InstanceManager_LoadingVersions}" IsVisible="{Binding IsLoadingInstanceVersions}" Foreground="{DynamicResource PieceTextSecondaryBrush}"/>
+                            <Button Content="{DynamicResource Lang_InstanceManager_Create}" Command="{Binding CreateMinecraftInstanceCommand}" IsEnabled="{Binding CanCreateInstance}" Classes="piece primary" HorizontalAlignment="Right" Padding="16,8"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Border IsVisible="{Binding ShowDeleteInstanceConfirmation}"
+                Background="{DynamicResource ThemeCardBackgroundBrush}"
+                BorderBrush="{DynamicResource ThemeCardBorderBrush}"
+                BorderThickness="2"
+                Padding="20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                MaxWidth="480">
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding PendingDeleteInstanceName}" FontSize="18" FontWeight="Bold"/>
+                <TextBlock Text="{DynamicResource Lang_InstanceManager_DeletePrompt}" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Foreground="{DynamicResource PieceOrangeFaceBrush}" TextWrapping="Wrap"/>
+                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                    <Button Content="{DynamicResource Lang_ModsManager_Cancel}" Command="{Binding CancelDeleteInstanceCommand}" Classes="piece"/>
+                    <Button Content="{DynamicResource Lang_InstanceManager_ConfirmDelete}" Command="{Binding ConfirmDeleteInstanceCommand}" Classes="piece primary"/>
                 </StackPanel>
             </StackPanel>
         </Border>

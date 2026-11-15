@@ -5,15 +5,15 @@
              x:DataType="vm:ProfilesPageViewModel">
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="44,12,44,16" Spacing="0">
+        <StackPanel Margin="0" Spacing="0">
             <!-- Header -->
             <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="{DynamicResource Lang_Profiles_Title}" FontSize="11" FontWeight="Bold"
-                               Foreground="{DynamicResource TextLabel}" LetterSpacing="3"/>
-                    <TextBlock Text="{DynamicResource Lang_Profiles_Subtitle}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource TextPrimary}"/>
+                               Foreground="{DynamicResource PieceTextSecondaryBrush}" LetterSpacing="3"/>
+                    <TextBlock Text="{DynamicResource Lang_Profiles_Subtitle}" FontSize="32" FontWeight="Black" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
                 </StackPanel>
-                <Button Grid.Column="1" Classes="PlayButton" Padding="16,10"
+                <Button Grid.Column="1" Classes="piece primary" Padding="16,10"
                         VerticalAlignment="Center" Command="{Binding ToggleAddFormCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <TextBlock Text="+" FontSize="16" VerticalAlignment="Center"/>
@@ -22,31 +22,27 @@
                 </Button>
             </Grid>
 
-            <ProgressBar IsIndeterminate="True" Height="2"
-                         IsVisible="{Binding IsLoadingProfiles}"
-                         Foreground="{DynamicResource AccentBrush}" Margin="0,0,0,10"/>
-
             <!-- Add-profile form -->
             <Border IsVisible="{Binding ShowAddProfileForm}"
-                    Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
-                    CornerRadius="12" Padding="20,16" Margin="0,0,0,16">
+                    Background="{DynamicResource ThemeCardBackgroundBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2"
+                    CornerRadius="0" Padding="20,16" Margin="0,0,0,16">
                 <StackPanel Spacing="10">
-                    <TextBlock Text="{DynamicResource Lang_Profiles_NewProfile}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                    <TextBlock Text="{DynamicResource Lang_Profiles_NewProfile}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource PieceTextPrimaryBrush}"/>
                     <Grid ColumnDefinitions="*,Auto,Auto">
                         <TextBox Grid.Column="0"
                                  Text="{Binding NewProfileName}"
                                  PlaceholderText="{DynamicResource Lang_Profiles_ProfileNameWatermark}"
                                  Margin="0,0,10,0"/>
                         <Button Grid.Column="1" Content="{DynamicResource Lang_Profiles_AddOffline}"
-                                Classes="MicrosoftButton" Margin="0,0,8,0"
+                                Classes="piece" Margin="0,0,8,0"
                                 Command="{Binding AddOfflineProfileCommand}"/>
-                        <Button Grid.Column="2" Content="{DynamicResource Lang_Home_SignInMs}"
-                                Classes="PlayButton" Padding="14,10"
+                        <Button Grid.Column="2" Content="{DynamicResource Lang_Profiles_SignInMs}"
+                                Classes="piece primary" Padding="14,10"
                                 Command="{Binding AddMicrosoftProfileCommand}"
                                 IsEnabled="{Binding !IsLoggingIn}"/>
                     </Grid>
                     <TextBlock Text="{Binding StatusMessage}"
-                               FontSize="11" Foreground="{DynamicResource TextError}" TextWrapping="Wrap"
+                               FontSize="11" Foreground="{DynamicResource PieceTextSecondaryBrush}" TextWrapping="Wrap"
                                IsVisible="{Binding HasStatusMessage}"/>
                 </StackPanel>
             </Border>
@@ -55,9 +51,9 @@
             <Border IsVisible="{Binding HasNoProfiles}" Padding="0,32">
                 <StackPanel Spacing="6" HorizontalAlignment="Center">
                     <TextBlock Text="{DynamicResource Lang_Profiles_NoProfiles}" FontSize="16"
-                               Foreground="{DynamicResource TextLabel}" HorizontalAlignment="Center"/>
+                               Foreground="{DynamicResource PieceTextSecondaryBrush}" HorizontalAlignment="Center"/>
                     <TextBlock Text="{DynamicResource Lang_Profiles_ClickToAdd}"
-                               FontSize="12" Foreground="{DynamicResource TextVeryDimmed}" HorizontalAlignment="Center"/>
+                               FontSize="12" Foreground="{DynamicResource PieceTextSecondaryBrush}" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
 
@@ -71,9 +67,9 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Width="300" Height="148"
-                                CornerRadius="12" Background="{DynamicResource CardBackground}"
-                                BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1"
-                                Margin="0,0,12,12" Padding="16,14">
+                                CornerRadius="0" Background="{DynamicResource ThemeCardBackgroundBrush}"
+                                BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2"
+                                Margin="4,0,12,12" Padding="16,14">
                             <Grid RowDefinitions="*,Auto" ColumnDefinitions="64,*,44">
                                 <Image Grid.Row="0" Grid.Column="0" Width="56" Height="56"
                                        Source="{Binding HeadImage}" Stretch="Uniform"
@@ -82,18 +78,17 @@
                                 <StackPanel Grid.Row="0" Grid.Column="1" Spacing="6"
                                             VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Name}" FontSize="15"
-                                               FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"
+                                               FontWeight="SemiBold" Foreground="{DynamicResource PieceTextPrimaryBrush}"
                                                TextTrimming="CharacterEllipsis"/>
-                                    <Border CornerRadius="4" Background="{DynamicResource BadgeTypeBg}"
+                                    <Border CornerRadius="0" Background="{DynamicResource ThemeSidebarBackgroundBrush}"
                                             Padding="6,3" HorizontalAlignment="Left">
-                                        <TextBlock Text="{Binding Type}" FontSize="10"
-                                                   Foreground="{DynamicResource BadgeTypeFg}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding DisplayType}" FontSize="10"
+                                                   Foreground="{DynamicResource PieceTextSecondaryBrush}" FontWeight="Bold"/>
                                     </Border>
                                 </StackPanel>
 
                                 <Button Grid.Row="0" Grid.Column="2" Content="⋯"
-                                        Classes="MicrosoftButton" Padding="0"
-                                        MinWidth="36" MinHeight="36" FontSize="18"
+                                        Classes="piece profile-action" FontSize="18"
                                         ToolTip.Tip="{DynamicResource Lang_Profiles_Manage}"
                                         VerticalAlignment="Center" HorizontalAlignment="Center"
                                         Command="{Binding $parent[UserControl].((vm:ProfilesPageViewModel)DataContext).ManageProfileCommand}"

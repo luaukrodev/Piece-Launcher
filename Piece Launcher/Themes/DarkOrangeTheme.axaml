@@ -1,88 +1,135 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- Accent Colors -->
-    <Color x:Key="SystemAccentColor">#e67e22</Color>
-    <Color x:Key="SystemAccentColorDark1">#c0392b</Color>
-    <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource SystemAccentColor}" />
-    <SolidColorBrush x:Key="AccentDarkBrush" Color="{DynamicResource SystemAccentColorDark1}" />
+    <Color x:Key="SystemAccentColor">#C87622</Color>
+    <Color x:Key="SystemAccentColorDark1">#A53919</Color>
+    <Color x:Key="AccentColor">#C87622</Color>
+    <SolidColorBrush x:Key="AccentBrush" Color="#C87622" />
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="#A53919" />
 
-    <!-- Window -->
-    <SolidColorBrush x:Key="WindowBackground" Color="#080810" />
-    <SolidColorBrush x:Key="WindowBorderBrush" Color="#1a1a2e" />
+    <SolidColorBrush x:Key="WindowBackground" Color="#090A1F" />
+    <SolidColorBrush x:Key="WindowBorderBrush" Color="#161954" />
+    <SolidColorBrush x:Key="SidebarBackground" Color="#070717" />
+    <SolidColorBrush x:Key="SidebarBorderBrush" Color="#161954" />
+    <SolidColorBrush x:Key="SidebarDividerBrush" Color="#161954" />
+    <SolidColorBrush x:Key="SidebarLogoBg" Color="#070717" />
+    <SolidColorBrush x:Key="PrimaryBackground" Color="#090A1F" />
+    <SolidColorBrush x:Key="SecondaryBackground" Color="#070717" />
+    <SolidColorBrush x:Key="CardBackground" Color="#0B0B1A" />
+    <SolidColorBrush x:Key="CardBorderBrush" Color="#1D2064" />
+    <SolidColorBrush x:Key="InnerCardBackground" Color="#0B0B1A" />
+    <SolidColorBrush x:Key="ElevatedBackground" Color="#11143B" />
+    <SolidColorBrush x:Key="SurfaceDivider" Color="#161954" />
 
-    <!-- Sidebar -->
-    <SolidColorBrush x:Key="SidebarBackground" Color="#0f0f1a" />
-    <SolidColorBrush x:Key="SidebarBorderBrush" Color="#1e1e2e" />
-    <SolidColorBrush x:Key="SidebarDividerBrush" Color="#1a1a2e" />
-    <SolidColorBrush x:Key="SidebarLogoBg" Color="#1a1200" />
+    <SolidColorBrush x:Key="LaunchBarBackground" Color="#050615" />
+    <SolidColorBrush x:Key="LaunchBarBorderBrush" Color="#161954" />
+    <SolidColorBrush x:Key="LaunchBarInnerBg" Color="#070717" />
+    <SolidColorBrush x:Key="LaunchBarInnerBorder" Color="#161954" />
 
-    <!-- Surfaces -->
-    <SolidColorBrush x:Key="PrimaryBackground" Color="#080810" />
-    <SolidColorBrush x:Key="SecondaryBackground" Color="#0f0f1a" />
-    <SolidColorBrush x:Key="CardBackground" Color="#0f0f1c" />
-    <SolidColorBrush x:Key="CardBorderBrush" Color="#252535" />
-    <SolidColorBrush x:Key="InnerCardBackground" Color="#1a1a2e" />
-    <SolidColorBrush x:Key="ElevatedBackground" Color="#0d0d1a" />
-    <SolidColorBrush x:Key="SurfaceDivider" Color="#1a1a2e" />
+    <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextSecondary" Color="#B4B8EE" />
+    <SolidColorBrush x:Key="TextMuted" Color="#969BD4" />
+    <SolidColorBrush x:Key="TextDimmed" Color="#777DBB" />
+    <SolidColorBrush x:Key="TextVeryDimmed" Color="#555B99" />
+    <SolidColorBrush x:Key="TextLabel" Color="#777DBB" />
+    <SolidColorBrush x:Key="TextWatermark" Color="#090A1F" />
+    <SolidColorBrush x:Key="TextError" Color="#FF5252" />
 
-    <!-- Launch Bar -->
-    <SolidColorBrush x:Key="LaunchBarBackground" Color="#0c0c18" />
-    <SolidColorBrush x:Key="LaunchBarBorderBrush" Color="#15152a" />
-    <SolidColorBrush x:Key="LaunchBarInnerBg" Color="#0a0a14" />
-    <SolidColorBrush x:Key="LaunchBarInnerBorder" Color="#1a1a2e" />
+    <SolidColorBrush x:Key="SidebarHoverBg" Color="#1A11144A" />
+    <SolidColorBrush x:Key="SidebarPressedBg" Color="#281B1F7C" />
+    <SolidColorBrush x:Key="SidebarActiveBg" Color="#1AC87622" />
+    <SolidColorBrush x:Key="SidebarActiveText" Color="#F4902A" />
+    <SolidColorBrush x:Key="SidebarHoverText" Color="#FFFFFF" />
 
-    <!-- Typography -->
-    <SolidColorBrush x:Key="TextPrimary" Color="White" />
-    <SolidColorBrush x:Key="TextSecondary" Color="#8888aa" />
-    <SolidColorBrush x:Key="TextMuted" Color="#6a6a9a" />
-    <SolidColorBrush x:Key="TextDimmed" Color="#5a5a7a" />
-    <SolidColorBrush x:Key="TextVeryDimmed" Color="#44445a" />
-    <SolidColorBrush x:Key="TextLabel" Color="#3a3a5a" />
-    <SolidColorBrush x:Key="TextWatermark" Color="#06060f" />
-    <SolidColorBrush x:Key="TextError" Color="#cc5555" />
+    <SolidColorBrush x:Key="MicrosoftBtnBg" Color="#0E103D" />
+    <SolidColorBrush x:Key="MicrosoftBtnBorder" Color="#262B8A" />
+    <SolidColorBrush x:Key="MicrosoftBtnFg" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="MicrosoftBtnHoverBg" Color="#11144A" />
+    <SolidColorBrush x:Key="RemoveHoverBg" Color="#4B1A0B" />
+    <SolidColorBrush x:Key="RemoveHoverFg" Color="#F4902A" />
 
-    <!-- Interactive -->
-    <SolidColorBrush x:Key="SidebarHoverBg" Color="#1ae67e22" />
-    <SolidColorBrush x:Key="SidebarPressedBg" Color="#28e67e22" />
-    <SolidColorBrush x:Key="SidebarActiveBg" Color="#1ae67e22" />
-    <SolidColorBrush x:Key="SidebarActiveText" Color="#e67e22" />
-    <SolidColorBrush x:Key="SidebarHoverText" Color="#ddddee" />
+    <SolidColorBrush x:Key="WinBtnBg" Color="#11143B" />
+    <SolidColorBrush x:Key="WinBtnFg" Color="#B4B8EE" />
+    <SolidColorBrush x:Key="WinCloseBg" Color="#C9451F" />
+    <SolidColorBrush x:Key="WinMaxBg" Color="#11144A" />
+    <SolidColorBrush x:Key="WinMinBg" Color="#11144A" />
 
-    <!-- Buttons -->
-    <SolidColorBrush x:Key="MicrosoftBtnBg" Color="#12121f" />
-    <SolidColorBrush x:Key="MicrosoftBtnBorder" Color="#252535" />
-    <SolidColorBrush x:Key="MicrosoftBtnFg" Color="#aaaacc" />
-    <SolidColorBrush x:Key="MicrosoftBtnHoverBg" Color="#1a1a2e" />
-    <SolidColorBrush x:Key="RemoveHoverBg" Color="#22e74c3c" />
-    <SolidColorBrush x:Key="RemoveHoverFg" Color="#e74c3c" />
-
-    <!-- Window Buttons -->
-    <SolidColorBrush x:Key="WinBtnBg" Color="#1a1a2a" />
-    <SolidColorBrush x:Key="WinBtnFg" Color="#44445a" />
-    <SolidColorBrush x:Key="WinCloseBg" Color="#c0392b" />
-    <SolidColorBrush x:Key="WinMaxBg" Color="#427ef5" />
-    <SolidColorBrush x:Key="WinMinBg" Color="#2a2a3a" />
-
-    <!-- Play Button Gradient -->
-    <Color x:Key="PlayBtnTop">#e67e22</Color>
-    <Color x:Key="PlayBtnBottom">#c0392b</Color>
-    <Color x:Key="PlayBtnHoverTop">#f39c12</Color>
-    <Color x:Key="PlayBtnHoverBottom">#e74c3c</Color>
-    <Color x:Key="PlayBtnPressedTop">#d35400</Color>
-    <Color x:Key="PlayBtnPressedBottom">#a93226</Color>
-
-    <!-- Glow Effects -->
-    <Color x:Key="GlowPrimary">#33e67e22</Color>
-    <Color x:Key="GlowSecondary">#22c0392b</Color>
-
-    <!-- Accent pill (Home page) -->
-    <SolidColorBrush x:Key="AccentPillBorder" Color="#55e67e22" />
-    <Color x:Key="AccentPillBgColor">#e67e22</Color>
-
-    <!-- Badge colors -->
-    <SolidColorBrush x:Key="BadgeTypeBg" Color="#1a1a2e" />
-    <SolidColorBrush x:Key="BadgeTypeFg" Color="#5a5a9a" />
-
-    <!-- Theme variant flag: true = dark -->
+    <Color x:Key="PlayBtnTop">#C87622</Color>
+    <Color x:Key="PlayBtnBottom">#A53919</Color>
+    <Color x:Key="PlayBtnHoverTop">#F4902A</Color>
+    <Color x:Key="PlayBtnHoverBottom">#C9451F</Color>
+    <Color x:Key="PlayBtnPressedTop">#A53919</Color>
+    <Color x:Key="PlayBtnPressedBottom">#4B1A0B</Color>
+    <Color x:Key="GlowPrimary">#33C87622</Color>
+    <Color x:Key="GlowSecondary">#22A53919</Color>
+    <SolidColorBrush x:Key="AccentPillBorder" Color="#D19852" />
+    <Color x:Key="AccentPillBgColor">#C87622</Color>
+    <SolidColorBrush x:Key="BadgeTypeBg" Color="#11143B" />
+    <SolidColorBrush x:Key="BadgeTypeFg" Color="#B4B8EE" />
     <x:Boolean x:Key="IsDarkTheme">True</x:Boolean>
+
+    <Color x:Key="PieceWindowBackground">#090A1F</Color>
+    <Color x:Key="PieceTopBarBackground">#050615</Color>
+    <Color x:Key="PieceSidebarBackground">#070717</Color>
+    <Color x:Key="PieceChromeBorder">#161954</Color>
+    <Color x:Key="PieceWindowControlButtonBackground">#11143B</Color>
+    <Color x:Key="PieceBlueFaceTop">#0E103D</Color>
+    <Color x:Key="PieceBlueFaceBottom">#161966</Color>
+    <Color x:Key="PieceBlueFaceBorder">#262B8A</Color>
+    <Color x:Key="PieceBlueBase">#040515</Color>
+    <Color x:Key="PieceBlueHoverTop">#11144A</Color>
+    <Color x:Key="PieceBlueHoverBottom">#1B1F7C</Color>
+    <Color x:Key="PieceBlueHoverBorder">#2E34A8</Color>
+    <Color x:Key="PieceOrangeFaceTop">#C87622</Color>
+    <Color x:Key="PieceOrangeFaceBottom">#A53919</Color>
+    <Color x:Key="PieceOrangeFaceBorder">#D19852</Color>
+    <Color x:Key="PieceOrangeBase">#4B1A0B</Color>
+    <Color x:Key="PieceOrangeHoverTop">#F4902A</Color>
+    <Color x:Key="PieceOrangeHoverBottom">#C9451F</Color>
+    <Color x:Key="PieceOrangeHoverBorder">#FFB964</Color>
+    <Color x:Key="PieceCardBackground">#0B0B1A</Color>
+    <Color x:Key="PieceCardBorder">#1D2064</Color>
+    <Color x:Key="PieceTextPrimary">#FFFFFF</Color>
+    <Color x:Key="PieceTextSecondary">#B4B8EE</Color>
+    <Color x:Key="PieceKeyboardFocus">#B4B8EE</Color>
+    <SolidColorBrush x:Key="PieceWindowBackgroundBrush" Color="#090A1F" />
+    <SolidColorBrush x:Key="PieceTopBarBackgroundBrush" Color="#050615" />
+    <SolidColorBrush x:Key="PieceSidebarBackgroundBrush" Color="#070717" />
+    <SolidColorBrush x:Key="PieceChromeBorderBrush" Color="#161954" />
+    <SolidColorBrush x:Key="PieceWindowControlButtonBackgroundBrush" Color="#11143B" />
+    <SolidColorBrush x:Key="PieceCardBackgroundBrush" Color="#0B0B1A" />
+    <SolidColorBrush x:Key="PieceCardBorderBrush" Color="#1D2064" />
+    <SolidColorBrush x:Key="PieceTextPrimaryBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="PieceTextSecondaryBrush" Color="#B4B8EE" />
+    <SolidColorBrush x:Key="PieceLoadingOverlayBrush" Color="#E6090A1F" />
+    <SolidColorBrush x:Key="PieceKeyboardFocusBrush" Color="#B4B8EE" />
+    <SolidColorBrush x:Key="PieceBlueFaceBorderBrush" Color="#262B8A" />
+    <SolidColorBrush x:Key="PieceBlueHoverBorderBrush" Color="#2E34A8" />
+    <SolidColorBrush x:Key="PieceBlueBaseBrush" Color="#040515" />
+    <SolidColorBrush x:Key="PieceOrangeFaceBorderBrush" Color="#D19852" />
+    <SolidColorBrush x:Key="PieceOrangeHoverBorderBrush" Color="#FFB964" />
+    <SolidColorBrush x:Key="PieceOrangeBaseBrush" Color="#4B1A0B" />
+    <LinearGradientBrush x:Key="PieceBlueFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#0E103D" Offset="0" />
+        <GradientStop Color="#161966" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PieceBlueHoverFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#11144A" Offset="0" />
+        <GradientStop Color="#1B1F7C" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PieceOrangeFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#C87622" Offset="0" />
+        <GradientStop Color="#A53919" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PieceOrangeHoverFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#F4902A" Offset="0" />
+        <GradientStop Color="#C9451F" Offset="1" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="ThemeWindowBackgroundBrush" Color="#090A1F" />
+    <SolidColorBrush x:Key="ThemeTopBarBackgroundBrush" Color="#050615" />
+    <SolidColorBrush x:Key="ThemeSidebarBackgroundBrush" Color="#070717" />
+    <SolidColorBrush x:Key="ThemeChromeBorderBrush" Color="#161954" />
+    <SolidColorBrush x:Key="ThemeCardBackgroundBrush" Color="#0B0B1A" />
+    <SolidColorBrush x:Key="ThemeCardBorderBrush" Color="#1D2064" />
+    <SolidColorBrush x:Key="ThemeLoadingOverlayBrush" Color="#E6090A1F" />
 </ResourceDictionary>

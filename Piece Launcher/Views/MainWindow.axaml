@@ -1,178 +1,234 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Piece_Launcher.ViewModels"
-        xmlns:sys="clr-namespace:System;assembly=netstandard"
+        xmlns:controls="using:Piece_Launcher.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="560"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720"
         x:Class="Piece_Launcher.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/Piece Launcher.ico"
-        Title=""
-        Width="900" Height="560"
-        MinWidth="800" MinHeight="500"
-        Background="{DynamicResource WindowBackground}"
+        Title="Piece Launcher"
+        Width="1280" Height="720"
+        MinWidth="1000" MinHeight="600"
+        Background="{DynamicResource ThemeWindowBackgroundBrush}"
         WindowDecorations="None"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaTitleBarHeightHint="-1"
-        CornerRadius="12"
-        BorderThickness="1"
-        BorderBrush="{DynamicResource WindowBorderBrush}">
+        ExtendClientAreaTitleBarHeightHint="44"
+        CornerRadius="0">
 
-    <Grid>
-        <!-- Glow effects -->
-        <Border>
-            <Border.Background>
-                <RadialGradientBrush Center="0,0" GradientOrigin="0,0" RadiusX="0.55" RadiusY="0.55">
-                    <GradientStop Color="{DynamicResource GlowPrimary}" Offset="0"/>
-                    <GradientStop Color="#00000000" Offset="1"/>
-                </RadialGradientBrush>
-            </Border.Background>
-        </Border>
-        <Border>
-            <Border.Background>
-                <RadialGradientBrush Center="1,1" GradientOrigin="1,1" RadiusX="0.45" RadiusY="0.45">
-                    <GradientStop Color="{DynamicResource GlowSecondary}" Offset="0"/>
-                    <GradientStop Color="#00000000" Offset="1"/>
-                </RadialGradientBrush>
-            </Border.Background>
+    <Grid RowDefinitions="44,*">
+        <!-- ═══════════════ TOP BAR (WINDOW DECORATIONS) ═══════════════ -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource ThemeTopBarBackgroundBrush}"
+                BorderBrush="{DynamicResource ThemeChromeBorderBrush}"
+                BorderThickness="0,0,0,1"
+                PointerPressed="OnTitleBarPointerPressed">
+            <Grid ColumnDefinitions="Auto,*,Auto" Margin="14,0,14,0">
+                <!-- Left: Hat Icon (26x26) + Title Text -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" IsHitTestVisible="False">
+                    <Image Source="/Assets/Piece Launcher.png" Width="26" Height="26" VerticalAlignment="Center"/>
+                    <TextBlock Text="Piece Launcher" FontSize="13" Foreground="{DynamicResource PieceTextPrimaryBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Center: Draggable Spacer -->
+                <Border Grid.Column="1" Background="Transparent" />
+
+                <!-- Right: Window Control Buttons (30x30, 6px apart) -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <Button Classes="win-btn min-max" ToolTip.Tip="{DynamicResource Lang_Global_Minimize}" Click="OnMinimizeClick">
+                        <Path Width="14" Height="14" Data="M1,7 L13,7" Stroke="{DynamicResource PieceTextPrimaryBrush}" StrokeThickness="1.5"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Classes="win-btn min-max" ToolTip.Tip="{DynamicResource Lang_Global_MaximizeRestore}" Click="OnMaximizeClick">
+                        <Path Width="14" Height="14" Data="M2,2 L12,2 L12,12 L2,12 Z" Stroke="{DynamicResource PieceTextPrimaryBrush}" StrokeThickness="1.5" Fill="Transparent"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button Classes="win-btn close" ToolTip.Tip="{DynamicResource Lang_Global_Close}" Click="OnCloseClick">
+                        <Path Width="14" Height="14" Data="M2,2 L12,12 M12,2 L2,12" Stroke="{DynamicResource PieceTextPrimaryBrush}" StrokeThickness="1.5"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </Border>
 
-        <Grid ColumnDefinitions="210,*">
+        <!-- ═══════════════ BODY (SIDEBAR + MAIN AREA) ═══════════════ -->
+        <Grid Grid.Row="1" ColumnDefinitions="260,*">
             <!-- ════ SIDEBAR ════ -->
-            <Border Grid.Column="0" Background="{DynamicResource SidebarBackground}" BorderBrush="{DynamicResource SidebarBorderBrush}" BorderThickness="0,0,1,0">
-                <Grid RowDefinitions="100,*,Auto">
-                    <!-- Logo -->
-                    <Border Grid.Row="0" Padding="20,10,10,10" BorderBrush="{DynamicResource SidebarDividerBrush}" BorderThickness="0,0,0,1">
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Border Width="75" Height="75" CornerRadius="10" Background="#00000000">
-                                <Image Source="/Assets/Piece Launcher.ico" Width="65" Height="65"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <StackPanel VerticalAlignment="Center" Spacing="0">
-                                <TextBlock Text="PIECE" FontSize="16" FontWeight="Black"
-                                           Foreground="{DynamicResource AccentBrush}" LetterSpacing="4"/>
+            <Border Grid.Column="0"
+                    Background="{DynamicResource ThemeSidebarBackgroundBrush}"
+                    BorderBrush="{DynamicResource ThemeChromeBorderBrush}"
+                    BorderThickness="0,0,1,0">
+                <Grid RowDefinitions="Auto,*,Auto" Margin="12,16,12,16">
+                    <!-- Top: Brand Block -->
+                    <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                        <Grid ColumnDefinitions="Auto,*" Margin="8,0,0,0">
+                            <!-- Hat Logo 56x56 -->
+                            <Image Grid.Column="0" Source="/Assets/Piece Launcher.png" Width="56" Height="56" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0" Spacing="2">
+                                <TextBlock Text="PIECE" FontSize="20" FontWeight="Black"
+                                           Foreground="{DynamicResource PieceOrangeFaceBorderBrush}" LetterSpacing="4"/>
                                 <TextBlock Text="LAUNCHER" FontSize="10" FontWeight="SemiBold"
-                                           Foreground="{DynamicResource TextDimmed}" LetterSpacing="3"/>
+                                           Foreground="{DynamicResource PieceTextSecondaryBrush}" LetterSpacing="3"/>
                             </StackPanel>
-                        </StackPanel>
-                    </Border>
+                        </Grid>
+                    </StackPanel>
 
-                    <!-- Nav -->
-                    <StackPanel Grid.Row="1" Margin="12,16,12,0" Spacing="4">
-                        <Button Classes="SidebarButton" Command="{Binding NavigateHomeCommand}">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <TextBlock Text="⌂" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource Lang_Nav_Home}" VerticalAlignment="Center"/>
-                            </StackPanel>
+                    <!-- Nav List (Buttons 234px wide, 10px gap) -->
+                    <StackPanel Grid.Row="1" Spacing="10">
+                        <!-- 1. Minecraft: Java Edition -->
+                        <Button Classes="piece nav" Classes.active="{Binding IsJavaEditionActive}"
+                                Command="{Binding NavigateJavaEditionCommand}" Width="234">
+                            <Grid ColumnDefinitions="48,*">
+                                <Path Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"
+                                      Data="M3,10 L12,3 L21,10 L21,20 L15,20 L15,13 L9,13 L9,20 L3,20 Z"
+                                      Stroke="{DynamicResource PieceTextSecondaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                                <TextBlock Grid.Column="1" Text="{DynamicResource Lang_Nav_JavaEdition}" FontSize="14" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource PieceTextPrimaryBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            </Grid>
                         </Button>
 
-                        <Button Classes="SidebarButton" Command="{Binding NavigateProfilesCommand}">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <TextBlock Text="◉" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource Lang_Nav_Profiles}" VerticalAlignment="Center"/>
-                            </StackPanel>
+                        <!-- 2. Profiles -->
+                        <Button Classes="piece nav" Classes.active="{Binding IsProfilesActive}"
+                                Command="{Binding NavigateProfilesCommand}" Width="234">
+                            <Grid ColumnDefinitions="48,*">
+                                <Path Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"
+                                      Data="M12,4 A4,4 0 1 0 12,12 A4,4 0 1 0 12,4 M4,20 C4,16 8,15 12,15 C16,15 20,16 20,20"
+                                      Stroke="{DynamicResource PieceTextSecondaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                                <TextBlock Grid.Column="1" Text="{DynamicResource Lang_Nav_Profiles}" FontSize="15" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource PieceTextPrimaryBrush}" VerticalAlignment="Center"/>
+                            </Grid>
                         </Button>
 
-                        <Button Classes="SidebarButton" Command="{Binding NavigateVersionsCommand}">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <TextBlock Text="⎇" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource Lang_Nav_Versions}" VerticalAlignment="Center"/>
-                            </StackPanel>
+                        <!-- 3. Versions -->
+                        <Button Classes="piece nav" Classes.active="{Binding IsVersionsActive}"
+                                Command="{Binding NavigateVersionsCommand}" Width="234">
+                            <Grid ColumnDefinitions="48,*">
+                                <Path Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"
+                                      Data="M4,4 L12,4 L12,12 L4,12 Z M12,12 L20,12 L20,20 L12,20 Z M4,14 L10,14 M14,6 L20,6"
+                                      Stroke="{DynamicResource PieceTextSecondaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                                <TextBlock Grid.Column="1" Text="{DynamicResource Lang_Nav_Versions}" FontSize="15" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource PieceTextPrimaryBrush}" VerticalAlignment="Center"/>
+                            </Grid>
                         </Button>
 
-                        <Button Classes="SidebarButton" Command="{Binding NavigateMinecraftModsCommand}">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <TextBlock Text="🗲" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource Lang_Nav_MinecraftMods}" VerticalAlignment="Center"/>
-                            </StackPanel>
+                        <!-- 4. Minecraft Mods -->
+                        <Button Classes="piece nav" Classes.active="{Binding IsMinecraftModsActive}"
+                                Command="{Binding NavigateMinecraftModsCommand}" Width="234">
+                            <Grid ColumnDefinitions="48,*">
+                                <Path Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"
+                                      Data="M13,2 L4,13 L11,13 L10,22 L20,10 L13,10 Z"
+                                      Stroke="{DynamicResource PieceTextSecondaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                                <TextBlock Grid.Column="1" Text="{DynamicResource Lang_Nav_MinecraftMods}" FontSize="15" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource PieceTextPrimaryBrush}" VerticalAlignment="Center"/>
+                            </Grid>
                         </Button>
-                        <Button Classes="SidebarButton" Command="{Binding NavigateCommunityCommand}">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <TextBlock Text="◈" FontSize="16" VerticalAlignment="Center"/>
-                                <TextBlock Text="{DynamicResource Lang_Nav_Community}" VerticalAlignment="Center"/>
-                            </StackPanel>
+
+                        <!-- 5. Community -->
+                        <Button Classes="piece nav" Classes.active="{Binding IsCommunityActive}"
+                                Command="{Binding NavigateCommunityCommand}" Width="234">
+                            <Grid ColumnDefinitions="48,*">
+                                <Path Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"
+                                      Data="M12,2 L21,8 L21,16 L12,22 L3,16 L3,8 Z"
+                                      Stroke="{DynamicResource PieceTextSecondaryBrush}" StrokeThickness="2" Fill="Transparent"/>
+                                <TextBlock Grid.Column="1" Text="{DynamicResource Lang_Nav_Community}" FontSize="15" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource PieceTextPrimaryBrush}" VerticalAlignment="Center"/>
+                            </Grid>
                         </Button>
                     </StackPanel>
 
-                    <!-- Settings -->
-                    <StackPanel Grid.Row="2" Margin="0,0,0,16" Spacing="2">
-                        <Button Classes="SidebarButton" Margin="12,0,12,0" Command="{Binding NavigateSettingsCommand}">
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <PathIcon Width="16" Height="16" VerticalAlignment="Center"
-                                          Data="M19.14,12.94C19.2,12.48 19.24,12 19.24,11.5C19.24,11.03 19.2,10.56 19.13,10.1L20.65,8.92C20.79,8.81 20.83,8.61 20.74,8.45L19.3,5.95C19.21,5.79 19.02,5.73 18.85,5.79L17.06,6.51C16.32,5.94 15.48,5.48 14.56,5.19L14.29,3.3C14.26,3.12 14.11,3 13.93,3H11.07C10.89,3 10.74,3.12 10.71,3.3L10.44,5.19C9.52,5.48 8.68,5.94 7.94,6.51L6.15,5.79C5.98,5.73 5.79,5.79 5.7,5.95L4.26,8.45C4.17,8.61 4.21,8.81 4.35,8.92L5.87,10.1C5.8,10.56 5.76,11.03 5.76,11.5C5.76,12 5.8,12.48 5.86,12.94L4.35,14.08C4.21,14.19 4.17,14.39 4.26,14.55L5.7,17.05C5.79,17.21 5.98,17.27 6.15,17.21L7.94,16.49C8.68,17.06 9.52,17.52 10.44,17.81L10.71,19.7C10.74,19.88 10.89,20 11.07,20H13.93C14.11,20 14.26,19.88 14.29,19.7L14.56,17.81C15.48,17.52 16.32,17.06 17.06,16.49L18.85,17.21C19.02,17.27 19.21,17.21 19.3,17.05L20.74,14.55C20.83,14.39 20.79,14.19 20.65,14.08L19.14,12.94ZM12.5,15C10.57,15 9,13.43 9,11.5C9,9.57 10.57,8 12.5,8C14.43,8 16,9.57 16,11.5C16,13.43 14.43,15 12.5,15Z"/>
-                                <TextBlock Text="{DynamicResource Lang_Nav_Settings}" VerticalAlignment="Center"/>
-                            </StackPanel>
+                    <!-- Bottom pinned: 2px divider, 14px gap, Configurations button, Version label -->
+                    <StackPanel Grid.Row="2" Spacing="14">
+                        <Border Height="2" Background="{DynamicResource ThemeChromeBorderBrush}" />
+
+                        <!-- Configurations (Settings) Button -->
+                        <Button Classes="piece nav" Classes.active="{Binding IsSettingsActive}"
+                                Command="{Binding NavigateSettingsCommand}" Width="234">
+                            <Grid ColumnDefinitions="48,*">
+                                <Path Grid.Column="0" Width="20" Height="20" HorizontalAlignment="Left" Margin="16,0,0,0"
+                                      Data="M12,15 C10.34,15 9,13.66 9,12 C9,10.34 10.34,9 12,9 C13.66,9 15,10.34 15,12 C15,13.66 13.66,15 12,15 Z M19.43,12.97 C19.47,12.65 19.5,12.33 19.5,12 C19.5,11.67 19.47,11.34 19.43,11 L21.54,9.37 C21.73,9.22 21.78,8.95 21.66,8.73 L19.66,5.27 C19.54,5.05 19.27,4.97 19.05,5.05 L16.56,6.05 C16.04,5.65 15.48,5.32 14.87,5.07 L14.49,2.42 C14.46,2.18 14.25,2 14,2 L10,2 C9.75,2 9.54,2.18 9.51,2.42 L9.13,5.07 C8.52,5.32 7.96,5.66 7.44,6.05 L4.95,5.05 C4.73,4.96 4.46,5.05 4.34,5.27 L2.34,8.73 C2.21,8.95 2.27,9.22 2.46,9.37 L4.57,11 C4.53,11.34 4.5,11.67 4.5,12 C4.5,12.33 4.53,12.65 4.57,12.97 L2.46,14.63 C2.27,14.78 2.21,15.05 2.34,15.27 L4.34,18.73 C4.46,18.95 4.72,19.03 4.95,18.95 L7.44,17.95 C7.96,18.35 8.52,18.68 9.13,18.93 L9.51,21.58 C9.54,21.82 9.75,22 10,22 L14,22 C14.25,22 14.46,21.82 14.49,21.58 L14.87,18.93 C15.48,18.68 16.04,18.34 16.56,17.95 L19.05,18.95 C19.28,19.04 19.54,18.95 19.66,18.73 L21.66,15.27 C21.78,15.05 21.73,14.78 21.54,14.63 L19.43,12.97 Z"
+                                      Stroke="{DynamicResource PieceTextSecondaryBrush}" StrokeThickness="1.5" Fill="Transparent"/>
+                                <TextBlock Grid.Column="1" Text="{DynamicResource Lang_Nav_Settings}" FontSize="15" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource PieceTextPrimaryBrush}" VerticalAlignment="Center"/>
+                            </Grid>
                         </Button>
-                        <StackPanel Orientation="Horizontal" Margin="26,4,12,0" Spacing="4">
-                            <TextBlock Text="{DynamicResource Lang_Settings_Version}"
-                                       FontSize="11"
-                                       Foreground="{DynamicResource TextMuted}"/>
-                            <TextBlock Text="{Binding LauncherVersion}"
-                                       FontSize="11"
-                                       Foreground="{DynamicResource TextPrimary}"
-                                       FontWeight="SemiBold"/>
-                        </StackPanel>
+
+                        <!-- Version Label -->
+                        <TextBlock Text="{Binding FormattedLauncherVersion}"
+                                   FontSize="12" Foreground="{DynamicResource PieceTextSecondaryBrush}"
+                                   HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- ════ MAIN ════ -->
-            <Grid Grid.Column="1" RowDefinitions="38,*,Auto">
-                <!-- Title-bar -->
-                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-                    <Border Grid.Column="0" Background="Transparent" PointerPressed="OnTitleBarPointerPressed"/>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0" Spacing="8">
-                        <Button Classes="WinBtn WinMaximize" Content="☐" Click="OnMaximizeClick"/>
-                        <Button Classes="WinBtn WinMinimize" Content="—" Click="OnMinimizeClick"/>
-                        <Button Classes="WinBtn WinClose" Content="✕" Click="OnCloseClick"/>
-                    </StackPanel>
-                </Grid>
+            <!-- ════ MAIN AREA (PADDING 32) ════ -->
+            <Grid Grid.Column="1">
+                <Border Background="{DynamicResource ThemeWindowBackgroundBrush}" Padding="32">
+                    <TransitioningContentControl Content="{Binding CurrentPage}">
+                        <TransitioningContentControl.PageTransition>
+                            <PageSlide Duration="0:0:0.220" Orientation="Vertical" />
+                        </TransitioningContentControl.PageTransition>
+                    </TransitioningContentControl>
+                </Border>
 
-                <!-- ── Dynamic Content ── -->
-                <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" />
+                <!-- ════ REUSABLE UNIVERSAL LOADING OVERLAY (MAIN AREA ONLY) ════ -->
+                <Border Background="{DynamicResource ThemeLoadingOverlayBrush}"
+                        IsVisible="{Binding IsDefaultLoadingSpinnerVisible}"
+                        Opacity="{Binding LoadingOverlayOpacity}"
+                        IsHitTestVisible="{Binding IsDefaultLoadingSpinnerVisible}">
+                    <Border.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Opacity" Duration="0:0:0.250" Easing="{StaticResource PieceEaseInOut}" />
+                        </Transitions>
+                    </Border.Transitions>
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <controls:HatSpinner Width="96" Height="96"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                             IsVisible="{Binding IsDefaultLoadingSpinnerVisible}" />
+                    </Grid>
+                </Border>
 
-                <!-- ════ LAUNCH BAR ════ -->
-                <Border Grid.Row="2" Background="{DynamicResource LaunchBarBackground}" BorderBrush="{DynamicResource LaunchBarBorderBrush}" BorderThickness="0,1,0,0">
-                    <Grid ColumnDefinitions="*,Auto" Margin="24,14,24,20" VerticalAlignment="Center">
-                        <Border Grid.Column="0" CornerRadius="12" Background="{DynamicResource LaunchBarInnerBg}" BorderBrush="{DynamicResource LaunchBarInnerBorder}" BorderThickness="1" Padding="16,0" Height="52">
-                            <Grid ColumnDefinitions="*,1,Auto,1,Auto">
-                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="2">
-                                    <TextBlock Text="{DynamicResource Lang_Global_Player}" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource TextLabel}" LetterSpacing="2"/>
-                                    <ComboBox Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextPrimary}" FontSize="13" FontWeight="SemiBold" MinHeight="0" Padding="0"
-                                              ItemsSource="{Binding UserProfiles}" SelectedItem="{Binding SelectedProfile}">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Name}"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </StackPanel>
-
-                                <Border Grid.Column="1" Width="1" Background="{DynamicResource SurfaceDivider}" Margin="0,10"/>
-
-                                <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="16,0" Spacing="2">
-                                    <TextBlock Text="{DynamicResource Lang_Global_Type}" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource TextLabel}" LetterSpacing="2"/>
-                                    <TextBlock Text="{Binding SelectedProfileType}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextMuted}"/>
-                                </StackPanel>
-
-                                <Border Grid.Column="3" Width="1" Background="{DynamicResource SurfaceDivider}" Margin="0,10"/>
-
-                                <StackPanel Grid.Column="4" VerticalAlignment="Center" Margin="16,0,0,0" Spacing="2">
-                                    <TextBlock Text="{DynamicResource Lang_Global_Version}" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource TextLabel}" LetterSpacing="2"/>
-                                    <TextBlock Text="{DynamicResource Lang_Global_Loading}" FontSize="12" Foreground="{DynamicResource TextVeryDimmed}" IsVisible="{Binding IsLoadingVersions}"/>
-                                    <ComboBox Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextPrimary}" FontSize="13" FontWeight="SemiBold" MinHeight="0" Padding="0"
-                                              ItemsSource="{Binding InstalledVersions}" SelectedItem="{Binding SelectedVersion}"
-                                              IsVisible="{Binding !IsLoadingVersions}"/>
-                                </StackPanel>
+                <Border IsVisible="{Binding IsVersionInstallProgressVisible}"
+                        IsHitTestVisible="False"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Background="{DynamicResource ThemeCardBackgroundBrush}"
+                        BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2"
+                        Padding="16">
+                    <Grid ColumnDefinitions="Auto,480" ColumnSpacing="16">
+                        <controls:HatSpinner Grid.Column="0" Width="48" Height="48"
+                                             VerticalAlignment="Center" />
+                        <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding VersionInstallProgressText}"
+                                           Foreground="{DynamicResource PieceTextPrimaryBrush}"
+                                           FontSize="13" FontWeight="SemiBold"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding VersionInstallProgressValue, StringFormat='{}{0:F0}%'}"
+                                           Foreground="{DynamicResource PieceOrangeFaceBorderBrush}"
+                                           FontSize="13" FontWeight="Bold" />
                             </Grid>
-                        </Border>
-
-                        <Button Grid.Column="1" Content="{DynamicResource Lang_Global_Play}" Width="130" Height="52" Margin="12,0,0,0" Classes="PlayButton"
-                                Command="{Binding LaunchGameCommand}" IsEnabled="{Binding CanPlay}" />
+                            <ProgressBar Value="{Binding VersionInstallProgressValue}" Maximum="100"
+                                         Height="8" Foreground="{DynamicResource PieceOrangeFaceBrush}" />
+                        </StackPanel>
                     </Grid>
                 </Border>
             </Grid>
+        </Grid>
+
+        <!-- ════ STARTUP COVER (COVERS SIDEBAR & MAIN, FADES OUT 800ms) ════ -->
+        <Grid Grid.Row="0"
+              Grid.RowSpan="2"
+              Background="#FF383838"
+              IsVisible="{Binding IsStartupCoverVisible}"
+              Opacity="{Binding StartupCoverOpacity}">
+            <Grid.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="{StaticResource PieceMotionCoverFade}" Easing="{StaticResource PieceEaseInOut}" />
+                </Transitions>
+            </Grid.Transitions>
+            <controls:HatSpinner Width="160" Height="160" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 IsVisible="{Binding IsStartupCoverVisible}" />
         </Grid>
     </Grid>
 </Window>

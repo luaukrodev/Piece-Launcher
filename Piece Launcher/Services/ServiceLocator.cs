@@ -14,6 +14,8 @@ namespace Piece_Launcher.Services
         public static IModLoaderService FabricLoaderService { get; private set; } = null!;
         public static IModLoaderService NeoForgeLoaderService { get; private set; } = null!;
         public static IModLoaderService QuiltLoaderService { get; private set; } = null!;
+        public static ILoadingService LoadingService { get; private set; } = new Impl.LoadingService();
+        public static ISkinService SkinService { get; } = new Impl.SkinService();
 
         public static void Initialize(
             IVersionService versionService,

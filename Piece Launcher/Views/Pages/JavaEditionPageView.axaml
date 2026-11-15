@@ -1,0 +1,164 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Piece_Launcher.ViewModels.Pages"
+             xmlns:controls="using:Piece_Launcher.Controls"
+             xmlns:models="using:Piece_Launcher.Models"
+             x:Class="Piece_Launcher.Views.Pages.JavaEditionPageView"
+             x:DataType="vm:JavaEditionPageViewModel">
+
+    <Grid x:Name="JavaEditionRoot" RowDefinitions="Auto,*,Auto,Auto" RowSpacing="8">
+        <TextBlock Grid.Row="0" FontSize="64" FontWeight="Light" Foreground="{DynamicResource PieceTextPrimaryBrush}"
+                   TextTrimming="CharacterEllipsis">
+            <Run Text="{DynamicResource Lang_JavaEdition_Greeting}" />
+            <Run Text=" " />
+            <Run Text="{Binding SelectedProfile.Name}" FontWeight="Bold" />
+            <Run Text="!" />
+        </TextBlock>
+
+        <Grid Grid.Row="1" ColumnDefinitions="360,*" ColumnSpacing="16" MinHeight="180">
+            <Border Grid.Column="0" Background="{DynamicResource ThemeCardBackgroundBrush}"
+                    BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2">
+                <Grid>
+                    <controls:SkinModelViewer SkinBitmap="{Binding SkinBitmap}"
+                                              Opacity="{Binding SkinOpacity}">
+                        <controls:SkinModelViewer.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.200"
+                                                  Easing="{StaticResource PieceEaseInOut}" />
+                            </Transitions>
+                        </controls:SkinModelViewer.Transitions>
+                    </controls:SkinModelViewer>
+                    <controls:HatSpinner Width="96" Height="96" HorizontalAlignment="Center"
+                                         VerticalAlignment="Center" IsVisible="{Binding IsSkinLoading}" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1" Background="{DynamicResource ThemeSidebarBackgroundBrush}"
+                    BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2" ClipToBounds="True">
+                <Grid>
+                    <Image Source="{Binding JavaThumbnail}" Stretch="UniformToFill"
+                           Opacity="{Binding JavaThumbnailOpacity}">
+                        <Image.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.250"
+                                                  Easing="{StaticResource PieceEaseInOut}" />
+                            </Transitions>
+                        </Image.Transitions>
+                    </Image>
+                    <Image Source="{Binding GenericThumbnail}" Stretch="UniformToFill"
+                           Opacity="{Binding GenericThumbnailOpacity}">
+                        <Image.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.250"
+                                                  Easing="{StaticResource PieceEaseInOut}" />
+                            </Transitions>
+                        </Image.Transitions>
+                    </Image>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <TextBlock Grid.Row="2" Text="{Binding LaunchStatusMessage}"
+                   IsVisible="{Binding HasLaunchStatusMessage}"
+                   Foreground="{DynamicResource PieceOrangeFaceBrush}"
+                   FontSize="13" TextWrapping="Wrap" />
+
+        <Grid Grid.Row="3" ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="360" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" MaxWidth="360" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="ProfileSelector" Grid.Column="0" Classes="piece selector"
+                    Command="{Binding ToggleProfilePopupCommand}" HorizontalContentAlignment="Stretch"
+                    Height="64" Width="360" FontSize="22" Padding="16,0">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Grid.Column="0" Text="{DynamicResource Lang_JavaEdition_SelectProfile}"
+                               IsVisible="{Binding !HasSelectedProfile}" VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Column="0" Text="{Binding SelectedProfile.Name}"
+                               IsVisible="{Binding HasSelectedProfile}" VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" />
+                    <Path Grid.Column="1" Width="18" Height="10" Margin="12,0,0,0"
+                          Data="M2,2 L9,9 L16,2" Stroke="{DynamicResource PieceTextSecondaryBrush}"
+                          StrokeThickness="2" VerticalAlignment="Center" />
+                </Grid>
+            </Button>
+
+            <Button x:Name="VersionSelector" Grid.Column="1" Classes="piece selector"
+                    Command="{Binding ToggleVersionPopupCommand}" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Height="64" FontSize="22" Padding="16,0">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Grid.Column="0" Text="{DynamicResource Lang_JavaEdition_SelectVersion}"
+                               IsVisible="{Binding !HasSelectedVersion}" VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Column="0" Text="{Binding SelectedVersionDisplayName}"
+                               IsVisible="{Binding HasSelectedVersion}" VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" />
+                    <Path Grid.Column="1" Width="18" Height="10" Margin="12,0,0,0"
+                          Data="M2,2 L9,9 L16,2" Stroke="{DynamicResource PieceTextSecondaryBrush}"
+                          StrokeThickness="2" VerticalAlignment="Center" />
+                </Grid>
+            </Button>
+
+            <Button Grid.Column="2" Classes="piece primary play" Command="{Binding LaunchGameCommand}"
+                    IsEnabled="{Binding CanPlay, FallbackValue=False}" HorizontalAlignment="Stretch"
+                    Height="64" FontSize="26">
+                <StackPanel Orientation="Horizontal" Spacing="14" HorizontalAlignment="Center">
+                    <Path Width="22" Height="24" Data="M4,2 L21,13 L4,24 Z"
+                          IsVisible="{Binding !IsLaunchingGame}"
+                          Fill="{DynamicResource PieceTextPrimaryBrush}" VerticalAlignment="Center" />
+                    <controls:HatSpinner Width="26" Height="26"
+                                         IsVisible="{Binding IsLaunchingGame}" />
+                    <TextBlock Text="{Binding LaunchButtonText}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <Popup x:Name="ProfilePopup" IsOpen="{Binding IsProfilePopupOpen, Mode=TwoWay}"
+               PlacementTarget="{Binding ElementName=ProfileSelector}" Placement="Bottom" IsLightDismissEnabled="True">
+            <Border Width="{Binding Bounds.Width, ElementName=ProfileSelector}" MaxHeight="300" Background="{DynamicResource ThemeSidebarBackgroundBrush}"
+                    BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2">
+                <ScrollViewer MaxHeight="296">
+                    <ItemsControl ItemsSource="{Binding UserProfiles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:ProfileEntry">
+                                <Button Classes="piece" HorizontalAlignment="Stretch" Margin="4"
+                                        Click="OnProfileItemClick">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                        <Image Grid.Column="0" Width="40" Height="40" Source="{Binding HeadImage}"
+                                               Stretch="Uniform" RenderOptions.BitmapInterpolationMode="None" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </Popup>
+
+        <Popup x:Name="VersionPopup" IsOpen="{Binding IsVersionPopupOpen, Mode=TwoWay}"
+               PlacementTarget="{Binding ElementName=VersionSelector}" Placement="Bottom" IsLightDismissEnabled="True">
+            <Border Width="{Binding Bounds.Width, ElementName=VersionSelector}" MaxHeight="300" Background="{DynamicResource ThemeSidebarBackgroundBrush}"
+                    BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="2">
+                <ScrollViewer MaxHeight="296">
+                    <ItemsControl ItemsSource="{Binding InstalledVersions}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Classes="piece" HorizontalAlignment="Stretch" Margin="4"
+                                        Click="OnVersionItemClick">
+                                    <TextBlock Text="{Binding DisplayName}" HorizontalAlignment="Left"
+                                               TextTrimming="CharacterEllipsis" />
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

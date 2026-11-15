@@ -1,0 +1,106 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Avalonia.Controls">
+    <Color x:Key="PieceWindowBackground">#090A1F</Color>
+    <Color x:Key="PieceTopBarBackground">#050615</Color>
+    <Color x:Key="PieceSidebarBackground">#070717</Color>
+    <Color x:Key="PieceChromeBorder">#161954</Color>
+    <Color x:Key="PieceWindowControlButtonBackground">#11143B</Color>
+
+    <Color x:Key="PieceBlueFaceTop">#0E103D</Color>
+    <Color x:Key="PieceBlueFaceBottom">#161966</Color>
+    <Color x:Key="PieceBlueFaceBorder">#262B8A</Color>
+    <Color x:Key="PieceBlueBase">#040515</Color>
+    <Color x:Key="PieceBlueHoverTop">#11144A</Color>
+    <Color x:Key="PieceBlueHoverBottom">#1B1F7C</Color>
+    <Color x:Key="PieceBlueHoverBorder">#2E34A8</Color>
+
+    <Color x:Key="PieceOrangeFaceTop">#C87622</Color>
+    <Color x:Key="PieceOrangeFaceBottom">#A53919</Color>
+    <Color x:Key="PieceOrangeFaceBorder">#D19852</Color>
+    <Color x:Key="PieceOrangeBase">#4B1A0B</Color>
+    <Color x:Key="PieceOrangeHoverTop">#F4902A</Color>
+    <Color x:Key="PieceOrangeHoverBottom">#C9451F</Color>
+    <Color x:Key="PieceOrangeHoverBorder">#FFB964</Color>
+
+    <Color x:Key="PieceCardBackground">#0B0B1A</Color>
+    <Color x:Key="PieceCardBorder">#1D2064</Color>
+    <Color x:Key="PieceTextPrimary">#FFFFFF</Color>
+    <Color x:Key="PieceTextSecondary">#B4B8EE</Color>
+    <Color x:Key="PieceKeyboardFocus">#B4B8EE</Color>
+
+    <SolidColorBrush x:Key="PieceWindowBackgroundBrush" Color="{StaticResource PieceWindowBackground}" />
+    <SolidColorBrush x:Key="PieceTopBarBackgroundBrush" Color="{StaticResource PieceTopBarBackground}" />
+    <SolidColorBrush x:Key="PieceSidebarBackgroundBrush" Color="{StaticResource PieceSidebarBackground}" />
+    <SolidColorBrush x:Key="PieceChromeBorderBrush" Color="{StaticResource PieceChromeBorder}" />
+    <SolidColorBrush x:Key="PieceWindowControlButtonBackgroundBrush" Color="{StaticResource PieceWindowControlButtonBackground}" />
+    <SolidColorBrush x:Key="PieceCardBackgroundBrush" Color="{StaticResource PieceCardBackground}" />
+    <SolidColorBrush x:Key="PieceCardBorderBrush" Color="{StaticResource PieceCardBorder}" />
+    <SolidColorBrush x:Key="PieceTextPrimaryBrush" Color="{StaticResource PieceTextPrimary}" />
+    <SolidColorBrush x:Key="PieceTextSecondaryBrush" Color="{StaticResource PieceTextSecondary}" />
+    <SolidColorBrush x:Key="PieceAccentTextBrush" Color="{DynamicResource PieceTextPrimary}" />
+    <SolidColorBrush x:Key="PieceLoadingOverlayBrush" Color="#E6090A1F" />
+
+    <SolidColorBrush x:Key="PieceKeyboardFocusBrush" Color="{StaticResource PieceKeyboardFocus}" />
+    <SolidColorBrush x:Key="PieceBlueFaceBorderBrush" Color="{StaticResource PieceBlueFaceBorder}" />
+    <SolidColorBrush x:Key="PieceBlueHoverBorderBrush" Color="{StaticResource PieceBlueHoverBorder}" />
+    <SolidColorBrush x:Key="PieceBlueBaseBrush" Color="{StaticResource PieceBlueBase}" />
+    <SolidColorBrush x:Key="PieceOrangeFaceBorderBrush" Color="{StaticResource PieceOrangeFaceBorder}" />
+    <SolidColorBrush x:Key="PieceOrangeHoverBorderBrush" Color="{StaticResource PieceOrangeHoverBorder}" />
+    <SolidColorBrush x:Key="PieceOrangeBaseBrush" Color="{StaticResource PieceOrangeBase}" />
+
+    <CornerRadius x:Key="PieceZeroCornerRadius">0</CornerRadius>
+
+    <LinearGradientBrush x:Key="PieceBlueFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource PieceBlueFaceTop}" Offset="0" />
+        <GradientStop Color="{StaticResource PieceBlueFaceBottom}" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PieceBlueHoverFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource PieceBlueHoverTop}" Offset="0" />
+        <GradientStop Color="{StaticResource PieceBlueHoverBottom}" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PieceOrangeFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource PieceOrangeFaceTop}" Offset="0" />
+        <GradientStop Color="{StaticResource PieceOrangeFaceBottom}" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PieceOrangeHoverFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource PieceOrangeHoverTop}" Offset="0" />
+        <GradientStop Color="{StaticResource PieceOrangeHoverBottom}" Offset="1" />
+    </LinearGradientBrush>
+
+    <controls:GridLength x:Key="PieceButtonBaseHeight">6</controls:GridLength>
+    <x:Double x:Key="PieceButtonPressOffset">4</x:Double>
+    <x:Double x:Key="PieceButtonDisabledOpacity">0.45</x:Double>
+    <x:Double x:Key="PieceDefaultButtonHeight">62</x:Double>
+    <x:Double x:Key="PieceNavButtonHeight">62</x:Double>
+    <x:Double x:Key="PieceSelectorButtonHeight">102</x:Double>
+    <x:Double x:Key="PiecePlayButtonHeight">94</x:Double>
+    <x:Double x:Key="PieceVersionEntryHeight">74</x:Double>
+    <x:Double x:Key="PieceSettingsNavHeight">48</x:Double>
+    <x:Double x:Key="PieceNavFontSize">15</x:Double>
+    <x:Double x:Key="PieceSelectorFontSize">28</x:Double>
+    <x:Double x:Key="PiecePlayFontSize">36</x:Double>
+    <Thickness x:Key="PieceFaceBorderThickness">2</Thickness>
+    <Thickness x:Key="PieceFocusBorderThickness">2</Thickness>
+    <Thickness x:Key="PieceFocusOutlineMargin">-2</Thickness>
+    <Thickness x:Key="PieceButtonBorderThickness">0</Thickness>
+    <x:Double x:Key="PieceTopBarHeight">44</x:Double>
+    <x:Double x:Key="PieceSidebarWidth">260</x:Double>
+    <x:Double x:Key="PieceMainPadding">32</x:Double>
+    <x:Double x:Key="PieceWindowControlSize">30</x:Double>
+    <x:Double x:Key="PieceWindowControlIconSize">14</x:Double>
+    <x:Double x:Key="PieceSidebarBrandSize">56</x:Double>
+    <x:Double x:Key="PieceSidebarBrandLeftPadding">8</x:Double>
+    <x:Double x:Key="PieceNavSidePadding">12</x:Double>
+    <x:Double x:Key="PieceNavButtonWidth">234</x:Double>
+    <x:Double x:Key="PieceNavButtonGap">10</x:Double>
+    <x:Double x:Key="PieceConfigurationsDividerHeight">2</x:Double>
+    <x:Double x:Key="PieceConfigurationsGap">14</x:Double>
+    <x:Double x:Key="PieceNavFaceHeight">56</x:Double>
+    <x:Double x:Key="PieceSelectorFaceHeight">96</x:Double>
+    <x:Double x:Key="PiecePlayFaceHeight">88</x:Double>
+    <x:Double x:Key="PieceSkinCardWidth">420</x:Double>
+    <x:Double x:Key="PieceSelectorWidth">420</x:Double>
+    <x:Double x:Key="PiecePlayWidth">360</x:Double>
+    <x:Double x:Key="PieceCardGap">16</x:Double>
+</ResourceDictionary>

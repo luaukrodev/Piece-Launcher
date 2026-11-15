@@ -3,8 +3,10 @@ using Avalonia.Media.Imaging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Piece_Launcher.Helpers;
 
 namespace Piece_Launcher.Models
 {
@@ -27,6 +29,13 @@ namespace Piece_Launcher.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ProfileType Type { get; set; } = ProfileType.Offline;
 
+        [JsonIgnore]
+        public string DisplayType => Type == ProfileType.Microsoft
+            ? LocalizationHelper.Get("Lang_ProfileManagement_Microsoft")
+            : LocalizationHelper.Get("Lang_ProfileManagement_Offline");
+
+        public void RefreshDisplayType() => OnPropertyChanged(nameof(DisplayType));
+
         public override string ToString() => Name;
     }
 
@@ -42,7 +51,11 @@ namespace Piece_Launcher.Models
         public bool UseCustomClientId { get; set; }
         public List<ProfileEntry> Profiles { get; set; } = new();
         public string? LastSelectedVersion { get; set; }
+        public Dictionary<string, string> VersionDisplayNames { get; set; } = new();
         public string? LastSelectedProfileId { get; set; }
+        public List<MinecraftInstanceEntry> MinecraftInstances { get; set; } = new();
+        public string? LastSelectedMinecraftInstanceId { get; set; }
+        public bool FirstRunSetupCompleted { get; set; }
 
         // New settings (Observable)
         private string _language = "English";
@@ -51,7 +64,7 @@ namespace Piece_Launcher.Models
         private string _theme = "DarkOrange";
         public string Theme { get => _theme; set => SetProperty(ref _theme, value); }
         
-        private string _startupPage = "Home";
+        private string _startupPage = "Minecraft: Java Edition";
         public string StartupPage { get => _startupPage; set => SetProperty(ref _startupPage, value); }
 
         private bool _launchOnStartup = false;
@@ -63,7 +76,8 @@ namespace Piece_Launcher.Models
         private bool _keepOpenWhilePlaying = true;
         public bool KeepOpenWhilePlaying { get => _keepOpenWhilePlaying; set => SetProperty(ref _keepOpenWhilePlaying, value); }
         
-        public bool MinimizeToTray { get; set; } = false;
+        private bool _minimizeToTray;
+        public bool MinimizeToTray { get => _minimizeToTray; set => SetProperty(ref _minimizeToTray, value); }
         public bool DiscordRichPresence { get; set; } = true;
         public bool EnableAnimations { get; set; } = true;
         public bool ReducedMotion { get; set; } = false;
@@ -104,7 +118,8 @@ namespace Piece_Launcher.Models
         public string DownloadsDirectory { get => _downloadsDirectory; set => SetProperty(ref _downloadsDirectory, value); }
         public bool VerifyBeforeLaunch { get; set; } = true;
         public bool VerifyAssets { get; set; } = true;
-        public bool ShowMinecraftConsole { get; set; } = false;
+        private bool _showMinecraftConsole;
+        public bool ShowMinecraftConsole { get => _showMinecraftConsole; set => SetProperty(ref _showMinecraftConsole, value); }
         public bool ShowLauncherConsole { get; set; } = false;
         public bool CheckMissingDependencies { get; set; } = true;
 
@@ -145,6 +160,35 @@ namespace Piece_Launcher.Models
         public bool ShowOnlyCompatibleMods { get; set; } = true;
         public bool AutoInstallDependencies { get; set; } = true;
         public bool SuggestCompatibleVersions { get; set; } = true;
+
+        public string GetVersionDisplayName(string? versionId)
+        {
+            if (string.IsNullOrWhiteSpace(versionId))
+                return string.Empty;
+
+            var displayName = VersionDisplayNames.FirstOrDefault(pair =>
+                string.Equals(pair.Key, versionId, StringComparison.OrdinalIgnoreCase)).Value;
+            return string.IsNullOrWhiteSpace(displayName) ? versionId : displayName;
+        }
+
+        public void SetVersionDisplayName(string versionId, string? displayName)
+        {
+            foreach (var key in VersionDisplayNames.Keys
+                         .Where(key => string.Equals(key, versionId, StringComparison.OrdinalIgnoreCase))
+                         .ToArray())
+            {
+                VersionDisplayNames.Remove(key);
+            }
+
+            if (!string.IsNullOrWhiteSpace(displayName) &&
+                !string.Equals(versionId, displayName, StringComparison.Ordinal))
+            {
+                VersionDisplayNames[versionId] = displayName;
+            }
+
+            OnPropertyChanged(nameof(VersionDisplayNames));
+            Save();
+        }
 
         // Downloads
         public int MaxSimultaneousDownloads { get; set; } = 3;

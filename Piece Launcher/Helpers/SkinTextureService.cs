@@ -4,6 +4,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Piece_Launcher.Models;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -13,7 +14,7 @@ namespace Piece_Launcher.Helpers
 {
     public static class SkinTextureService
     {
-        private static readonly HttpClient HttpClient = new();
+        private static readonly HttpClient HttpClient = new() { Timeout = TimeSpan.FromSeconds(10) };
         private static readonly Lazy<Bitmap> DefaultSkin = new(CreateDefaultSkin);
 
         public static Bitmap GetDefaultSkin() => DefaultSkin.Value;
@@ -85,12 +86,25 @@ namespace Piece_Launcher.Helpers
             if (profile.Type == ProfileType.Offline)
             {
                 if (!string.IsNullOrWhiteSpace(profile.SkinPath) && File.Exists(profile.SkinPath))
-                    return new Bitmap(profile.SkinPath);
+                    return await Task.Run(() => new Bitmap(profile.SkinPath));
 
                 return GetDefaultSkin();
             }
 
-            return await LoadMicrosoftSkinAsync(profile.Id);
+            var cachePath = GetSavedSkinPath(profile.Id);
+            if (File.Exists(cachePath))
+            {
+                try
+                {
+                    return await Task.Run(() => new Bitmap(cachePath));
+                }
+                catch (Exception exception)
+                {
+                    Trace.WriteLine($"Could not read cached skin for profile '{profile.Name}': {exception.Message}");
+                }
+            }
+
+            return await LoadMicrosoftSkinAsync(profile.Id, cachePath);
         }
 
         public static string GetSavedSkinPath(string profileId)
@@ -102,7 +116,7 @@ namespace Piece_Launcher.Helpers
                 "PieceLauncher", "Skins", $"{id}.png");
         }
 
-        private static async Task<Bitmap> LoadMicrosoftSkinAsync(string profileId)
+        private static async Task<Bitmap> LoadMicrosoftSkinAsync(string profileId, string cachePath)
         {
             var id = profileId.Replace("-", string.Empty, StringComparison.Ordinal);
             using var response = await HttpClient.GetAsync(
@@ -135,7 +149,18 @@ namespace Piece_Launcher.Helpers
 
             var png = await HttpClient.GetByteArrayAsync(skinUrl.GetString()
                 ?? throw new InvalidDataException("The Minecraft profile returned an invalid skin URL."));
-            return DecodeSkin(png);
+            var bitmap = DecodeSkin(png);
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(cachePath)!);
+                await File.WriteAllBytesAsync(cachePath, png);
+            }
+            catch (Exception exception)
+            {
+                Trace.WriteLine($"Could not cache skin for profile '{profileId}': {exception.Message}");
+            }
+
+            return bitmap;
         }
 
         private static Bitmap CreateDefaultSkin()

@@ -5,6 +5,7 @@ using Avalonia.Styling;
 using Piece_Launcher.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Piece_Launcher.Services.Impl
@@ -14,11 +15,15 @@ namespace Piece_Launcher.Services.Impl
         public IReadOnlyList<ThemeDefinition> AvailableThemes { get; } = new List<ThemeDefinition>
         {
             new ThemeDefinition("DarkOrange", "Dark Orange", true, new Dictionary<string, string>()),
-            new ThemeDefinition("Light", "Light", false, new Dictionary<string, string>()),
             new ThemeDefinition("DarkPurple", "Dark Purple", true, new Dictionary<string, string>()),
-            new ThemeDefinition("MidnightBlue", "Midnight Blue", true, new Dictionary<string, string>()),
+            new ThemeDefinition("CrimsonRed", "Crimson Red", true, new Dictionary<string, string>()),
             new ThemeDefinition("ForestGreen", "Forest Green", true, new Dictionary<string, string>()),
-            new ThemeDefinition("CrimsonRed", "Crimson Red", true, new Dictionary<string, string>())
+            new ThemeDefinition("MidnightBlue", "Midnight Blue", true, new Dictionary<string, string>()),
+            new ThemeDefinition("OceanTeal", "Ocean Teal", true, new Dictionary<string, string>()),
+            new ThemeDefinition("Sakura", "Sakura", true, new Dictionary<string, string>()),
+            new ThemeDefinition("DesertSand", "Desert Sand", false, new Dictionary<string, string>()),
+            new ThemeDefinition("Monochrome", "Monochrome", true, new Dictionary<string, string>()),
+            new ThemeDefinition("Light", "Light", false, new Dictionary<string, string>())
         };
 
         public ThemeDefinition CurrentTheme { get; private set; }
@@ -30,7 +35,9 @@ namespace Piece_Launcher.Services.Impl
 
         public void ApplyTheme(string themeName)
         {
-            var theme = AvailableThemes.FirstOrDefault(t => t.Name == themeName) ?? AvailableThemes[0];
+            var theme = AvailableThemes.FirstOrDefault(t =>
+                string.Equals(t.Name, themeName, StringComparison.OrdinalIgnoreCase))
+                ?? AvailableThemes[0];
             CurrentTheme = theme;
 
             var app = Application.Current;
@@ -39,14 +46,34 @@ namespace Piece_Launcher.Services.Impl
             // Switch Avalonia theme variant (Light vs Dark) for FluentTheme controls
             app.RequestedThemeVariant = theme.IsDark ? ThemeVariant.Dark : ThemeVariant.Light;
             
-            // Always replace the theme at index 0
             var dictionaries = app.Resources.MergedDictionaries;
-            if (dictionaries != null && dictionaries.Count > 0)
+            if (dictionaries == null)
+                return;
+
+            try
             {
+                var themeDictionaryIndex = -1;
+                for (var i = 0; i < dictionaries.Count; i++)
+                {
+                    if (dictionaries[i] is ResourceInclude resourceInclude &&
+                        resourceInclude.Source?.OriginalString.Contains("/Themes/", StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        themeDictionaryIndex = i;
+                        break;
+                    }
+                }
+
                 var uri = new Uri($"avares://Piece%20Launcher/Themes/{theme.Name}Theme.axaml");
                 var include = new ResourceInclude(new Uri("avares://Piece%20Launcher/")) { Source = uri };
-                
-                dictionaries[0] = include;
+
+                if (themeDictionaryIndex >= 0)
+                    dictionaries[themeDictionaryIndex] = include;
+                else
+                    dictionaries.Add(include);
+            }
+            catch (Exception exception)
+            {
+                Trace.WriteLine($"Could not apply theme '{theme.Name}': {exception}");
             }
         }
 

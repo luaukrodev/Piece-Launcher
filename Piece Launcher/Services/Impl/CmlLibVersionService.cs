@@ -60,16 +60,22 @@ namespace Piece_Launcher.Services.Impl
 
         public Task<IReadOnlyList<string>> GetInstalledVersionNamesAsync(CancellationToken ct = default)
         {
-            var versionsDir = new DirectoryInfo(_launcher.MinecraftPath.Versions);
-            if (!versionsDir.Exists)
-                return Task.FromResult<IReadOnlyList<string>>(Array.Empty<string>());
+            return Task.Run<IReadOnlyList<string>>(() =>
+            {
+                ct.ThrowIfCancellationRequested();
 
-            var installed = versionsDir.GetDirectories()
-                .Where(dir => IsVersionDownloaded(dir))
-                .Select(dir => dir.Name)
-                .ToList();
+                var versionsDir = new DirectoryInfo(_launcher.MinecraftPath.Versions);
+                if (!versionsDir.Exists)
+                    return Array.Empty<string>();
 
-            return Task.FromResult<IReadOnlyList<string>>(installed);
+                var installed = versionsDir.GetDirectories()
+                    .Where(dir => IsVersionDownloaded(dir))
+                    .Select(dir => dir.Name)
+                    .ToList();
+
+                ct.ThrowIfCancellationRequested();
+                return installed;
+            }, ct);
         }
 
         public static bool IsVersionDownloaded(DirectoryInfo dir)
@@ -106,7 +112,14 @@ namespace Piece_Launcher.Services.Impl
             return false;
         }
 
-        public async Task InstallVersionAsync(string versionName, IProgress<InstallProgress>? progress = null, CancellationToken ct = default)
+        public Task InstallVersionAsync(string versionName, IProgress<InstallProgress>? progress = null, CancellationToken ct = default)
+            => InstallVersionAsync(_launcher, versionName, progress, ct);
+
+        public static async Task InstallVersionAsync(
+            MinecraftLauncher launcher,
+            string versionName,
+            IProgress<InstallProgress>? progress = null,
+            CancellationToken ct = default)
         {
             progress?.Report(new InstallProgress("Initializing", 0, versionName));
 
@@ -127,16 +140,16 @@ namespace Piece_Launcher.Services.Impl
 
             try
             {
-                _launcher.FileProgressChanged += fileHandler;
-                _launcher.ByteProgressChanged += byteHandler;
+                launcher.FileProgressChanged += fileHandler;
+                launcher.ByteProgressChanged += byteHandler;
 
-                await _launcher.InstallAsync(versionName, ct);
+                await launcher.InstallAsync(versionName, ct);
                 progress?.Report(new InstallProgress("Completed", 100, versionName));
             }
             finally
             {
-                _launcher.FileProgressChanged -= fileHandler;
-                _launcher.ByteProgressChanged -= byteHandler;
+                launcher.FileProgressChanged -= fileHandler;
+                launcher.ByteProgressChanged -= byteHandler;
             }
         }
     }

@@ -1,0 +1,339 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="Border">
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="Button">
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="TextBox">
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Height" Value="44" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="Background" Value="{DynamicResource ThemeCardBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+    </Style>
+    <Style Selector="ComboBox">
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Height" Value="44" />
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{DynamicResource ThemeCardBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+    </Style>
+    <Style Selector="ComboBoxItem">
+        <Setter Property="Background" Value="{DynamicResource ThemeSidebarBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="MinHeight" Value="42" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="ComboBoxItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource PieceBlueHoverFaceBrush}" />
+    </Style>
+    <Style Selector="ComboBoxItem:selected">
+        <Setter Property="Background" Value="{DynamicResource PieceOrangeFaceBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceAccentTextBrush}" />
+    </Style>
+    <Style Selector="ProgressBar">
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource PieceBlueBaseBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceOrangeFaceBrush}" />
+    </Style>
+    <Style Selector="ScrollBar">
+        <Setter Property="Background" Value="{DynamicResource ThemeSidebarBackgroundBrush}" />
+    </Style>
+    <Style Selector="ScrollViewer">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="4" />
+    </Style>
+    <Style Selector="CheckBox, RadioButton, ToggleSwitch">
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+    </Style>
+    <Style Selector="Slider">
+        <Setter Property="Foreground" Value="{DynamicResource PieceOrangeFaceBrush}" />
+        <Setter Property="Background" Value="{DynamicResource PieceBlueBaseBrush}" />
+    </Style>
+    <Style Selector="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="ListBoxItem">
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+    </Style>
+    <Style Selector="TabControl">
+        <Setter Property="Background" Value="{DynamicResource ThemeCardBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+    </Style>
+    <Style Selector="ContextMenu">
+        <Setter Property="Background" Value="{DynamicResource ThemeSidebarBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    <Style Selector="MenuItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+    </Style>
+    <Style Selector="ToolTip">
+        <Setter Property="Background" Value="{DynamicResource ThemeSidebarBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{StaticResource PieceZeroCornerRadius}" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+        <Setter Property="Padding" Value="8,4" />
+    </Style>
+
+    <Style Selector="Button.piece">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="{StaticResource PieceButtonBorderThickness}" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Height" Value="{StaticResource PieceDefaultButtonHeight}" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="16,0" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ClipToBounds="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="{StaticResource PieceButtonBaseHeight}" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Solid Base (Row 1) -->
+                    <Grid Grid.Row="1">
+                        <Border x:Name="PART_BlueBase"
+                                Background="{DynamicResource PieceBlueBaseBrush}" />
+                        <Border x:Name="PART_OrangeBase"
+                                Background="{DynamicResource PieceOrangeBaseBrush}"
+                                Opacity="0">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity"
+                                                      Duration="{StaticResource PieceMotionBase}"
+                                                      Easing="{StaticResource PieceEaseInOut}" />
+                                </Transitions>
+                            </Border.Transitions>
+                        </Border>
+                    </Grid>
+
+                    <!-- Face (Row 0, translates down 4px when pressed) -->
+                    <Grid x:Name="PART_Face" Grid.Row="0" ClipToBounds="False">
+                        <!-- Blue Face Layers -->
+                        <Border x:Name="PART_BlueRestFace"
+                                Background="{DynamicResource PieceBlueFaceBrush}"
+                                BorderBrush="{DynamicResource PieceBlueFaceBorderBrush}"
+                                BorderThickness="{StaticResource PieceFaceBorderThickness}" />
+                        <Border x:Name="PART_BlueHoverFace"
+                                Background="{DynamicResource PieceBlueHoverFaceBrush}"
+                                BorderBrush="{DynamicResource PieceBlueHoverBorderBrush}"
+                                BorderThickness="{StaticResource PieceFaceBorderThickness}"
+                                Opacity="0">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity"
+                                                      Duration="{StaticResource PieceMotionFast}"
+                                                      Easing="{StaticResource PieceEaseInOut}" />
+                                </Transitions>
+                            </Border.Transitions>
+                        </Border>
+
+                        <!-- Orange Face Layers -->
+                        <Border x:Name="PART_OrangeRestFace"
+                                Background="{DynamicResource PieceOrangeFaceBrush}"
+                                BorderBrush="{DynamicResource PieceOrangeFaceBorderBrush}"
+                                BorderThickness="{StaticResource PieceFaceBorderThickness}"
+                                Opacity="0">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity"
+                                                      Duration="{StaticResource PieceMotionBase}"
+                                                      Easing="{StaticResource PieceEaseInOut}" />
+                                </Transitions>
+                            </Border.Transitions>
+                        </Border>
+                        <Border x:Name="PART_OrangeHoverFace"
+                                Background="{DynamicResource PieceOrangeHoverFaceBrush}"
+                                BorderBrush="{DynamicResource PieceOrangeHoverBorderBrush}"
+                                BorderThickness="{StaticResource PieceFaceBorderThickness}"
+                                Opacity="0">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity"
+                                                      Duration="{StaticResource PieceMotionFast}"
+                                                      Easing="{StaticResource PieceEaseInOut}" />
+                                </Transitions>
+                            </Border.Transitions>
+                        </Border>
+
+                        <!-- Content on top of Face -->
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Grid>
+
+                    <!-- Keyboard focus outline (2px outline #B4B8EE, offset 2) -->
+                    <Border x:Name="PART_Focus"
+                            Grid.RowSpan="2"
+                            Margin="{StaticResource PieceFocusOutlineMargin}"
+                            BorderBrush="{DynamicResource PieceKeyboardFocusBrush}"
+                            BorderThickness="{StaticResource PieceFocusBorderThickness}"
+                            IsHitTestVisible="False"
+                            Opacity="0" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <!-- Hover on Blue Button -->
+    <Style Selector="Button.piece:not(.active):not(.primary):pointerover /template/ Border#PART_BlueHoverFace">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+
+    <!-- Active State (Orange) -->
+    <Style Selector="Button.piece.active /template/ Border#PART_OrangeBase">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="Button.piece.active /template/ Border#PART_OrangeRestFace">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="Button.piece.active /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource PieceAccentTextBrush}" />
+    </Style>
+    <Style Selector="Button.piece.active:pointerover /template/ Border#PART_OrangeHoverFace">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+
+    <!-- Primary State (Orange - Play, Dialog Actions) -->
+    <Style Selector="Button.piece.primary /template/ Border#PART_OrangeBase">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="Button.piece.primary /template/ Border#PART_OrangeRestFace">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="Button.piece.primary /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource PieceAccentTextBrush}" />
+    </Style>
+    <Style Selector="Button.piece.primary:pointerover /template/ Border#PART_OrangeHoverFace">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+
+    <!-- Keyboard Focus (Focus-Visible) -->
+    <Style Selector="Button.piece:focus-visible /template/ Border#PART_Focus">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+
+    <!-- Press Animation (translate down 4px in 80ms, release in 120ms) -->
+    <Style Selector="Button.piece /template/ Grid#PART_Face">
+        <Setter Property="RenderTransform" Value="translate(0px, 0px)" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform"
+                                               Duration="{StaticResource PieceMotionFast}"
+                                               Easing="{StaticResource PieceEaseOut}" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="Button.piece:pressed /template/ Grid#PART_Face">
+        <Setter Property="RenderTransform" Value="translate(0px, 4px)" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform"
+                                               Duration="{StaticResource PieceMotionPress}"
+                                               Easing="{StaticResource PieceEaseInOut}" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <!-- Disabled State (45% opacity, no hover, no press) -->
+    <Style Selector="Button.piece:disabled">
+        <Setter Property="Opacity" Value="{StaticResource PieceButtonDisabledOpacity}" />
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+    <Style Selector="Button.piece:disabled /template/ Border#PART_BlueHoverFace">
+        <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="Button.piece:disabled /template/ Border#PART_OrangeHoverFace">
+        <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="Button.piece:disabled /template/ Grid#PART_Face">
+        <Setter Property="RenderTransform" Value="translate(0px, 0px)" />
+    </Style>
+
+    <!-- Sized Variants -->
+    <Style Selector="Button.piece.nav">
+        <Setter Property="Height" Value="{StaticResource PieceNavButtonHeight}" />
+        <Setter Property="FontSize" Value="{StaticResource PieceNavFontSize}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+    </Style>
+    <Style Selector="Button.piece.SettingsNavItem">
+        <Setter Property="Height" Value="{StaticResource PieceSettingsNavHeight}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Padding" Value="12,8" />
+    </Style>
+    <Style Selector="Button.piece.profile-action">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+    <Style Selector="Button.piece.selector">
+        <Setter Property="Height" Value="{StaticResource PieceSelectorButtonHeight}" />
+        <Setter Property="FontSize" Value="{StaticResource PieceSelectorFontSize}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Padding" Value="32,0" />
+    </Style>
+    <Style Selector="Button.piece.loader-choice">
+        <Setter Property="Height" Value="{StaticResource PieceDefaultButtonHeight}" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Button.piece.version-entry">
+        <Setter Property="Height" Value="{StaticResource PieceVersionEntryHeight}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Foreground" Value="{DynamicResource PieceTextPrimaryBrush}" />
+    </Style>
+    <Style Selector="Button.piece.play">
+        <Setter Property="Height" Value="{StaticResource PiecePlayButtonHeight}" />
+        <Setter Property="FontSize" Value="{StaticResource PiecePlayFontSize}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <!-- Window Control Buttons (Top Bar) -->
+    <Style Selector="Button.win-btn">
+        <Setter Property="Width" Value="{StaticResource PieceWindowControlSize}" />
+        <Setter Property="Height" Value="{StaticResource PieceWindowControlSize}" />
+        <Setter Property="Background" Value="{DynamicResource PieceWindowControlButtonBackgroundBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="{StaticResource PieceZeroCornerRadius}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.win-btn.min-max:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PieceBlueHoverBorderBrush}" />
+    </Style>
+    <Style Selector="Button.win-btn.close:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PieceOrangeHoverFaceBrush}" />
+    </Style>
+</Styles>
